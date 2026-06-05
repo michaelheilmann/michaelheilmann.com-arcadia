@@ -58,8 +58,8 @@
 
 #define Arcadia_ValueTag_ForeignProcedure (4)
 
-#define Arcadia_ValueTag_InternalImmutableByteArray (5)
-#define Arcadia_ValueTag_ImmutableUTF8String (6)
+#define Arcadia_ValueTag_RuntimeByteArray (5)
+#define Arcadia_ValueTag_RuntimeUTF8String (6)
 
 #define Arcadia_ValueTag_Integer16 (7)
 #define Arcadia_ValueTag_Integer32 (8)
@@ -100,8 +100,8 @@ typedef struct Arcadia_Value {
 
     Define(Arcadia, ForeignProcedure, foreignProcedure)
 
-    Define(Arcadia, InternalImmutableByteArray, internalImmutableByteArray)
-    Define(Arcadia, ImmutableUTF8String, immutableUTF8String)
+    Define(Arcadia, RuntimeByteArray, runtimeByteArray)
+    Define(Arcadia, RuntimeUTF8String, runtimeUTF8String)
 
     Define(Arcadia, Integer16, integer16)
     Define(Arcadia, Integer32, integer32)
@@ -184,8 +184,8 @@ Define(Arcadia, Boolean, boolean)
 
 Define(Arcadia, ForeignProcedure, foreignProcedure)
 
-Define(Arcadia, InternalImmutableByteArray, internalImmutableByteArray)
-Define(Arcadia, ImmutableUTF8String, immutableUTF8String)
+Define(Arcadia, RuntimeByteArray, runtimeByteArray)
+Define(Arcadia, RuntimeUTF8String, runtimeUTF8String)
 
 Define(Arcadia, Integer16, integer16)
 Define(Arcadia, Integer32, integer32)

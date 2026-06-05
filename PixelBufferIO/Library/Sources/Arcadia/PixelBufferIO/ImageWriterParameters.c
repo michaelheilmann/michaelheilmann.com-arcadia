@@ -23,7 +23,7 @@ struct Arcadia_Imaging_ImageWriterParameters {
   Arcadia_Object _parent;
   // The format string.
   Arcadia_String* format;
-  // "object" either refers to a "Arcadia.ByteBuffer" object or a "Arcadia.Path" object.
+  // "object" either refers to a "Arcadia.ByteArrayBuilder" object or a "Arcadia.Path" object.
   Arcadia_ObjectReferenceValue object;
 };
 
@@ -90,7 +90,7 @@ Arcadia_Imaging_ImageWriterParameters_constructImpl
   Arcadia_Object* object = Arcadia_ValueStack_getObjectReferenceValue(thread, 2);
   if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_String_getType(thread))) {
     self->object = (Arcadia_ObjectReferenceValue)object;
-  } else if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_ByteBuffer_getType(thread))) {
+  } else if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_ByteArrayBuilder_getType(thread))) {
     self->object = (Arcadia_ObjectReferenceValue)object;
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -158,7 +158,7 @@ Arcadia_Imaging_ImageWriterParameters*
 Arcadia_Imaging_ImageWriterParameters_createByteBuffer
   (
     Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* byteBuffer,
+    Arcadia_ByteArrayBuilder* byteBuffer,
     Arcadia_String* format
   )
 {
@@ -210,10 +210,10 @@ Arcadia_Imaging_ImageWriterParameters_hasByteBuffer
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->object);
-  return Arcadia_Type_isDescendantType(thread, type, _Arcadia_ByteBuffer_getType(thread));
+  return Arcadia_Type_isDescendantType(thread, type, _Arcadia_ByteArrayBuilder_getType(thread));
 }
 
-Arcadia_ByteBuffer*
+Arcadia_ByteArrayBuilder*
 Arcadia_Imaging_ImageWriterParameters_getByteBuffer
   (
     Arcadia_Thread* thread,
@@ -224,7 +224,7 @@ Arcadia_Imaging_ImageWriterParameters_getByteBuffer
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return (Arcadia_ByteBuffer*)self->object;
+  return (Arcadia_ByteArrayBuilder*)self->object;
 }
 
 Arcadia_String*

@@ -19,12 +19,12 @@ static void
 assertEqual
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* a,
-    Arcadia_ImmutableUTF8String* b
+    Arcadia_RuntimeUTF8String* a,
+    Arcadia_RuntimeUTF8String* b
   )
 {
-  Arcadia_Value a1 = Arcadia_Value_makeImmutableUTF8StringValue(a),
-                b1 = Arcadia_Value_makeImmutableUTF8StringValue(b);
+  Arcadia_Value a1 = Arcadia_Value_makeRuntimeUTF8StringValue(a),
+                b1 = Arcadia_Value_makeRuntimeUTF8StringValue(b);
   Arcadia_Tests_assertTrue(thread, Arcadia_Value_isEqualTo(thread, &a1, &b1));
 }
 
@@ -41,16 +41,16 @@ fixture
     Arcadia_BooleanValue error
   )
 {
-  Arcadia_ImmutableUTF8String* string = Arcadia_ImmutableUTF8String_create(thread, p, n);
+  Arcadia_RuntimeUTF8String* string = Arcadia_RuntimeUTF8String_create(thread, p, n);
   if (!error) {
-    Arcadia_ImmutableUTF8String* receivedSubString = Arcadia_ImmutableUTF8String_substring(thread, string, start, length);
-    Arcadia_ImmutableUTF8String* expectedSubString = Arcadia_ImmutableUTF8String_create(thread, q, m);
+    Arcadia_RuntimeUTF8String* receivedSubString = Arcadia_RuntimeUTF8String_substring(thread, string, start, length);
+    Arcadia_RuntimeUTF8String* expectedSubString = Arcadia_RuntimeUTF8String_create(thread, q, m);
     assertEqual(thread, receivedSubString, expectedSubString);
   } else {
     Arcadia_JumpTarget jt;
     Arcadia_Thread_pushJumpTarget(thread, &jt);
     if (Arcadia_JumpTarget_save(&jt)) {
-      Arcadia_ImmutableUTF8String_substring(thread, string, start, length);
+      Arcadia_RuntimeUTF8String_substring(thread, string, start, length);
       Arcadia_Thread_popJumpTarget(thread);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);

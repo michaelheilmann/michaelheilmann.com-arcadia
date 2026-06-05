@@ -89,12 +89,12 @@ Arcadia_DDLS_Diagnostics_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  self->stringBuffer = Arcadia_StringBuffer_create(thread);
+  self->stringBuffer = Arcadia_StringBuilder_create(thread);
   self->stringTable = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Languages_StringTable_getType(thread));
   //
 #define Define(Name, Value) \
-  Arcadia_StringBuffer_clear(thread, self->stringBuffer); \
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, Value); \
+  Arcadia_StringBuilder_clear(thread, self->stringBuffer); \
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, Value); \
   self->Name = Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, self->stringBuffer);
 
   Define(BOOLEAN, u8"Boolean");
@@ -229,18 +229,18 @@ Arcadia_DDLS_Diagnostics_unexpectedTypeError
     Arcadia_DDL_Node* node
   )
 {
-  Arcadia_StringBuffer_clear(thread, self->stringBuffer);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"expected `");
-  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, expectedToString(thread, self, ddlsNode));
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`, received `");
-  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, receivedToString(thread, self, node));
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`\n");
+  Arcadia_StringBuilder_clear(thread, self->stringBuffer);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"expected `");
+  Arcadia_StringBuilder_insertBackString(thread, self->stringBuffer, expectedToString(thread, self, ddlsNode));
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"`, received `");
+  Arcadia_StringBuilder_insertBackString(thread, self->stringBuffer, receivedToString(thread, self, node));
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"`\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
-  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
-                                       Arcadia_StringBuffer_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
+  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuilder_getBytes(thread, self->stringBuffer),
+                                       Arcadia_StringBuilder_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
 }
 
 void
@@ -251,17 +251,17 @@ Arcadia_DDLS_Diagnostics_mapEntryAlreadyDefined
     Arcadia_String* name
   )
 {
-  Arcadia_StringBuffer_clear(thread, self->stringBuffer);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
-  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` was already specified");
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
+  Arcadia_StringBuilder_clear(thread, self->stringBuffer);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
+  Arcadia_StringBuilder_insertBackString(thread, self->stringBuffer, name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"` was already specified");
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
-  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
-                                       Arcadia_StringBuffer_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
+  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuilder_getBytes(thread, self->stringBuffer),
+                                       Arcadia_StringBuilder_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
 }
 
 void
@@ -272,17 +272,17 @@ Arcadia_DDLS_Diagnostics_mapEntryExistsError
     Arcadia_String* name
   )
 {
-  Arcadia_StringBuffer_clear(thread, self->stringBuffer);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
-  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` exists but is not permitted by the type");
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
+  Arcadia_StringBuilder_clear(thread, self->stringBuffer);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
+  Arcadia_StringBuilder_insertBackString(thread, self->stringBuffer, name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"` exists but is not permitted by the type");
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
-  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
-                                       Arcadia_StringBuffer_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
+  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuilder_getBytes(thread, self->stringBuffer),
+                                       Arcadia_StringBuilder_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
 }
 
 void
@@ -293,17 +293,17 @@ Arcadia_DDLS_Diagnostics_mapEntryNotExistsError
     Arcadia_String* name
   )
 {
-  Arcadia_StringBuffer_clear(thread, self->stringBuffer);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
-  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` not exists but is required by the type");
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
+  Arcadia_StringBuilder_clear(thread, self->stringBuffer);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
+  Arcadia_StringBuilder_insertBackString(thread, self->stringBuffer, name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"` not exists but is required by the type");
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
-  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
-                                       Arcadia_StringBuffer_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
+  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuilder_getBytes(thread, self->stringBuffer),
+                                       Arcadia_StringBuilder_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
 }
 
 void
@@ -314,15 +314,15 @@ Arcadia_DDLS_Diagnostics_unresolvedSchemaReferenceError
     Arcadia_String* name
   )
 {
-  Arcadia_StringBuffer_clear(thread, self->stringBuffer);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"unresolved schema reference `");
-  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`");
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
+  Arcadia_StringBuilder_clear(thread, self->stringBuffer);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"unresolved schema reference `");
+  Arcadia_StringBuilder_insertBackString(thread, self->stringBuffer, name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"`");
+  Arcadia_StringBuilder_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
-  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
-                                       Arcadia_StringBuffer_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
+  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuilder_getBytes(thread, self->stringBuffer),
+                                       Arcadia_StringBuilder_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
 }

@@ -30,10 +30,10 @@ is
     uint32_t expectedCodePoint
   )
 {
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
+  if (!Arcadia_UnicodeCodePointReader_hasValue(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value currentCodePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
+  Arcadia_Natural32Value currentCodePoint = Arcadia_UnicodeCodePointReader_getValue(thread, context->reader);
   return expectedCodePoint == currentCodePoint;
 }
 
@@ -45,14 +45,14 @@ evalInvoke
     Directives_Tree* ast
   )
 {
-  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->invoke.name);
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->invokeExpr.target);
   Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
   if (Arcadia_Value_isVoidValue(&v)) {
     // Error.
-    Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
-    Arcadia_StringBuffer_insertBack(thread, sb, k);
-    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` not defined\n");
+    Arcadia_StringBuilder* sb = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"variable `");
+    Arcadia_StringBuilder_insertBack(thread, sb, k);
+    Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"` not defined\n");
 
     Arcadia_Log_error(thread, context->context->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sb)));
 
@@ -61,10 +61,10 @@ evalInvoke
   }
   if (!Arcadia_Value_isForeignProcedureValue(&v)) {
     // Error.
-    Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
-    Arcadia_StringBuffer_insertBack(thread, sb, k);
-    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` is not of procedure string\n");
+    Arcadia_StringBuilder* sb = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"variable `");
+    Arcadia_StringBuilder_insertBack(thread, sb, k);
+    Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"` is not of procedure string\n");
 
     Arcadia_Log_error(thread, context->context->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sb)));
 
@@ -75,13 +75,13 @@ evalInvoke
   Arcadia_Value targetValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
 
   Arcadia_SizeValue oldStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_SizeValue numberOfValues = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->invoke.arguments);
+  Arcadia_SizeValue numberOfValues = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->invokeExpr.arguments);
   if (numberOfValues > Arcadia_Natural8Value_Maximum - 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   for (Arcadia_SizeValue i = 0, n = numberOfValues; i < n; ++i) {
-    Arcadia_Value temporary = Arcadia_List_getAt(thread, ast->invoke.arguments, i);
+    Arcadia_Value temporary = Arcadia_List_getAt(thread, ast->invokeExpr.arguments, i);
     Arcadia_ValueStack_pushValue(thread, &temporary);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, numberOfValues);
@@ -115,7 +115,7 @@ evalInvoke
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ByteBuffer_insertBackBytes(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
 
 }
 
@@ -128,52 +128,52 @@ evalAst
   )
 {
   switch (ast->type) {
-    case Directives_TreeKind_At: {
+    case Directives_TreeKind_AtLiteralExpr: {
       Arcadia_Natural32Value targetCodePoint = '@';
-      Arcadia_UTF8Writer_writeCodePoints(thread, context->context->target, &targetCodePoint, 1);
+      Arcadia_Unicode_Encoder_encodeCodePoints(thread, context->context->target, &targetCodePoint, 1, context->context->targetBuffer);
     } break;
-    case Directives_TreeKind_GetVariable: {
-      Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->getVariable.name);
+    case Directives_TreeKind_NameExpr: {
+      Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->nameExpr.name);
       Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
       if (Arcadia_Value_isVoidValue(&v)) {
         // Error.
-        Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
-        Arcadia_StringBuffer_insertBack(thread, sb, k);
-        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` not defined\n");
-        fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+        Arcadia_StringBuilder* sb = Arcadia_StringBuilder_create(thread);
+        Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"variable `");
+        Arcadia_StringBuilder_insertBack(thread, sb, k);
+        Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"` not defined\n");
+        fwrite(Arcadia_StringBuilder_getBytes(thread, sb), 1, Arcadia_StringBuilder_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
         Arcadia_Thread_jump(thread);
       } else  if (!Arcadia_Value_isObjectReferenceValue(&v)) {
         // Error.
-        Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
-        Arcadia_StringBuffer_insertBack(thread, sb, k);
-        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` is not of type string\n");
-        fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+        Arcadia_StringBuilder* sb = Arcadia_StringBuilder_create(thread);
+        Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"variable `");
+        Arcadia_StringBuilder_insertBack(thread, sb, k);
+        Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"` is not of type string\n");
+        fwrite(Arcadia_StringBuilder_getBytes(thread, sb), 1, Arcadia_StringBuilder_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
         Arcadia_Thread_jump(thread);
       }
       Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&v);
       if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
         // Error.
-        Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
-        Arcadia_StringBuffer_insertBack(thread, sb, k);
-        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` is not of type string\n");
-        fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+        Arcadia_StringBuilder* sb = Arcadia_StringBuilder_create(thread);
+        Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"variable `");
+        Arcadia_StringBuilder_insertBack(thread, sb, k);
+        Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"` is not of type string\n");
+        fwrite(Arcadia_StringBuilder_getBytes(thread, sb), 1, Arcadia_StringBuilder_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_ByteBuffer_insertBackBytes(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(thread, (Arcadia_String*)object));
+      Arcadia_ByteArrayBuilder_insertBackBytes(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(thread, (Arcadia_String*)object));
     } break;
-    case Directives_TreeKind_Invoke: {
-      if (Arcadia_String_isEqualTo_pn(thread, ast->invoke.name, u8"include", sizeof(u8"include") - 1)) {
-        if (1 != Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->invoke.arguments)) {
+    case Directives_TreeKind_InvokeExpr: {
+      if (Arcadia_String_isEqualTo_pn(thread, ast->invokeExpr.target, u8"include", sizeof(u8"include") - 1)) {
+        if (1 != Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->invokeExpr.arguments)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
           Arcadia_Thread_jump(thread);
         }
-        Arcadia_Object* object = Arcadia_List_getObjectReferenceValueAt(thread, ast->invoke.arguments, 0);
+        Arcadia_Object* object = Arcadia_List_getObjectReferenceValueAt(thread, ast->invokeExpr.arguments, 0);
         if (!Arcadia_Object_isInstanceOf(thread, object, _Arcadia_String_getType(thread))) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
           Arcadia_Thread_jump(thread);
@@ -188,8 +188,8 @@ evalAst
         evalInvoke(thread, context, ast);
       }
     } break;
-    case Directives_TreeKind_String: {
-      Arcadia_UTF8Writer_writeString(thread, context->context->target, ast->string);
+    case Directives_TreeKind_StringLiteralExpr: {
+      Arcadia_Unicode_Encoder_encodeString(thread, context->context->target, ast->stringLiteralExpr.string, context->context->targetBuffer);
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -268,6 +268,9 @@ FileContext_visit
     FileContext* self
   )
 {
+  if (self->fileBytes) {
+    Arcadia_RuntimeByteArray_visit(thread, self->fileBytes);
+  }
   if (self->context) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->context);
   }
@@ -311,6 +314,7 @@ FileContext_constructImpl
   self->includingFilePath = (Arcadia_FilePath*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_FilePath_getType(thread));;
   self->includedFilePath = (Arcadia_FilePath*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
 
+  self->fileBytes = NULL;
   self->reader = NULL;
 
   self->parser = NULL;
@@ -345,6 +349,19 @@ FileContext_create
   ARCADIA_CREATEOBJECT(FileContext);
 }
 
+/// Get the Unicode code points of a file.
+/// Emits a diagnostic error if decoding fails.
+Arcadia_List* toCodePoints(Arcadia_Thread* thread, Arcadia_Languages_Diagnostics* diagnostics, Arcadia_RuntimeByteArray* source) {
+  Arcadia_List* codePoints = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  _Arcadia_UTF8ArrayIterator iterator;
+  _Arcadia_UTF8ArrayIterator_initialize(thread, &iterator, Arcadia_RuntimeByteArray_getBytes(thread, source), Arcadia_RuntimeByteArray_getNumberOfBytes(thread, source));
+  while (_Arcadia_UTF8ArrayIterator_hasCodePoint(thread, &iterator)) {
+    Arcadia_Natural32Value codePoint = _Arcadia_UTF8ArrayIterator_getCodePoint(thread, &iterator);
+    Arcadia_List_insertBackNatural32Value(thread, codePoints, codePoint);
+  }
+  return codePoints;
+}
+
 void
 FileContext_execute
   (
@@ -353,7 +370,7 @@ FileContext_execute
   )
 {
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_ByteBuffer* sourceByteBuffer = NULL;
+  Arcadia_ByteArrayBuilder* sourceByteBuffer = NULL;
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -364,33 +381,33 @@ FileContext_execute
     Arcadia_Thread_popJumpTarget(thread);
 
     Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, context->includedFilePath);
-    Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuilder* sb = Arcadia_StringBuilder_create(thread);
     Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ps);
-    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"failed to read file `");
-    Arcadia_StringBuffer_insertBack(thread, sb, v);
-    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"failed to read file `");
+    Arcadia_StringBuilder_insertBack(thread, sb, v);
+    Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"`\n");
 
     Arcadia_Log_error(thread, context->context->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sb)));
 
     Arcadia_Thread_jump(thread);
   }
-
-  context->reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
+  context->fileBytes = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, sourceByteBuffer), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, sourceByteBuffer));
+  context->reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_RuntimeByteArray_ByteReader_create(thread, context->fileBytes));
   if (!context->parser) {
     context->parser = Directives_Parser_create(thread, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 0, context->reader);
   }
 
-  while (Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
-    Arcadia_Natural32Value sourceCodePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
+  while (Arcadia_UnicodeCodePointReader_hasValue(thread, context->reader)) {
+    Arcadia_Natural32Value sourceCodePoint = Arcadia_UnicodeCodePointReader_getValue(thread, context->reader);
     if (sourceCodePoint == '@') {
-      Arcadia_UTF8Reader_next(thread, context->reader);
+      Arcadia_UnicodeCodePointReader_nextValue(thread, context->reader);
       Directives_Parser_setInput(thread, context->parser, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 1, context->reader);
       Directives_Tree* ast = parseDirective(thread, context);
       evalAst(thread, context, ast);
     } else {
       Arcadia_Natural32Value targetCodePoint = sourceCodePoint;
-      Arcadia_UTF8Writer_writeCodePoints(thread, context->context->target, &targetCodePoint, 1);
-      Arcadia_UTF8Reader_next(thread, context->reader);
+      Arcadia_Unicode_Encoder_encodeCodePoints(thread, context->context->target, &targetCodePoint, 1, context->context->targetBuffer);
+      Arcadia_UnicodeCodePointReader_nextValue(thread, context->reader);
     }
   }
 }

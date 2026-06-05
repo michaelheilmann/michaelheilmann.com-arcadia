@@ -79,6 +79,6 @@ Arcadia_Media_DSP_generate
     Arcadia_Media_DSP* self,
     Arcadia_Natural32Value sampleRate,
     Arcadia_Natural32Value numberOfSamples,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 { Arcadia_VirtualCall(Arcadia_Media_DSP, generate, self, sampleRate, numberOfSamples, target); }

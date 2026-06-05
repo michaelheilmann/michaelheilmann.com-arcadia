@@ -33,13 +33,13 @@ main1
   Arcadia_Value_setVoidValue(&target, Arcadia_VoidValue_Void);
   Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
+    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_RuntimeByteArray_create(thread, argv[argi], strlen(argv[argi])));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argumentString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
-    Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argumentString);
-    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r);
+    Arcadia_UnicodeCodePointReader* r = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_String_ByteReader_create(thread, argumentString));
+    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UnicodeCodePointReader*)r);
     if (argument->syntacticalError) {
       Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString, log);
     }
@@ -73,7 +73,7 @@ main1
     256,
   };
   Arcadia_Imaging_ImageManager* imageManager = Arcadia_Imaging_ImageManager_getOrCreate(thread);
-  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"ico", sizeof(u8"ico") - 1)));
+  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"ico", sizeof(u8"ico") - 1)));
   Arcadia_List* writers = Arcadia_Imaging_ImageManager_getWriters(thread, imageManager, extension);
   if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)writers)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);

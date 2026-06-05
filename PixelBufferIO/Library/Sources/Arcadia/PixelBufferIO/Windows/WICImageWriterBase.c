@@ -117,10 +117,10 @@ startup1
   HRESULT hr;
   //
   if (Arcadia_Imaging_ImageWriterParameters_hasPath(thread, parameters)) {
-    Arcadia_ByteBuffer* b = Arcadia_ByteBuffer_create(thread);
-    Arcadia_ByteBuffer_insertBackBytes(thread, b, Arcadia_String_getBytes(thread, Arcadia_Imaging_ImageWriterParameters_getPath(thread, parameters)),
+    Arcadia_ByteArrayBuilder* b = Arcadia_ByteArrayBuilder_create(thread);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, b, Arcadia_String_getBytes(thread, Arcadia_Imaging_ImageWriterParameters_getPath(thread, parameters)),
                                                   Arcadia_String_getNumberOfBytes(thread, Arcadia_Imaging_ImageWriterParameters_getPath(thread, parameters)));
-    Arcadia_ByteBuffer_insertBackBytes(thread, b, u8"", 1);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, b, u8"", 1);
     wchar_t* targetPathW = Arcadia_Windows_multiByteToWideCharZeroTerminated(b->p);
     if (!targetPathW) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -340,7 +340,7 @@ startup3
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_ByteBuffer_insertBackBytes(thread, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, parameters), p, n);
+      Arcadia_ByteArrayBuilder_insertBackBytes(thread, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, parameters), p, n);
       GlobalUnlock(self->hMemory);
       Arcadia_Thread_popJumpTarget(thread);
     } else {

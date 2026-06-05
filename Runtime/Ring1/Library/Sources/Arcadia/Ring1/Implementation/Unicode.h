@@ -62,7 +62,8 @@ Arcadia_Unicode_encodeCodePointsUtf32Le
     Arcadia_Unicode_EncodeCodePointCallbackFunction* function
   );
 
-/// @brief Encode a sequence of Bytes into their corresponding sequence of UTF8 Bytes.
+/// @brief
+/// Validate a sequence of UTF8 Bytes and write the Bytes into.
 /// @remarks
 /// This function also validates if the sequence of Natural8 values is a valid code points.
 void

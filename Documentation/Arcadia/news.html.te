@@ -2,25 +2,6 @@
 
   <link rel='canonical' href='@{siteAddress}/Arcadia/news'>
   <title>News</title>
-  <style>
-    div.news-item {
-      display: flex;
-      flex-direction: row;
-    }
-    .news {
-      display: flex;
-      flex-direction: column;
-      row-gap: 6rem;
-      column-gap: 6rem;
-    }
-    .news-item-body {
-      margin-top: 0.25rem;
-    }
-    .news-item-header > h2 {
-      margin: 0 !important;
-      margin-right: 2rem !important;
-    }
-  </style>
 </head>
 <body class="my-content-page-1">
   <header>
@@ -31,7 +12,7 @@
   <main>
     <div class="left-column"></div>
     <div class="center-column">
-    <h1>News</h1>
+    <h1 style="margin-top: 6rem; margin-bottom: 6rem">News</h1>
     
     <div class="news">
     @{include("./News/news-2025-12-24.i")}
@@ -47,13 +28,6 @@
   </div>
   <div class="right-column"></div>
   </main>
-  <footer>
-    <div class="left-column"></div>
-    <div class="center-column"></div>
-    <div class="right-column">
-      <div>Website maintained by @{siteAuthor}.</div>
-      <div>Last modified on @{dayOfMonth()} @{monthName()} @{year()}.</div>
-    </div>
-  </footer>
+  @{include("./../footer.i")}
 </body>
 </html>

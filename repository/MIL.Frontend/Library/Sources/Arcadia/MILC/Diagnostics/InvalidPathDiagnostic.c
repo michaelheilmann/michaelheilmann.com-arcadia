@@ -129,10 +129,10 @@ getMessageImpl
     Arcadia_MILC_Diagnostics_InvalidPathDiagnostic* self
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"error: string `");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, self->string);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` is not a valid path\n");
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"error: string `");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, self->string);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` is not a valid path\n");
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }
 

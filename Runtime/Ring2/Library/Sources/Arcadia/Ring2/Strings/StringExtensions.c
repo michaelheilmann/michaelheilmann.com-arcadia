@@ -52,7 +52,7 @@ Arcadia_String_createFromCxxString
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, x, strlen(x))));
+  return Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, x, strlen(x))));
 }
 
 int
@@ -71,36 +71,75 @@ Arcadia_String_toCxxInt
 }
 
 void
-Arcadia_StringBuffer_insertBackCxxInt
+Arcadia_StringBuilder_insertBackCxxInt
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
+    Arcadia_StringBuilder* self,
     int x
   )
 {
   Arcadia_String* string = Arcadia_String_createFromCxxInt(thread, x);
-  Arcadia_StringBuffer_insertBack(thread, self, Arcadia_Value_makeObjectReferenceValue(string));
+  Arcadia_StringBuilder_insertBack(thread, self, Arcadia_Value_makeObjectReferenceValue(string));
 }
 
 void
-Arcadia_StringBuffer_insertBackCxxString
+Arcadia_StringBuilder_insertBackCxxString
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
+    Arcadia_StringBuilder* self,
     const char *x
   )
 {
   Arcadia_String* y = Arcadia_String_createFromCxxString(thread, x);
-  Arcadia_StringBuffer_insertBack(thread, self, Arcadia_Value_makeObjectReferenceValue(y));
+  Arcadia_StringBuilder_insertBack(thread, self, Arcadia_Value_makeObjectReferenceValue(y));
 }
 
 void
-Arcadia_StringBuffer_insertBackString
+Arcadia_StringBuilder_insertFrontString
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
+    Arcadia_StringBuilder* self,
     Arcadia_String* x
   )
 {
-  Arcadia_StringBuffer_insertBack(thread, self, Arcadia_Value_makeObjectReferenceValue(x));
+  Arcadia_StringBuilder_insertFront(thread, self, Arcadia_Value_makeObjectReferenceValue(x));
 }
+
+void
+Arcadia_StringBuilder_insertBackString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuilder* self,
+    Arcadia_String* x
+  )
+{
+  Arcadia_StringBuilder_insertBack(thread, self, Arcadia_Value_makeObjectReferenceValue(x));
+}
+
+void
+Arcadia_String_insertByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_SizeValue index,
+    Arcadia_ByteArrayBuilder* target
+  )
+{ Arcadia_ByteArrayBuilder_insertBytes(thread, target, index, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread,self)); }
+
+void
+Arcadia_String_insertFrontByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_ByteArrayBuilder* target
+  )
+{ Arcadia_ByteArrayBuilder_insertFrontBytes(thread, target, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self)); }
+
+void
+Arcadia_String_insertBackByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_ByteArrayBuilder* target
+  )
+{ Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self)); }

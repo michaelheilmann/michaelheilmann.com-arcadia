@@ -46,7 +46,7 @@ Arcadia_Media_DSP_WhiteNoise_generate
     Arcadia_Media_DSP_WhiteNoise* self,
     Arcadia_Natural32Value sampleRate,
     Arcadia_Natural32Value numberOfSamples,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 /// @return The random number [-1,+1].
@@ -99,7 +99,7 @@ Arcadia_Media_DSP_WhiteNoise_initializeDispatchImpl
     Arcadia_Media_DSP_WhiteNoiseDispatch* self
   )
 {
-  ((Arcadia_Media_DSPDispatch*)self)->generate = (void (*)(Arcadia_Thread*, Arcadia_Media_DSP*, Arcadia_Natural32Value, Arcadia_Natural32Value, Arcadia_ByteBuffer*)) & Arcadia_Media_DSP_WhiteNoise_generate;
+  ((Arcadia_Media_DSPDispatch*)self)->generate = (void (*)(Arcadia_Thread*, Arcadia_Media_DSP*, Arcadia_Natural32Value, Arcadia_Natural32Value, Arcadia_ByteArrayBuilder*)) & Arcadia_Media_DSP_WhiteNoise_generate;
 }
 
 static void
@@ -117,12 +117,12 @@ Arcadia_Media_DSP_WhiteNoise_generate
     Arcadia_Media_DSP_WhiteNoise* self,
     Arcadia_Natural32Value sampleRate,
     Arcadia_Natural32Value numberOfSamples,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 { 
   for (Arcadia_SizeValue i = 0, n = numberOfSamples; i < n; ++i) {
     Arcadia_Real32Value v = Arcadia_getRandomReal32Value(thread);
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, &v, sizeof(v));
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, &v, sizeof(v));
   }
 }
 

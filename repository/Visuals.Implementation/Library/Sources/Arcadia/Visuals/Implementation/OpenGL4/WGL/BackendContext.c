@@ -145,45 +145,45 @@ createContext
   Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_open(thread, self->systemWindow);
   // (1) Get supported configuration.
   Arcadia_List* supportedConfigurations = Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryContext_getConfigurations(thread, wglFactoryContext);
-  Arcadia_StringBuffer* logMessage = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* logMessage = Arcadia_StringBuilder_create(thread);
   Arcadia_Log* log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)supportedConfigurations); i < n; ++i) {
     Arcadia_Visuals_Configuration* supportedConfiguration = Arcadia_List_getObjectReferenceValueAt(thread, supportedConfigurations, i);
-    Arcadia_StringBuffer_clear(thread, logMessage);
+    Arcadia_StringBuilder_clear(thread, logMessage);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"index: ");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromSize(thread, i));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"index: ");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, Arcadia_String_createFromSize(thread, i));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"red bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.redBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"red bits: ");
+    Arcadia_StringBuilder_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.redBits));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"green bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.greenBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"green bits: ");
+    Arcadia_StringBuilder_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.greenBits));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"blue bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.blueBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"blue bits: ");
+    Arcadia_StringBuilder_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.blueBits));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"alpha bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.alphaBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"alpha bits: ");
+    Arcadia_StringBuilder_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.alphaBits));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"depth bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->depthBuffer.depthBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"depth bits: ");
+    Arcadia_StringBuilder_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->depthBuffer.depthBits));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"OpenGL major version: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->opengl.version.major));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"OpenGL major version: ");
+    Arcadia_StringBuilder_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->opengl.version.major));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"OpenGL minor version: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->opengl.version.minor));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"OpenGL minor version: ");
+    Arcadia_StringBuilder_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->opengl.version.minor));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
     Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
   }
@@ -191,11 +191,11 @@ createContext
   Arcadia_Visuals_Configuration* desiredConfiguration = Arcadia_Visuals_Configuration_create(thread);
   // (3) Check if desired configuration is in supported configurations. If yes, continue. If no, fail.
   if (!isConfigurationSupported(thread, supportedConfigurations, desiredConfiguration)) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": visuals configuration not supported\n");
+    Arcadia_StringBuilder_clear(thread, logMessage);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, __FILE__);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8":");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8": visuals configuration not supported\n");
 
     Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 
@@ -219,11 +219,11 @@ createContext
   int numberOfPixelFormats;
   wglFactoryContext->_wglChoosePixelFormat(self->systemWindow->deviceContextHandle, &pixelFormatAttribs[0], NULL, 1, &self->pixelFormatIndex, &numberOfPixelFormats);
   if (!numberOfPixelFormats) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to select pixel format\n");
+    Arcadia_StringBuilder_clear(thread, logMessage);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, __FILE__);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8":");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8": failed to select pixel format\n");
 
     Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 
@@ -232,11 +232,11 @@ createContext
   }
   PIXELFORMATDESCRIPTOR pixelFormatDescriptors;
   if (!DescribePixelFormat(self->systemWindow->deviceContextHandle, self->pixelFormatIndex, sizeof(pixelFormatDescriptors), &pixelFormatDescriptors)) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to describe pixel format\n");
+    Arcadia_StringBuilder_clear(thread, logMessage);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, __FILE__);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8":");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8": failed to describe pixel format\n");
 
     Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 
@@ -244,11 +244,11 @@ createContext
     Arcadia_Thread_jump(thread);
   }
   if (!SetPixelFormat(self->systemWindow->deviceContextHandle, self->pixelFormatIndex, &pixelFormatDescriptors)) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to set pixel format\n");
+    Arcadia_StringBuilder_clear(thread, logMessage);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, __FILE__);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8":");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8": failed to set pixel format\n");
 
     Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 
@@ -263,15 +263,15 @@ createContext
   };
   self->glResourceContextHandle = wglFactoryContext->_wglCreateContextAttribs(self->systemWindow->deviceContextHandle, NULL, &contextAttribs[0]);
   if (!self->glResourceContextHandle) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to create OpenGL/WGL context for OpenGL version ");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.major);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8".");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.minor);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+    Arcadia_StringBuilder_clear(thread, logMessage);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, __FILE__);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8":");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8": failed to create OpenGL/WGL context for OpenGL version ");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.major);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8".");
+    Arcadia_StringBuilder_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.minor);
+    Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
     Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 
@@ -279,15 +279,15 @@ createContext
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_StringBuffer_clear(thread, logMessage);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-  Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": created OpenGL/WGL context for OpenGL version \n");
-  Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.major);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8".");
-  Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.minor);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
+  Arcadia_StringBuilder_clear(thread, logMessage);
+  Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, __FILE__);
+  Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8":");
+  Arcadia_StringBuilder_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
+  Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8": created OpenGL/WGL context for OpenGL version \n");
+  Arcadia_StringBuilder_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.major);
+  Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8".");
+  Arcadia_StringBuilder_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.minor);
+  Arcadia_StringBuilder_insertBackCxxString(thread, logMessage, u8"\n");
 
   Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 }

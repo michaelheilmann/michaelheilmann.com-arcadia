@@ -22,6 +22,7 @@
 #include "Arcadia/MILC/Diagnostics/MissingModuleDefinitionDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/MultipleModuleDefinitionsDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/SymbolAlreadyDefinedDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/UnexpectedSymbolDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/UnexpectedWordDiagnostic.h"
 
 #endif // ARCADIA_MILC_DIAGNOSTICS_INCLUDE_H_INCLUDED

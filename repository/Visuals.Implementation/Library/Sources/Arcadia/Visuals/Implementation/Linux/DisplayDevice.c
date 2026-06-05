@@ -349,14 +349,14 @@ Arcadia_Visuals_Linux_DisplayDevice_updateBounds
   Window rootWindow = XDefaultRootWindow(self->backendContext->display);
   XRRScreenResources* screenResources = XRRGetScreenResources(self->backendContext->display, rootWindow);
   if (!screenResources) {
-    Arcadia_StringBuffer* buffer = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBackCxxString(thread, buffer, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, buffer, u8":");
-    Arcadia_StringBuffer_insertBackCxxInt(thread, buffer, __LINE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, buffer, u8": ");
-    Arcadia_StringBuffer_insertBackCxxString(thread, buffer, u8"XRRGetScreenResources");
-    Arcadia_StringBuffer_insertBackCxxString(thread, buffer, u8" failed\n");
-    fwrite(Arcadia_StringBuffer_getBytes(thread, buffer), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, buffer), stdout);
+    Arcadia_StringBuilder* stringBuilder = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, __FILE__);
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, u8":");
+    Arcadia_StringBuilder_insertBackCxxInt(thread, stringBuilder, __LINE__);
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, u8": ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, u8"XRRGetScreenResources");
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, u8" failed\n");
+    fwrite(Arcadia_StringBuilder_getBytes(thread, stringBuilder), 1, Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuilder), stdout);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }

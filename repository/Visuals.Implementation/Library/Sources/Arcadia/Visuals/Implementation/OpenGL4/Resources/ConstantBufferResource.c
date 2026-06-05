@@ -146,7 +146,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   self->dirty = Arcadia_BooleanValue_True;
-  self->byteBuffer = Arcadia_ByteBuffer_create(thread);
+  self->byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
   self->bufferID = 0;
   Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource);
 }
@@ -206,7 +206,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl
   }
   if (self->dirty) {
     gl->glBindBuffer(GL_UNIFORM_BUFFER, self->bufferID);
-    gl->glBufferData(GL_UNIFORM_BUFFER, Arcadia_ByteBuffer_getNumberOfBytes(thread, self->byteBuffer), Arcadia_ByteBuffer_getBytes(thread, self->byteBuffer), GL_STATIC_DRAW);
+    gl->glBufferData(GL_UNIFORM_BUFFER, Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, self->byteBuffer), Arcadia_ByteArrayBuilder_getBytes(thread, self->byteBuffer), GL_STATIC_DRAW);
     if (gl->glGetError()) {
       return;
     }
@@ -256,7 +256,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   }
   if (self->dirty) {
     gl->glBindBuffer(GL_UNIFORM_BUFFER, self->bufferID);
-    gl->glBufferData(GL_UNIFORM_BUFFER, Arcadia_ByteBuffer_getNumberOfBytes(thread, self->byteBuffer), Arcadia_ByteBuffer_getBytes(thread, self->byteBuffer), GL_STATIC_DRAW);
+    gl->glBufferData(GL_UNIFORM_BUFFER, Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, self->byteBuffer), Arcadia_ByteArrayBuilder_getBytes(thread, self->byteBuffer), GL_STATIC_DRAW);
     if (gl->glGetError()) {
       return;
     }
@@ -273,8 +273,8 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_ByteBuffer_clear(thread, self->byteBuffer);
-  Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, bytes, numberOfBytes);
+  Arcadia_ByteArrayBuilder_clear(thread, self->byteBuffer);
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, self->byteBuffer, bytes, numberOfBytes);
   self->dirty = Arcadia_BooleanValue_True;
 }
 
@@ -284,7 +284,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
   )
-{ Arcadia_ByteBuffer_clear(thread, self->byteBuffer); self->dirty = Arcadia_BooleanValue_True; }
+{ Arcadia_ByteArrayBuilder_clear(thread, self->byteBuffer); self->dirty = Arcadia_BooleanValue_True; }
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32Impl
@@ -294,7 +294,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32I
     Arcadia_Math_Color4Real32 const* source
   )
 {
-  Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, &(source->components[0]), sizeof(float) * 4);
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, self->byteBuffer, &(source->components[0]), sizeof(float) * 4);
 }
 
 static inline void
@@ -309,13 +309,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real
   if (transpose) {
     for (size_t i = 0; i < 4; ++i) {
       for (size_t j = 0; j < 4; ++j) {
-        Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, &(source->elements[j][i]), sizeof(float));
+        Arcadia_ByteArrayBuilder_insertBackBytes(thread, self->byteBuffer, &(source->elements[j][i]), sizeof(float));
       }
     }
   } else {
     for (size_t i = 0; i < 4; ++i) {
       for (size_t j = 0; j < 4; ++j) {
-        Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, &(source->elements[i][j]), sizeof(float));
+        Arcadia_ByteArrayBuilder_insertBackBytes(thread, self->byteBuffer, &(source->elements[i][j]), sizeof(float));
       }
     }
   }

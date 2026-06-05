@@ -63,7 +63,7 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_Map* constantMapping,
     Arcadia_Map* vertexShaderVariableScalarMapping,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 /// @param constantMapping maps "VPL constant record names" / "VPL constant scalar names" to "OpenGL/GLSL uniform block names" and "OpenGL/GLSL uniform names".
@@ -76,7 +76,7 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
     Arcadia_Map* constantMapping,
     Arcadia_Map* fragmentShaderVariableScalarMapping,
     Arcadia_String** fragmentColorOutput,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_VPL_GLSL_TRANSPILER_H_INCLUDED

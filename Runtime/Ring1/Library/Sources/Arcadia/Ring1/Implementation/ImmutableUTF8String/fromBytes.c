@@ -20,7 +20,7 @@
 #include "Arcadia/Ring1/Implementation/ImmutableUTF8String/hash.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUTF8String/type.h"
 
-Arcadia_ImmutableUTF8String*
+Arcadia_RuntimeUTF8String*
 _createFromBytes
   (
     Arcadia_Thread* thread,
@@ -32,7 +32,7 @@ _createFromBytes
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_SizeValue_Maximum - sizeof(Arcadia_ImmutableUTF8String) < numberOfBytes) {
+  if (Arcadia_SizeValue_Maximum - sizeof(Arcadia_RuntimeUTF8String) < numberOfBytes) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -41,8 +41,8 @@ _createFromBytes
     Arcadia_Thread_jump(thread);
   }
   _ensureTypeRegistered(thread);
-  Arcadia_ImmutableUTF8String* string = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUTF8String) + numberOfBytes);
+  Arcadia_RuntimeUTF8String* string = NULL;
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_RuntimeUTF8String) + numberOfBytes);
   Arcadia_Memory_copy(thread, string->bytes, bytes, numberOfBytes);
   string->numberOfBytes = numberOfBytes;
   string->hash = _hashUTF8(thread, string->bytes, string->numberOfBytes);

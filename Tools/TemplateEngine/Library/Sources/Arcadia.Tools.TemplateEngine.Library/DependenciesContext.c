@@ -136,19 +136,20 @@ writePath
     Arcadia_Thread* thread,
     DependenciesContext* self,
     Arcadia_String* pathString,
-    Arcadia_UTF8Writer* writer
+    Arcadia_Unicode_Encoder* targetEncoder,
+    Arcadia_ByteArrayBuilder* targetByteBuffer
   )
 {
-  Arcadia_UTF8Reader* reader = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, pathString);
-  while (Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
-    Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
+  Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_String_ByteReader_create(thread, pathString));
+  while (Arcadia_UnicodeCodePointReader_hasValue(thread, reader)) {
+    Arcadia_Natural32Value codePoint = Arcadia_UnicodeCodePointReader_getValue(thread, reader);
     if (codePoint == ' ') {
       Arcadia_Natural32Value t[] = { '\\', codePoint };
-      Arcadia_UTF8Writer_writeCodePoints(thread, writer, t, 2);
+      Arcadia_Unicode_Encoder_encodeCodePoints(thread, targetEncoder, t, 2, targetByteBuffer);
     } else {
-      Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+      Arcadia_Unicode_Encoder_encodeCodePoints(thread, targetEncoder, &codePoint, 1, targetByteBuffer);
     }
-    Arcadia_UTF8Reader_next(thread, reader);
+    Arcadia_UnicodeCodePointReader_nextValue(thread, reader);
   }
 }
 
@@ -165,8 +166,8 @@ DependenciesContext_write
   }
   Arcadia_List* tosList = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   // (1) Create a buffer to write to.
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer);
+  Arcadia_ByteArrayBuilder* byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  Arcadia_Unicode_Encoder* writer = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
   // (2) Iterate over the keys.
   Arcadia_List* froms = Arcadia_Map_getKeys(thread, self->dependencies);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)froms); i < n; ++i) {
@@ -177,16 +178,16 @@ DependenciesContext_write
     Arcadia_Collection_clear(thread, (Arcadia_Collection*)tosList);
     Arcadia_Set_getAll(thread, tosSet, tosList);
     // (2.3) Write the "from" string.
-    writePath(thread, self, from, writer);
-    Arcadia_UTF8Writer_writeString(thread, writer, Arcadia_String_createFromCxxString(thread, u8" :"));
+    writePath(thread, self, from, writer, byteBuffer);
+    Arcadia_Unicode_Encoder_encodeString(thread, writer, Arcadia_String_createFromCxxString(thread, u8" :"), byteBuffer);
     for (Arcadia_SizeValue j = 0, m = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tosList); j < m; ++j) {
       // (2.4) Get the "to" string.
       Arcadia_String* to = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tosList, j, _Arcadia_String_getType(thread));
       // (2.5) Write the "to" string.
-      Arcadia_UTF8Writer_writeString(thread, writer, Arcadia_String_createFromCxxString(thread, u8" "));
-      writePath(thread, self, to, writer);
+      Arcadia_Unicode_Encoder_encodeString(thread, writer, Arcadia_String_createFromCxxString(thread, u8" "), byteBuffer);
+      writePath(thread, self, to, writer, byteBuffer);
     }
-    Arcadia_UTF8Writer_writeString(thread, writer, Arcadia_String_createFromCxxString(thread, u8"\r\n"));
+    Arcadia_Unicode_Encoder_encodeString(thread, writer, Arcadia_String_createFromCxxString(thread, u8"\r\n"), byteBuffer);
   }
   {
     // (1) Ensure the path is absolute.

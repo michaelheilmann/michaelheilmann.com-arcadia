@@ -29,7 +29,7 @@
 // d) the single Byte sequence (128) would be represented as ('x', '80')
 // e) the single Byte sequence (255) would be represented as xff.
 // f) the two Byte sequence (1, 128) would be encoded as ('x', '01', '80').
-// @param source The value of type Arcadia.String or Arcadia.StringBuffer.
+// @param source The value of type Arcadia.String or Arcadia.StringBuilder.
 Arcadia_String*
 Arcadia_Languages_mangleName
   (

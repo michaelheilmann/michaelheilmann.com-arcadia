@@ -327,10 +327,10 @@ getMessageImpl
     Arcadia_MILC_Diagnostics_UnexpectedWordDiagnostic* self
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"lexical error: received ");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, wordTypeToString(thread, self, self->received));
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"\n");
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"lexical error: received ");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, wordTypeToString(thread, self, self->received));
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"\n");
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }
 

@@ -17,7 +17,7 @@
 #include "Arcadia/Ring2/FileSystem/Windows/DirectoryIteratorWindows.h"
 
 #include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
-#include "Arcadia/Ring2/Strings/StringBuffer.h"
+#include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Strings/StringExtensions.h"
 #include "Arcadia/Ring2/FileSystem/FilePath.h"
 
@@ -98,15 +98,15 @@ Arcadia_DirectoryIteratorWindows_constructImpl
   }
   self->path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
   self->handle = INVALID_HANDLE_VALUE;
-  Arcadia_StringBuffer* queryStringBuilder = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBack(thread, queryStringBuilder, Arcadia_Value_makeObjectReferenceValue(Arcadia_FilePath_toNative(thread, self->path, Arcadia_BooleanValue_False)));
+  Arcadia_StringBuilder* queryStringBuilder = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBack(thread, queryStringBuilder, Arcadia_Value_makeObjectReferenceValue(Arcadia_FilePath_toNative(thread, self->path, Arcadia_BooleanValue_False)));
   // (1) Append '/' if the path does not end with '/'.
-  if (!Arcadia_StringBuffer_endsWith_pn(thread, queryStringBuilder, u8"\\", sizeof(u8"\\") - 1)) {
-    Arcadia_StringBuffer_insertBackCxxString(thread, queryStringBuilder, u8"\\");
+  if (!Arcadia_StringBuilder_endsWith_pn(thread, queryStringBuilder, u8"\\", sizeof(u8"\\") - 1)) {
+    Arcadia_StringBuilder_insertBackCxxString(thread, queryStringBuilder, u8"\\");
   }
   // (2) Append '*\0'.
-  Arcadia_StringBuffer_insertBackCxxString(thread, queryStringBuilder, u8"*");
-  Arcadia_StringBuffer_insertBackCodePoints(thread, queryStringBuilder, &zeroTerminator, 1);
+  Arcadia_StringBuilder_insertBackCxxString(thread, queryStringBuilder, u8"*");
+  Arcadia_StringBuilder_insertBackCodePoints(thread, queryStringBuilder, &zeroTerminator, 1);
   Arcadia_String* queryString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(queryStringBuilder));
   SetLastError(0);
   self->handle = FindFirstFileA(Arcadia_String_getBytes(thread, queryString), &self->data);
@@ -160,7 +160,7 @@ Arcadia_DirectoryIteratorWindows_getValue
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
   } else {
-    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, self->data.cFileName, strlen(self->data.cFileName))));
+    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, self->data.cFileName, strlen(self->data.cFileName))));
     return Arcadia_FilePath_parseNative(thread, fileNameString);
   }
 }

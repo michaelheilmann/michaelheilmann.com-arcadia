@@ -43,7 +43,7 @@ parse
     size_t n
   )
 {
-  Arcadia_String* input = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n)));
+  Arcadia_RuntimeByteArray* input = Arcadia_RuntimeByteArray_create(thread, p, n);
   return (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser, input), _Arcadia_DDL_Node_getType(thread));
 }
 

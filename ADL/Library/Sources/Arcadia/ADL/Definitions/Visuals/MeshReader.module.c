@@ -20,6 +20,7 @@
 #include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Reference.h"
 #include "Arcadia/ADL/Definitions/Visuals/Include.h"
+#include <string.h>
 
 static const char* SCHEMA =
   "{\n"
@@ -162,7 +163,7 @@ Arcadia_ADL_MeshReader_read
   Arcadia_String* name = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
   Arcadia_String* ambientColorName = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->AMBIENTCOLOR);
 
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_List* list; Arcadia_SizeValue numberOfVertices, n;
 
   // (1) The number of position tuples / ambient color tuples / ambient texture coordinate tuples must be the same.
@@ -170,7 +171,7 @@ Arcadia_ADL_MeshReader_read
   numberOfVertices = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)list) / 3; // Not divisible by 3 erorr is handled below.
 
   // (1) read the positions
-  Arcadia_ByteBuffer_clear(thread, byteBuffer);
+  Arcadia_ByteArrayBuilder_clear(thread, byteBuffer);
   list = Arcadia_ADL_Reader_getListValue(thread, (Arcadia_DDL_MapNode*)input, self->VERTEXPOSITIONS);
   n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)list);
   if (n % 3 != 0 || numberOfVertices != n / 3) {
@@ -180,11 +181,11 @@ Arcadia_ADL_MeshReader_read
   for (Arcadia_SizeValue i = 0; i < n; ++i) {
     Arcadia_DDL_NumberNode* listElement = (Arcadia_DDL_NumberNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, list, i, _Arcadia_DDL_NumberNode_getType(thread));
     Arcadia_Real32Value v = Arcadia_String_toReal32(thread, listElement->value);
-    Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, &v, sizeof(Arcadia_Real32Value));
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteBuffer, &v, sizeof(Arcadia_Real32Value));
   }
-  Arcadia_InternalImmutableByteArray* vertexPositions = Arcadia_InternalImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer));
+  Arcadia_RuntimeByteArray* vertexPositions = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, byteBuffer), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, byteBuffer));
   // (2) read the ambient colors
-  Arcadia_ByteBuffer_clear(thread, byteBuffer);
+  Arcadia_ByteArrayBuilder_clear(thread, byteBuffer);
   list = Arcadia_ADL_Reader_getListValue(thread, (Arcadia_DDL_MapNode*)input, self->VERTEXAMBIENTCOLORS);
   n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)list);
   if (n % 4 != 0 || numberOfVertices != n / 4) {
@@ -194,11 +195,11 @@ Arcadia_ADL_MeshReader_read
   for (Arcadia_SizeValue i = 0; i < n; ++i) {
     Arcadia_DDL_NumberNode* listElement = (Arcadia_DDL_NumberNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, list, i, _Arcadia_DDL_NumberNode_getType(thread));
     Arcadia_Real32Value v = Arcadia_String_toReal32(thread, listElement->value);
-    Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, &v, sizeof(Arcadia_Real32Value));
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteBuffer, &v, sizeof(Arcadia_Real32Value));
   }
-  Arcadia_InternalImmutableByteArray* vertexAmbientColors = Arcadia_InternalImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer));
+  Arcadia_RuntimeByteArray* vertexAmbientColors = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, byteBuffer), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, byteBuffer));
   // (3) read the ambient color texutre coordinates
-  Arcadia_ByteBuffer_clear(thread, byteBuffer);
+  Arcadia_ByteArrayBuilder_clear(thread, byteBuffer);
   list = Arcadia_ADL_Reader_getListValue(thread, (Arcadia_DDL_MapNode*)input, self->VERTEXAMBIENTCOLORTEXTURECOORDINATES);
   n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)list);
   if (n % 2 != 0 || numberOfVertices != n / 2) {
@@ -208,10 +209,10 @@ Arcadia_ADL_MeshReader_read
   for (Arcadia_SizeValue i = 0; i < n; ++i) {
     Arcadia_DDL_NumberNode* listElement = (Arcadia_DDL_NumberNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, list, i, _Arcadia_DDL_NumberNode_getType(thread));
     Arcadia_Real32Value v = Arcadia_String_toReal32(thread, listElement->value);
-    Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, &v, sizeof(Arcadia_Real32Value));
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteBuffer, &v, sizeof(Arcadia_Real32Value));
   }
 
-  Arcadia_InternalImmutableByteArray* vertexAmbientColorTextureCoordinates = Arcadia_InternalImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer));
+  Arcadia_RuntimeByteArray* vertexAmbientColorTextureCoordinates = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, byteBuffer), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, byteBuffer));
 
 
   // Assert the definition has the correct type.
@@ -254,7 +255,7 @@ Arcadia_ADL_MeshReader_constructImpl
   }
   {
     Arcadia_DDLS_DefaultReader* reader = (Arcadia_DDLS_DefaultReader*)Arcadia_DDLS_DefaultReader_create(thread);
-    Arcadia_DDLS_Node* node = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, SCHEMA));
+    Arcadia_DDLS_Node* node = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_RuntimeByteArray_create(thread, SCHEMA, strlen(SCHEMA)));
     if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node, _Arcadia_DDLS_SchemaNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);

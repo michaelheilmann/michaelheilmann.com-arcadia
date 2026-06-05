@@ -183,7 +183,8 @@ step2
       }
       Arcadia_Languages_Diagnostics_emit(thread, self->context->diagnostics);
     } else {
-      Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_FileSystem_getFileContents(thread, fileSystem, moduleFilePath)))), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
+      Arcadia_ByteArrayBuilder* fileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, moduleFilePath);
+      Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, fileContents), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, fileContents))), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
       compilationUnitNode->filePath = moduleFilePath;
       Arcadia_MILC_AST_ModuleNode_appendCompilationUnit(thread, moduleNode, compilationUnitNode);
       compilationUnitNode->moduleNode = moduleNode;
@@ -278,7 +279,8 @@ step3
         Arcadia_Log_information(thread, self->log, Arcadia_FilePath_toGeneric(thread, filePath));
         Arcadia_Log_information(thread, self->log, Arcadia_String_createFromCxxString(thread, u8"`\n"));
       #endif
-        Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath)))), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
+        Arcadia_ByteArrayBuilder* fileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
+        Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, fileContents), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, fileContents))), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
         compilationUnitNode->filePath = filePath;
         compilationUnitNode->moduleNode = moduleNode;
 #if 0
@@ -307,7 +309,7 @@ dumpClassSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_ClassSymbol* classSymbol
   );
 
@@ -316,7 +318,7 @@ dumpEnumerationSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_EnumerationSymbol* enumerationSymbol
   );
 
@@ -325,7 +327,7 @@ dumpModuleSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_ModuleSymbol* moduleSymbol
   );
 
@@ -334,7 +336,7 @@ dumpProcedureSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_ProcedureSymbol* procedureSymbol
   );
 
@@ -343,7 +345,7 @@ dumpSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_Symbol* symbol
   );
 
@@ -352,16 +354,16 @@ dumpClassSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_ClassSymbol* classSymbol
   )
 {
   for (Arcadia_SizeValue i = 0, n = indent; i < n; ++i) {
-    Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, ' ');
+    Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, ' ');
   }
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"class ");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)classSymbol)->name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"class ");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)classSymbol)->name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"\n");
 }
 
 static void
@@ -369,16 +371,16 @@ dumpEnumerationSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_EnumerationSymbol* enumerationSymbol
   )
 {
   for (Arcadia_SizeValue i = 0, n = indent; i < n; ++i) {
-    Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, ' ');
+    Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, ' ');
   }
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"enumeration ");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)enumerationSymbol)->name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"enumeration ");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)enumerationSymbol)->name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"\n");
 }
 
 static void
@@ -386,16 +388,16 @@ dumpProcedureSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_ProcedureSymbol* procedureSymbol
   )
 { 
   for (Arcadia_SizeValue i = 0, n = indent; i < n; ++i) {
-    Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, ' ');
+    Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, ' ');
   }
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"procedure ");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)procedureSymbol)->name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"procedure ");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)procedureSymbol)->name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"\n");
 }
 
 static void
@@ -403,16 +405,16 @@ dumpModuleSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_ModuleSymbol* moduleSymbol
   )
 {
   for (Arcadia_SizeValue i = 0, n = indent; i < n; ++i) {
-    Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, ' ');
+    Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, ' ');
   }
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"module ");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)moduleSymbol)->name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"module ");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, ((Arcadia_MILC_Symbol*)moduleSymbol)->name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"\n");
 
   Arcadia_List* symbols = Arcadia_Map_getValues(thread, moduleSymbol->scope->entries);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)symbols); i < n; ++i) {
@@ -426,12 +428,12 @@ dumpSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue indent,
-    Arcadia_StringBuffer* stringBuffer,
+    Arcadia_StringBuilder* stringBuffer,
     Arcadia_MILC_Symbol* symbol
   )
 {
   for (Arcadia_SizeValue i = 0, n = indent; i < n; ++i) {
-    Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, ' ');
+    Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, ' ');
   }
   switch (symbol->kind) {
     case Arcadia_MILC_SymbolKind_Class: {
@@ -484,7 +486,7 @@ Arcadia_MILC_CompilationTask_run
   Arcadia_MILC_EnterPhase_run(thread, self->context->enterPhase);
   // Dump top-level symbols.
 #if defined(Arcadia_MILC_Configuration_ListTopLevelSymbols) && 1 == Arcadia_MILC_Configuration_ListTopLevelSymbols
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
   Arcadia_List* symbols = Arcadia_Map_getValues(thread, self->context->scope->entries);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)symbols); i < n; ++i) { 
     Arcadia_MILC_Symbol* symbol = (Arcadia_MILC_Symbol*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, symbols, i, _Arcadia_MILC_Symbol_getType(thread));

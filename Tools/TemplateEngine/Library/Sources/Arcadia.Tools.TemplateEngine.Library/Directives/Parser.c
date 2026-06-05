@@ -44,42 +44,6 @@ Directives_Parser_initializeDispatchImpl
   );
 
 static Arcadia_BooleanValue
-is
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self,
-    Arcadia_Natural32Value expectedCodePoint
-  );
-
-static Arcadia_BooleanValue
-isSign
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  );
-
-static Arcadia_BooleanValue
-isLetter
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  );
-
-static Arcadia_BooleanValue
-isDigit
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  );
-
-static Arcadia_BooleanValue
-isUnderscore
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  );
-
-static Arcadia_BooleanValue
 isLeftParenthesis
   (
     Arcadia_Thread* thread,
@@ -100,20 +64,6 @@ getLiteral
     Directives_Parser* self
   );
 
-static void
-parseIdentifier
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  );
-
-static void
-parseString
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  );
-
 static Directives_Tree*
 parseExpression
   (
@@ -123,6 +73,13 @@ parseExpression
 
 static Directives_Tree*
 parseStatement
+  (
+    Arcadia_Thread* thread,
+    Directives_Parser* self
+  );
+
+static void
+DirectivesScannner_step
   (
     Arcadia_Thread* thread,
     Directives_Parser* self
@@ -167,17 +124,8 @@ Directives_Parser_visit
     Directives_Parser* self
   )
 {
-  if (self->file) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->file);
-  }
-  if (self->reader) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->reader);
-  }
-  if (self->temporary) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporary);
-  }
-  if (self->temporaryBuffer) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporaryBuffer);
+  if (self->scanner) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scanner);
   }
 }
 
@@ -198,13 +146,10 @@ Directives_Parser_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  self->file = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_String_getType(thread));
-  self->line = Arcadia_ValueStack_getNatural64Value(thread, 2);
-  self->reader = (Arcadia_UTF8Reader*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_UTF8Reader_getType(thread));
-
-  self->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  self->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->temporaryBuffer);
-
+  Arcadia_String* file = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_String_getType(thread));
+  Arcadia_Natural64Value line = Arcadia_ValueStack_getNatural64Value(thread, 2);
+  Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_UnicodeCodePointReader_getType(thread));
+  self->scanner = Directives_Scanner_create(thread, file, line, reader);
   Arcadia_LeaveConstructor(Directives_Parser);
 }
 
@@ -217,77 +162,13 @@ Directives_Parser_initializeDispatchImpl
 {/*Intentionally empty.*/}
 
 static Arcadia_BooleanValue
-is
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self,
-    Arcadia_Natural32Value expectedCodePoint
-  )
-{
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, self->reader)) {
-    return Arcadia_BooleanValue_False;
-  }
-  Arcadia_Natural32Value currentCodePoint = Arcadia_UTF8Reader_getCodePoint(thread, self->reader);
-  return expectedCodePoint == currentCodePoint;
-}
-
-static Arcadia_BooleanValue
-isSign
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  )
-{
-  return is(thread, self, '+') || is(thread, self, '-');
-}
-
-static Arcadia_BooleanValue
-isLetter
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  )
-{
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, self->reader)) {
-    return Arcadia_BooleanValue_False;
-  }
-  Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, self->reader);
-  return ('A' <= current && current <= 'Z')
-      || ('a' <= current && current <= 'z');
-}
-
-static Arcadia_BooleanValue
-isDigit
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  )
-{
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, self->reader)) {
-    return Arcadia_BooleanValue_False;
-  }
-  Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, self->reader);
-  return ('0' <= current && current <= '9');
-}
-
-static Arcadia_BooleanValue
-isUnderscore
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  )
-{
-  return is(thread, self, '_');
-}
-
-static Arcadia_BooleanValue
 isLeftParenthesis
   (
     Arcadia_Thread* thread,
     Directives_Parser* self
   )
 {
-  return is(thread, self, '(');
+  return self->scanner->wordType == Arcadia_TemplateEngine_WordType_LeftParenthesis;
 }
 
 static Arcadia_BooleanValue
@@ -297,7 +178,7 @@ isRightParenthesis
     Directives_Parser* self
   )
 {
-  return is(thread, self, ')');
+  return self->scanner->wordType == Arcadia_TemplateEngine_WordType_RightParenthesis;;
 }
 
 static Arcadia_String*
@@ -307,79 +188,7 @@ getLiteral
     Directives_Parser* self
   )
 {
-  return Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, self->temporaryBuffer->p, self->temporaryBuffer->sz));
-}
-
-static void
-parseIdentifier
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  )
-{
-  if (!isUnderscore(thread, self) && !isLetter(thread, self)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  do {
-    Arcadia_Natural32Value targetCodePoint = Arcadia_UTF8Reader_getCodePoint(thread, self->reader);
-    Arcadia_UTF8Writer_writeCodePoints(thread, self->temporary, &targetCodePoint, 1);
-    Arcadia_UTF8Reader_next(thread, self->reader);
-  } while (isUnderscore(thread, self) || isLetter(thread, self) || isDigit(thread, self));
-}
-
-static void
-parseString
-  (
-    Arcadia_Thread* thread,
-    Directives_Parser* self
-  )
-{
-  if (!is(thread, self, '"')) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_UTF8Reader_next(thread, self->reader);
-
-  Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
-  while (true) {
-    if (!Arcadia_UTF8Reader_hasCodePoint(thread, self->reader)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, self->reader);
-    if (lastWasSlash) {
-      switch (current) {
-        case '\\': {
-          Arcadia_Natural32Value targetCodePoint = '\\';
-          Arcadia_UTF8Writer_writeCodePoints(thread, self->temporary, &targetCodePoint, 1);
-          lastWasSlash = Arcadia_BooleanValue_False;
-        } break;
-        case '"': {
-          Arcadia_Natural32Value targetCodePoint = '"';
-          Arcadia_UTF8Writer_writeCodePoints(thread, self->temporary, &targetCodePoint, 1);
-          lastWasSlash = Arcadia_BooleanValue_False;
-        } break;
-        default: {
-          Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-          Arcadia_Thread_jump(thread);
-        } break;
-      };
-    } else {
-      if (current == '"') {
-        Arcadia_UTF8Reader_next(thread, self->reader);
-        return;
-      } else if (current == '\\') {
-        lastWasSlash = Arcadia_BooleanValue_True;
-        Arcadia_UTF8Reader_next(thread, self->reader);
-      } else {
-        Arcadia_UTF8Writer_writeCodePoints(thread, self->temporary, &current, 1);
-        Arcadia_UTF8Reader_next(thread, self->reader);
-      }
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-  Arcadia_Thread_jump(thread);
+  return Directives_Scanner_getLiteral(thread, self->scanner);
 }
 
 static Directives_Tree*
@@ -390,27 +199,31 @@ parseExpression
   )
 {
   Directives_Tree* ast = NULL;
-  Arcadia_ByteBuffer_clear(thread, self->temporaryBuffer);
-  parseIdentifier(thread, self);
+  if (self->scanner->wordType != Arcadia_TemplateEngine_WordType_Name) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
   Arcadia_String* name = getLiteral(thread, self);
-  Arcadia_String* argument = NULL;
+  DirectivesScannner_step(thread, self);
   if (isLeftParenthesis(thread, self)) {
+    DirectivesScannner_step(thread, self);
     Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-    Arcadia_UTF8Reader_next(thread, self->reader);
-    if (is(thread, self, '"')) {
-      Arcadia_ByteBuffer_clear(thread, self->temporaryBuffer);
-      parseString(thread, self);
-      argument = getLiteral(thread, self);
+    while (self->scanner->wordType == Arcadia_TemplateEngine_WordType_StringLiteral) {
+      Arcadia_String* argument = getLiteral(thread, self);
       Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
+      DirectivesScannner_step(thread, self);
+      if (self->scanner->wordType == Arcadia_TemplateEngine_WordType_Comma) {
+        DirectivesScannner_step(thread, self);
+      }
     }
     if (!isRightParenthesis(thread, self)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_UTF8Reader_next(thread, self->reader);
-    ast = Directives_Tree_createInvoke(thread, name, arguments);
+    DirectivesScannner_step(thread, self);
+    ast = Directives_Tree_createInvokeExpr(thread, name, arguments);
   } else {
-    ast = Directives_Tree_createGetVariable(thread, name);
+    ast = Directives_Tree_createNameExpr(thread, name);
   }
   return ast;
 }
@@ -425,6 +238,16 @@ parseStatement
   return parseExpression(thread, self);
 }
 
+static void 
+DirectivesScannner_step
+  (
+    Arcadia_Thread* thread,
+    Directives_Parser* self
+  )
+{
+  Directives_Scanner_step(thread, self->scanner);
+}
+
 static Directives_Tree*
 parseDirective
   (
@@ -432,25 +255,23 @@ parseDirective
     Directives_Parser* self
   )
 {
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, self->reader)) {
+  if (self->scanner->wordType != Arcadia_TemplateEngine_WordType_StartOfInput) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, self->reader);
-  switch (current) {
-    case '@': {
-      Directives_Tree* ast = Directives_Tree_createAt(thread);
-      Arcadia_UTF8Reader_next(thread, self->reader);
+  DirectivesScannner_step(thread, self);
+  switch (self->scanner->wordType) {
+    case Arcadia_TemplateEngine_WordType_AtLiteral: {
+      Directives_Tree* ast = Directives_Tree_createAtLiteralExpr(thread);
       return ast;
     } break;
-    case '{': {
-      Arcadia_UTF8Reader_next(thread, self->reader);
+    case Arcadia_TemplateEngine_WordType_LeftCurlyBracket: {
+      DirectivesScannner_step(thread, self);
       Directives_Tree* ast = parseStatement(thread, self);
-      if (!is(thread, self, '}')) {
+      if (self->scanner->wordType != Arcadia_TemplateEngine_WordType_RightCurlyBracket) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_UTF8Reader_next(thread, self->reader);
       return ast;
     } break;
     default: {
@@ -466,7 +287,7 @@ Directives_Parser_create
     Arcadia_Thread* thread,
     Arcadia_String* file,
 	  Arcadia_Natural64Value line,
-	  Arcadia_UTF8Reader* reader
+    Arcadia_UnicodeCodePointReader* reader
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
@@ -484,12 +305,10 @@ Directives_Parser_setInput
 	  Directives_Parser* self,
 	  Arcadia_String* file,
 	  Arcadia_Natural64Value line,
-	  Arcadia_UTF8Reader* reader
+    Arcadia_UnicodeCodePointReader* reader
   )
 {
-  self->file = file;
-  self->line = line;
-  self->reader = reader;
+  Directives_Scanner_setInput(thread, self->scanner, file, line, reader);
 }
 
 Directives_Tree*

@@ -143,25 +143,25 @@ getMessageImpl
     Arcadia_MILC_Diagnostics_FileNotFoundDiagnostic* self
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"error: ");
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"error: ");
   switch (self->fileType) {
     case Arcadia_MILC_FileType_CompilationUnit: {
-      Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"compilation unit file");
+      Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"compilation unit file");
     } break;
     case Arcadia_MILC_FileType_ConfigurationFile: {
-      Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"configuration file");
+      Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"configuration file");
     } break;
     case Arcadia_MILC_FileType_ModuleDirectory: {
-      Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"module directory");
+      Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"module directory");
     } break;
     default: {
-      Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"file ");
+      Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"file ");
     } break;
   }
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8" `");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, Arcadia_FilePath_toNative(thread, self->path, Arcadia_BooleanValue_False));
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` not found\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8" `");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, Arcadia_FilePath_toNative(thread, self->path, Arcadia_BooleanValue_False));
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` not found\n");
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }
 

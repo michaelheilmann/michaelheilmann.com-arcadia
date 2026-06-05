@@ -17,6 +17,8 @@
 #define ARCADIA_TEMPLATEENGINE_DIRECTIVES_PARSER_H_INCLUDED
 
 #include "Arcadia.Tools.TemplateEngine.Library/Directives/Tree.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Directives/WordType.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Directives/Scanner.h"
 
 Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Directives.Parser", Directives_Parser,
                           u8"Arcadia.Object");
@@ -27,17 +29,8 @@ struct Directives_ParserDispatch {
 
 struct Directives_Parser {
   Arcadia_Object _parent;
-  // The file.
-  Arcadia_String* file;
-  // The line.
-  Arcadia_Natural64Value line;
-  // The reader.
-  Arcadia_UTF8Reader* reader;
-
-  // Writer to temporary buffer.
-  Arcadia_UTF8Writer* temporary;
-  // Temporary buffer.
-  Arcadia_ByteBuffer* temporaryBuffer;
+  /// The scanner.
+  Directives_Scanner* scanner;
 };
 
 Directives_Parser*
@@ -46,7 +39,7 @@ Directives_Parser_create
     Arcadia_Thread* thread,
 	  Arcadia_String* file,
 	  Arcadia_Natural64Value line,
-	  Arcadia_UTF8Reader* reader
+    Arcadia_UnicodeCodePointReader* reader
   );
 
 void
@@ -56,7 +49,7 @@ Directives_Parser_setInput
 	  Directives_Parser* self,
     Arcadia_String* file,
 	  Arcadia_Natural64Value line,
-	  Arcadia_UTF8Reader* reader
+    Arcadia_UnicodeCodePointReader* reader
   );
 
 Directives_Tree*

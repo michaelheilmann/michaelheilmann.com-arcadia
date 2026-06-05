@@ -37,10 +37,10 @@ main1
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
-  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->targetBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->target = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
+  context->temporaryBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->temporary = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
 
   Context_onRun(thread, context);
 
@@ -61,10 +61,10 @@ recursiveInclude1
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
-  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->targetBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->target = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
+  context->temporaryBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->temporary = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -93,10 +93,10 @@ recursiveInclude2
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
-  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->targetBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->target = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
+  context->temporaryBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->temporary = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -127,10 +127,10 @@ time
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
-  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->targetBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->target = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
+  context->temporaryBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  context->temporary = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
 
   Context_onRun(thread, context);
 

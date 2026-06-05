@@ -163,10 +163,10 @@ Arcadia_Engine_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl
   )
 {
   if (!self->currentDisplayMode) {
-    Arcadia_StringBuffer* deviceModeName = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBack(thread, deviceModeName, Arcadia_Value_makeObjectReferenceValue(self->id));
+    Arcadia_StringBuilder* deviceModeName = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBack(thread, deviceModeName, Arcadia_Value_makeObjectReferenceValue(self->id));
     Arcadia_Natural32Value zeroTerminator = 0x0;
-    Arcadia_StringBuffer_insertBackCodePoints(thread, deviceModeName, &zeroTerminator, 1);
+    Arcadia_StringBuilder_insertBackCodePoints(thread, deviceModeName, &zeroTerminator, 1);
 
     DEVMODEA devMode = { 0 };
     if (!EnumDisplaySettingsA(deviceModeName->elements, ENUM_CURRENT_SETTINGS, &devMode)) {
@@ -213,10 +213,10 @@ Arcadia_Engine_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl
   if (!self->availableDisplayModes) {
     Arcadia_List* availableDisplayModes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
 
-    Arcadia_StringBuffer* deviceModeName = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBack(thread, deviceModeName, Arcadia_Value_makeObjectReferenceValue(self->id));
+    Arcadia_StringBuilder* deviceModeName = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBack(thread, deviceModeName, Arcadia_Value_makeObjectReferenceValue(self->id));
     Arcadia_Natural32Value zeroTerminator = 0x0;
-    Arcadia_StringBuffer_insertBackCodePoints(thread, deviceModeName, &zeroTerminator, 1);
+    Arcadia_StringBuilder_insertBackCodePoints(thread, deviceModeName, &zeroTerminator, 1);
 
     DWORD iModeNum = 0;
     while (true) {
@@ -274,10 +274,10 @@ Arcadia_Engine_Visuals_Windows_DisplayDevice_getNameImpl
     Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeObjectReferenceValue(self->adapter));
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"/");
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeObjectReferenceValue(self->monitor));
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBack(thread, stringBuffer, Arcadia_Value_makeObjectReferenceValue(self->adapter));
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"/");
+  Arcadia_StringBuilder_insertBack(thread, stringBuffer, Arcadia_Value_makeObjectReferenceValue(self->monitor));
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }
 

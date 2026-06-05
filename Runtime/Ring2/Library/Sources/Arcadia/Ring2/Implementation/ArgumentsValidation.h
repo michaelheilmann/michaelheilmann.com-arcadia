@@ -146,22 +146,22 @@ Arcadia_ArgumentsValidation_getNatural64Value
   return Arcadia_Value_getNatural64Value(value);
 }
 
-static inline Arcadia_ImmutableUTF8StringValue
-Arcadia_ArgumentsValidation_getImmutableUTF8StringValue
+static inline Arcadia_RuntimeUTF8StringValue
+Arcadia_ArgumentsValidation_getRuntimeUTF8StringValue
   (
     Arcadia_Thread* thread,
     Arcadia_Value const* value
   )
 {
-  if (!Arcadia_Value_isImmutableUTF8StringValue(value)) {
+  if (!Arcadia_Value_isRuntimeUTF8StringValue(value)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return Arcadia_Value_getImmutableUTF8StringValue(value);
+  return Arcadia_Value_getRuntimeUTF8StringValue(value);
 }
 
-static inline Arcadia_ImmutableUTF8StringValue
-Arcadia_ArgumentsValidation_getImmutableUTF8StringValueOrNull
+static inline Arcadia_RuntimeUTF8StringValue
+Arcadia_ArgumentsValidation_getRuntimeUTF8StringValueOrNull
   (
     Arcadia_Thread* thread,
     Arcadia_Value const* value
@@ -170,11 +170,11 @@ Arcadia_ArgumentsValidation_getImmutableUTF8StringValueOrNull
   if (Arcadia_Value_isVoidValue(value)) {
     return NULL;
   }
-  if (!Arcadia_Value_isImmutableUTF8StringValue(value)) {
+  if (!Arcadia_Value_isRuntimeUTF8StringValue(value)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return Arcadia_Value_getImmutableUTF8StringValue(value);
+  return Arcadia_Value_getRuntimeUTF8StringValue(value);
 }
 
 #endif // ARCADIA_RING2_IMPLEMENTATION_ARGUMENTSVALIDATION_H_INCLUDED

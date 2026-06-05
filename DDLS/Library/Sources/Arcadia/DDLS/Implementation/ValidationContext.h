@@ -35,7 +35,7 @@ struct Arcadia_DDLS_ValidationContext {
   /// @brief The schemata used by this validation context.
   Arcadia_Map* schemata;
   Arcadia_DDLS_Diagnostics* diagnostics;
-  Arcadia_StringBuffer* temporary1;
+  Arcadia_StringBuilder* temporary1;
   Arcadia_Languages_StringTable* stringTable;
 };
 

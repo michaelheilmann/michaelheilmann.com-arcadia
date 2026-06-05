@@ -50,7 +50,7 @@ Arcadia_Languages_StringTable_getOrCreateString
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_StringTable* self,
-    Arcadia_StringBuffer* stringBuffer
+    Arcadia_StringBuilder* stringBuffer
   );
 
 Arcadia_String*

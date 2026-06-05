@@ -250,22 +250,22 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 </section>
 
 <section class="cxx entity object">
-<h1 id="Arcadia_ByteBuffer">Arcadia_ByteBuffer</h1>
-<p><code>Arcadia_ByteBuffer</code> extends <code>Arcadia_Object</code>.</p>
-<p><code>Arcadia_ByteBuffer</code> represents a mutable sequence of Bytes.</p>
+<h1 id="Arcadia_ByteArrayBuilder">Arcadia_ByteArrayBuilder</h1>
+<p><code>Arcadia_ByteArrayBuilder</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_ByteArrayBuilder</code> represents a mutable sequence of Bytes.</p>
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_clear">Arcadia_ByteArrayBuilder_clear</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_ByteBuffer_clear<br>
+  Arcadia_ByteArrayBuilder_clear<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -280,7 +280,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
   </section>
@@ -289,11 +289,11 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_create">Arcadia_ByteBuffer_create</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_create">Arcadia_ByteArrayBuilder_create</h1>
 
   <my-signature><code>
-  Arcadia_ByteBuffer*<br>
-  Arcadia_ByteBuffer_create<br>
+  Arcadia_ByteArrayBuilder*<br>
+  Arcadia_ByteArrayBuilder_create<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
   &nbsp;&nbsp;)
@@ -321,21 +321,21 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
   <section class="cxx return-value">
     <h1>Return value</h1>
-    <p>A pointer to the <code>Arcadia_ByteBuffer</code> object.</p>
+    <p>A pointer to the <code>Arcadia_ByteArrayBuilder</code> object.</p>
   </section>
 
 </section>
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_getBytes">Arcadia_ByteBuffer_getBytes</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_getBytes">Arcadia_ByteArrayBuilder_getBytes</h1>
 
   <my-signature><code>
   void const*<br>
-  Arcadia_ByteBuffer_getBytes<br>
+  Arcadia_ByteArrayBuilder_getBytes<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -351,7 +351,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
   </section>
@@ -365,20 +365,20 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getNumberOfBytes</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_getSize">Arcadia_ByteArrayBuilder_getNumberOfBytes</h1>
 
   <my-signature><code>
   Arcadia_SizeValue<br>
-  Arcadia_ByteBuffer_getNumberOfBytes<br>
+  Arcadia_ByteArrayBuilder_getNumberOfBytes<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
   <my-summary>
   Get the number of Bytes in this Byte buffer.
-  Remarks: This is an alias of Arcadia_ByteBuffer_getSize.
+  Remarks: This is an alias of Arcadia_ByteArrayBuilder_getSize.
   </my-summary>
 
   <section class="cxx parameters">
@@ -388,7 +388,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
   </section>
@@ -402,14 +402,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getSize</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_getSize">Arcadia_ByteArrayBuilder_getSize</h1>
 
   <my-signature><code>
   Arcadia_SizeValue<br>
-  Arcadia_ByteBuffer_getSize<br>
+  Arcadia_ByteArrayBuilder_getSize<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -417,7 +417,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   Get the size of this Byte buffer.
   Remarks:
   The size of a Byte buffer is the number of Bytes in that Byte buffer.
-  This is an alias of Arcadia_ByteBuffer_getNumberOfBytes.
+  This is an alias of Arcadia_ByteArrayBuilder_getNumberOfBytes.
   </my-summary>
 
   <section class="cxx parameters">
@@ -427,7 +427,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
   </section>
@@ -441,14 +441,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_insertBackBytes">Arcadia_ByteBuffer_insertBackBytes</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_insertBackBytes">Arcadia_ByteArrayBuilder_insertBackBytes</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_ByteBuffer_insertBackBytes<br>
+  Arcadia_ByteArrayBuilder_insertBackBytes<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
   &nbsp;&nbsp;)
@@ -465,7 +465,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
@@ -498,14 +498,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_insertBytes">Arcadia_ByteBuffer_insertBytes</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_insertBytes">Arcadia_ByteArrayBuilder_insertBytes</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_ByteBuffer_insertBytes<br>
+  Arcadia_ByteArrayBuilder_insertBytes<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue n<br>
@@ -523,7 +523,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
@@ -560,14 +560,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_insertFrontBytes">Arcadia_ByteBuffer_insertFrontBytes</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_insertFrontBytes">Arcadia_ByteArrayBuilder_insertFrontBytes</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_ByteBuffer_insertFrontBytes<br>
+  Arcadia_ByteArrayBuilder_insertFrontBytes<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue n<br>
   &nbsp;&nbsp;)
@@ -584,7 +584,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
@@ -620,14 +620,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_endsWith_pn">Arcadia_ByteBuffer_endsWith_pn</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_endsWith_pn">Arcadia_ByteArrayBuilder_endsWith_pn</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_endsWith_pn<br>
+  Arcadia_ByteArrayBuilder_endsWith_pn<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
   &nbsp;&nbsp;)
@@ -644,7 +644,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
@@ -671,14 +671,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_startsWith_pn">Arcadia_ByteBuffer_startsWith_pn</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_startsWith_pn">Arcadia_ByteArrayBuilder_startsWith_pn</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_startsWith_pn<br>
+  Arcadia_ByteArrayBuilder_startsWith_pn<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
   &nbsp;&nbsp;)
@@ -695,7 +695,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
@@ -722,14 +722,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_isEqualTo_pn">Arcadia_isEqualTo_pn</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_isEqualTo_pn">Arcadia_isEqualTo_pn</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_isEqualTo_pn<br>
+  Arcadia_ByteArrayBuilder_isEqualTo_pn<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
   &nbsp;&nbsp;)
@@ -746,7 +746,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
@@ -773,15 +773,15 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_isEqualTo">Arcadia_ByteBuffer_isEqualTo</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_isEqualTo">Arcadia_ByteArrayBuilder_isEqualTo</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_isEqualTo<br>
+  Arcadia_ByteArrayBuilder_isEqualTo<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* other<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* other<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -796,11 +796,11 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer const* self</div>
+      <div>Arcadia_ByteArrayBuilder const* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer const* other</div>
+      <div>Arcadia_ByteArrayBuilder const* other</div>
       <div>A pointer to the other Byte buffer.</div>
     </div>
   </section>
@@ -819,14 +819,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_getAt">Arcadia_ByteBuffer_getAt</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_getAt">Arcadia_ByteArrayBuilder_getAt</h1>
 
   <my-signature><code>
   Arcadia_Natural8Value<br>
-  Arcadia_ByteBuffer_getAt<br>
+  Arcadia_ByteArrayBuilder_getAt<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
   &nbsp;&nbsp;)
   </code></my-signature>
@@ -843,7 +843,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
@@ -863,14 +863,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_isEmpty">Arcadia_ByteBuffer_isEmpty</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_isEmpty">Arcadia_ByteArrayBuilder_isEmpty</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_isEmpty<br>
+  Arcadia_ByteArrayBuilder_isEmpty<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -883,7 +883,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
   </section>
@@ -907,15 +907,15 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_ByteBuffer_swap">Arcadia_ByteBuffer_swap</h1>
+  <h1 id="Arcadia_ByteArrayBuilder_swap">Arcadia_ByteArrayBuilder_swap</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_ByteBuffer_swap<br>
+  Arcadia_ByteArrayBuilder_swap<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* other<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* other<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -928,11 +928,11 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to this Byte buffer.</div>
     </div>
     <div>
-      <div>Arcadia_ByteBuffer* self</div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
       <div>A pointer to the other Byte buffer.</div>
     </div>
   </section>
@@ -2521,708 +2521,6 @@ The enumeration elements cannot be combined.
   </div>
 
 </section>
-
-</section>
-
-<section class="cxx entity object">
-<h1 id="Arcadia_ByteBuffer">Arcadia_ByteBuffer</h1>
-<p><code>Arcadia_ByteBuffer</code> extends <code>Arcadia_Object</code>.</p>
-<p><code>Arcadia_ByteBuffer</code> represents a mutable sequence of Bytes.</p>
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</h1>
-
-  <my-signature><code>
-  void<br>
-  Arcadia_ByteBuffer_clear<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Set the number of elements of this Byte buffer to zero.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-  </section>
-
-</section>
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_create">Arcadia_ByteBuffer_create</h1>
-
-  <my-signature><code>
-  Arcadia_ByteBuffer*<br>
-  Arcadia_ByteBuffer_create<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Create a Byte buffer.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>A pointer to the <code>Arcadia_ByteBuffer</code> object.</p>
-  </section>
-
-</section>
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_getBytes">Arcadia_ByteBuffer_getBytes</h1>
-
-  <my-signature><code>
-  void const*<br>
-  Arcadia_ByteBuffer_getBytes<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get a pointer to the Bytes in this Byte buffer.
-  Warning: The Bytes must not be modified. The pointer is valid only as long as the Byte buffer object is valid and is not modified.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>A pointer to the Bytes in this Byte buffer.</p>
-  </section>
-
-</section>
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getNumberOfBytes</h1>
-
-  <my-signature><code>
-  Arcadia_SizeValue<br>
-  Arcadia_ByteBuffer_getNumberOfBytes<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get the number of Bytes in this Byte buffer.
-  Remarks: This is an alias of Arcadia_ByteBuffer_getSize.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The size of this Byte buffer.</p>
-  </section>
-
-</section>
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getSize</h1>
-
-  <my-signature><code>
-  Arcadia_SizeValue<br>
-  Arcadia_ByteBuffer_getSize<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get the size of this Byte buffer.
-  Remarks:
-  The size of a Byte buffer is the number of Bytes in that Byte buffer.
-  This is an alias of Arcadia_ByteBuffer_getNumberOfBytes.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The size of this Byte buffer.</p>
-  </section>
-
-</section>
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_insertBackBytes">Arcadia_ByteBuffer_insertBackBytes</h1>
-
-  <my-signature><code>
-  void<br>
-  Arcadia_ByteBuffer_insertBackBytes<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Append Bytes to this Byte buffer.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>void const* bytes</div>
-      <div>A pointer to an array of <code>n</code> Bytes.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue numberOfBytes</div>
-      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
-    </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>bytes</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
-    </div>
-  </section>
-
-</section>
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_insertBytes">Arcadia_ByteBuffer_insertBytes</h1>
-
-  <my-signature><code>
-  void<br>
-  Arcadia_ByteBuffer_insertBytes<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue n<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Insert Bytes into this Byte buffer.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue index</div>
-      <div>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
-    </div>
-    <div>
-      <div>void const* p</div>
-      <div>A pointer to an array of <code>n</code> Bytes.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue n</div>
-      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
-    </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>bytes</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
-    </div>
-  </section>
-
-</section>
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_insertFrontBytes">Arcadia_ByteBuffer_insertFrontBytes</h1>
-
-  <my-signature><code>
-  void<br>
-  Arcadia_ByteBuffer_insertFrontBytes<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue n<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Prepend Bytes to this Byte buffer.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>void const* p</div>
-      <div>A pointer to an array of <code>n</code> Bytes.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue n</div>
-      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
-    </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>bytes</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
-    </div>
-  </section>
-
-</section>
-
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_endsWith_pn">Arcadia_ByteBuffer_endsWith_pn</h1>
-
-  <my-signature><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_endsWith_pn<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get if a sequence of Bytes is a suffix of this Byte buffer's sequence of Bytes.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>void const* bytes</div>
-      <div>A pointer to an array of <code>n</code> Bytes.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue numberOfBytes</div>
-      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this byte buffer's sequence of Bytes.
-    <code>Arcadia_BooleanValue_False</code> otherwise.
-    </p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_startsWith_pn">Arcadia_ByteBuffer_startsWith_pn</h1>
-
-  <my-signature><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_startsWith_pn<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get if a sequence of Bytes is a prefix of this Byte buffer's sequence of Bytes.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>void const* bytes</div>
-      <div>A pointer to an array of <code>n</code> Bytes.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue numberOfBytes</div>
-      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
-    <code>Arcadia_BooleanValue_False</code> otherwise.
-    </p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_isEqualTo_pn">Arcadia_isEqualTo_pn</h1>
-
-  <my-signature><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_isEqualTo_pn<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>void const* bytes</div>
-      <div>A pointer to an array of <code>n</code> Bytes.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue numberOfBytes</div>
-      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
-    <code>Arcadia_BooleanValue_False</code> otherwise.
-    </p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_isEqualTo">Arcadia_ByteBuffer_isEqualTo</h1>
-
-  <my-signature><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_isEqualTo<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* other<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Compare this Byte buffer with another Byte buffer for equality.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer const* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer const* other</div>
-      <div>A pointer to the other Byte buffer.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    <code>Arcadia_BooleanValue_True</code> if this Byte buffer is equal to the other Byte buffer.
-    <code>Arcadia_BooleanValue_False</code> otherwise.
-    </p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_getAt">Arcadia_ByteBuffer_getAt</h1>
-
-  <my-signature><code>
-  Arcadia_Natural8Value<br>
-  Arcadia_ByteBuffer_getAt<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get the Byte value at the specified index.
-  Remarks: The size of a Byte buffer is the length of the Byte sequence it contains.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue index</div>
-      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The Byte value.</p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_isEmpty">Arcadia_ByteBuffer_isEmpty</h1>
-
-  <my-signature><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_ByteBuffer_isEmpty<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>Get if this Byte buffer is empty.</my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_ByteBuffer_swap">Arcadia_ByteBuffer_swap</h1>
-
-  <my-signature><code>
-  void<br>
-  Arcadia_ByteBuffer_swap<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* other<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>Swap the contents of this Byte buffer with the contents of another Byte buffer.</my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to this Byte buffer.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* self</div>
-      <div>A pointer to the other Byte buffer.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>other</code> is a null pointer.</div>
-    </div>
-  </section>
 
 </section>
 
@@ -5787,10 +5085,10 @@ The enumeration elements cannot be combined.
 
 
 <section class="cxx entity object">
-<h1 id="Arcadia_StringBuffer">Arcadia_StringBuffer</h1>
-<p><code>Arcadia_StringBuffer</code> extends <code>Arcadia_Object</code>.</p>
+<h1 id="Arcadia_StringBuilder">Arcadia_StringBuilder</h1>
+<p><code>Arcadia_StringBuilder</code> extends <code>Arcadia_Object</code>.</p>
 <p>
-<code>Arcadia_StringBuffer</code> represents a mutable sequence of code points in UTF8 encoding.
+<code>Arcadia_StringBuilder</code> represents a mutable sequence of code points in UTF8 encoding.
 </p>
 </section>
 
@@ -5798,14 +5096,14 @@ The enumeration elements cannot be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_clear">Arcadia_StringBuffer_clear</h1>
+  <h1 id="Arcadia_StringBuilder_clear">Arcadia_StringBuilder_clear</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_StringBuffer_clear<br>
+  Arcadia_StringBuilder_clear<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuffer* self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuilder* self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -5820,7 +5118,7 @@ The enumeration elements cannot be combined.
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_StringBuffer self</div>
+      <div>Arcadia_StringBuilder self</div>
       <div>A pointer to this string buffer.</div>
     </div>
   </section>
@@ -5831,11 +5129,11 @@ The enumeration elements cannot be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_create">Arcadia_StringBuffer_create</h1>
+  <h1 id="Arcadia_StringBuilder_create">Arcadia_StringBuilder_create</h1>
 
   <my-signature><code>
-  Arcadia_StringBuffer*<br>
-  Arcadia_StringBuffer_create<br>
+  Arcadia_StringBuilder*<br>
+  Arcadia_StringBuilder_create<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
   &nbsp;&nbsp;)
@@ -5864,7 +5162,7 @@ The enumeration elements cannot be combined.
 
   <section class="cxx return-value">
     <h1>Return value</h1>
-    <p>A pointer to the <code>Arcadia_StringBuffer</code> value.</p>
+    <p>A pointer to the <code>Arcadia_StringBuilder</code> value.</p>
   </section>
 
 </section>
@@ -5872,14 +5170,14 @@ The enumeration elements cannot be combined.
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_compareTo">Arcadia_StringBuffer_compareTo</h1>
+  <h1 id="Arcadia_StringBuilder_compareTo">Arcadia_StringBuilder_compareTo</h1>
 
   <my-signature><code>
   Arcadia_Integer32Value*<br>
-  Arcadia_StringBuffer_compareTo<br>
+  Arcadia_StringBuilder_compareTo<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value other<br>
   &nbsp;&nbsp;)
   </code></my-signature>
@@ -5898,7 +5196,7 @@ The enumeration elements cannot be combined.
     </div>
 
     <div>
-      <div>Arcadia_StringBuffer* self</div>
+      <div>Arcadia_StringBuilder* self</div>
       <div>A pointer to this string buffer.</div>
     </div>
     
@@ -5906,7 +5204,7 @@ The enumeration elements cannot be combined.
       <div>Arcadia_Value other</div>
       <div>
       The value to compare the UTF-8 string in this string buffer to.
-      The value must be one of <code>Arcadia.ImmutableUtf8String</code>, <code>Arcadia.StringBuffer</code>, or <code>Arcadia.String</code>.
+      The value must be one of <code>Arcadia.ImmutableUtf8String</code>, <code>Arcadia.StringBuilder</code>, or <code>Arcadia.String</code>.
       </div>
     </div>
     
@@ -5959,14 +5257,14 @@ The enumeration elements cannot be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_getNumberOfBytes">Arcadia_StringBuffer_getNumberOfBytes</h1>
+  <h1 id="Arcadia_StringBuilder_getNumberOfBytes">Arcadia_StringBuilder_getNumberOfBytes</h1>
 
   <my-signature><code>
   Arcadia_SizeValue<br>
-  Arcadia_StringBuffer_getNumberOfBytes<br>
+  Arcadia_StringBuilder_getNumberOfBytes<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuffer self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuilder self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -5981,7 +5279,7 @@ The enumeration elements cannot be combined.
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_StringBuffer* self</div>
+      <div>Arcadia_StringBuilder* self</div>
       <div>A pointer to this string buffer.</div>
     </div>
   </section>
@@ -5997,14 +5295,14 @@ The enumeration elements cannot be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_insertAt">Arcadia_StringBuffer_insertAt</h1>
+  <h1 id="Arcadia_StringBuilder_insertAt">Arcadia_StringBuilder_insertAt</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_StringBuffer_insertAt<br>
+  Arcadia_StringBuilder_insertAt<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
   &nbsp;&nbsp;)
@@ -6021,7 +5319,7 @@ The enumeration elements cannot be combined.
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_StringBuffer* self</div>
+      <div>Arcadia_StringBuilder* self</div>
       <div>A pointer to this string buffer.</div>
     </div>
     <div>
@@ -6029,8 +5327,8 @@ The enumeration elements cannot be combined.
       <div>
       The code point index at which to insert the value.
       Must be within the bounds of [0,n] where n is the number of code points in this string buffer.
-      If index is 0, then this call is equivalent to a call to Arcadia_StringBuffer_insertFront.
-      If index is n, then this call is equivalent to a call to Arcadia_StringBuffer_insertBack.
+      If index is 0, then this call is equivalent to a call to Arcadia_StringBuilder_insertFront.
+      If index is n, then this call is equivalent to a call to Arcadia_StringBuilder_insertBack.
       </div>
     </div>
     <div>
@@ -6039,7 +5337,7 @@ The enumeration elements cannot be combined.
       The value to insert at the code point index.
       The value must be of one of the following types:
       <code>Arcadia.ImmutableByteArray</code>, <code>Arcadia.ImmutableUtf8String</code>,
-      <code>Arcadia.ByteBuffer</code>, <code>Arcadia.StringBuffer</code>, or <code>Arcadia.String</code>.
+      <code>Arcadia.ByteBuffer</code>, <code>Arcadia.StringBuilder</code>, or <code>Arcadia.String</code>.
       </div>
     </div>
   </<section>
@@ -6066,14 +5364,14 @@ The enumeration elements cannot be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_insertBack">Arcadia_StringBuffer_insertBack</h1>
+  <h1 id="Arcadia_StringBuilder_insertBack">Arcadia_StringBuilder_insertBack</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_StringBuffer_insertFront<br>
+  Arcadia_StringBuilder_insertFront<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
   &nbsp;&nbsp;)
   </code></my-signature>
@@ -6089,7 +5387,7 @@ The enumeration elements cannot be combined.
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_StringBuffer* self</div>
+      <div>Arcadia_StringBuilder* self</div>
       <div>A pointer to this string buffer.</div>
     </div>
     <div>
@@ -6098,7 +5396,7 @@ The enumeration elements cannot be combined.
       The value to insert at the back.
       The value must be of one of the following types:
       <code>Arcadia.ImmutableByteArray</code>, <code>Arcadia.ImmutableUtf8String</code>,
-      <code>Arcadia.ByteBuffer</code>, <code>Arcadia.StringBuffer</code>, or <code>Arcadia.String</code>.
+      <code>Arcadia.ByteBuffer</code>, <code>Arcadia.StringBuilder</code>, or <code>Arcadia.String</code>.
       </div>
     </div>
   </<section>
@@ -6121,14 +5419,14 @@ The enumeration elements cannot be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_insertFront">Arcadia_StringBuffer_insertFront</h1>
+  <h1 id="Arcadia_StringBuilder_insertFront">Arcadia_StringBuilder_insertFront</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_StringBuffer_insertFront<br>
+  Arcadia_StringBuilder_insertFront<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuilder* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
   &nbsp;&nbsp;)
   </code></my-signature>
@@ -6144,7 +5442,7 @@ The enumeration elements cannot be combined.
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_StringBuffer* self</div>
+      <div>Arcadia_StringBuilder* self</div>
       <div>A pointer to this string buffer.</div>
     </div>
     <div>
@@ -6153,7 +5451,7 @@ The enumeration elements cannot be combined.
       The value to insert at the front.
       The value must be of one of the following types:
       <code>Arcadia.ImmutableByteArray</code>, <code>Arcadia.ImmutableUtf8String</code>,
-      <code>Arcadia.ByteBuffer</code>, <code>Arcadia.StringBuffer</code>, or <code>Arcadia.String</code>.
+      <code>Arcadia.ByteBuffer</code>, <code>Arcadia.StringBuilder</code>, or <code>Arcadia.String</code>.
       </div>
     </div>
   </<section>
@@ -6176,14 +5474,14 @@ The enumeration elements cannot be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_StringBuffer_isEmpty">Arcadia_StringBuffer_isEmpty</h1>
+  <h1 id="Arcadia_StringBuilder_isEmpty">Arcadia_StringBuilder_isEmpty</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>
-  Arcadia_StringBuffer_isEmpty<br>
+  Arcadia_StringBuilder_isEmpty<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuffer* self<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_StringBuilder* self<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -6198,7 +5496,7 @@ The enumeration elements cannot be combined.
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
-      <div>Arcadia_StringBuffer* self</div>
+      <div>Arcadia_StringBuilder* self</div>
       <div>A pointer to this string buffer.</div>
     </div>
   </section>
@@ -6231,15 +5529,15 @@ The enumeration elements cannot be combined.
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Object_isNotEqualTo">Arcadia_Object_isNotEqualTo</a></li>
 
         <li>Byte Buffer</li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer">Arcadia_ByteBuffer</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_create">Arcadia_ByteBuffer_create</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_getBytes">Arcadia_ByteBuffer_getBytes</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_getNumberOfBytes">Arcadia_ByteBuffer_getNumberOfBytes</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getNumberOfBytes</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insertBackBytes">Arcadia_ByteBuffer_insertBackBytes</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insertBytes">Arcadia_ByteBuffer_insertBytes</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insertFrontBytes">Arcadia_ByteBuffer_insertFrontBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder">Arcadia_ByteArrayBuilder</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_clear">Arcadia_ByteArrayBuilder_clear</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_create">Arcadia_ByteArrayBuilder_create</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_getBytes">Arcadia_ByteArrayBuilder_getBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_getNumberOfBytes">Arcadia_ByteArrayBuilder_getNumberOfBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_getSize">Arcadia_ByteArrayBuilder_getNumberOfBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_insertBackBytes">Arcadia_ByteArrayBuilder_insertBackBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_insertBytes">Arcadia_ByteArrayBuilder_insertBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_insertFrontBytes">Arcadia_ByteArrayBuilder_insertFrontBytes</a></li>
         <li>File System</li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ExistingFilePolicy">Arcadia_ExistingFilePolicy</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileAccessMode">Arcadia_FileAccessMode</a></li>
@@ -6346,28 +5644,42 @@ The enumeration elements cannot be combined.
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_toReal64">Arcadia_String_toReal64</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_toVoid">Arcadia_String_toVoid</a></li>
 
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer">Arcadia_StringBuffer</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_clear">Arcadia_StringBuffer_clear</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_create">Arcadia_StringBuffer_create</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_compareTo">Arcadia_StringBuffer_compareTo</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_getNumberOfBytes">Arcadia_StringBuffer_getNumberOfBytes</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertAt">Arcadia_StringBuffer_insertAt</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertBack">Arcadia_StringBuffer_insertBack</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertFront">Arcadia_StringBuffer_insertFront</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StingBuffer_isEmpty">Arcadia_StringBuffer_isEmpty</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder">Arcadia_StringBuilder</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_clear">Arcadia_StringBuilder_clear</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_create">Arcadia_StringBuilder_create</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_compareTo">Arcadia_StringBuilder_compareTo</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_getNumberOfBytes">Arcadia_StringBuilder_getNumberOfBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_insertAt">Arcadia_StringBuilder_insertAt</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_insertBack">Arcadia_StringBuilder_insertBack</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_insertFront">Arcadia_StringBuilder_insertFront</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StingBuffer_isEmpty">Arcadia_StringBuilder_isEmpty</a></li>
 
       </ul>
     </nav>
   </div>
   </main>
   <footer>
-    <div class="left-column"></div>
-    <div class="center-column"></div>
-    <div class="right-column">
-      <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 21 May 2026.</div>
+  <div class="left-column">
+    <div>
+    <div>Website maintained by Michael Heilmann.</div>
+    <div>Last modified on 8 June 2026.</div> 
     </div>
-  </footer>
+  </div>
+  <div class="center-column">
+    <div>
+      <div><a href="https://michaelheilmann.com/imprint">Imprint</a></div>
+      <div><a href="https://michaelheilmann.com/data-protection-statement">Data Protection Statement</a></div>
+    </div>
+  </div>
+  <div class="right-column">
+    <div>
+      <div><a href='https://github.com/michaelheilmann'>GitHub</a></div>
+      <div><a href='https://discord.gg/XtPA6pwAsp'>Discord</a></div>
+      <div><a href='mailto:contact@michaelheilmann.com'>contact@michaelheilmann.com</a></div>
+    </div>
+  </div>
+</footer>
+
   </body>
 </html>
 

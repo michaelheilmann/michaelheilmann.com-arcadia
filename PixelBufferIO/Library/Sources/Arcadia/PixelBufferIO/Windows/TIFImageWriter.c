@@ -49,7 +49,7 @@ Arcadia_Imaging_Windows_TIFImageWriter_writeToByteBufferImpl
     Arcadia_Imaging_Windows_TIFImageWriter* self,
     Arcadia_String* extension,
     Arcadia_List* sourcePixelBuffers,
-    Arcadia_ByteBuffer* targetByteBuffer
+    Arcadia_ByteArrayBuilder* targetByteBuffer
   );
 
 static void
@@ -133,7 +133,7 @@ Arcadia_Imaging_Windows_TIFImageWriter_writeToByteBufferImpl
     Arcadia_Imaging_Windows_TIFImageWriter* self,
     Arcadia_String* extension,
     Arcadia_List* sourcePixelBuffers,
-    Arcadia_ByteBuffer* targetByteBuffer
+    Arcadia_ByteArrayBuilder* targetByteBuffer
   )
 {
   Arcadia_Imaging_ImageWriterParameters* parameters = Arcadia_Imaging_ImageWriterParameters_createByteBuffer(thread, targetByteBuffer, extension);
@@ -225,7 +225,7 @@ Arcadia_Imaging_Windows_TIFImageWriter_constructImpl
   //
   self->supportedTypes = NULL;
   Arcadia_List* supportedTypes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, supportedTypes, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"tif", sizeof(u8"tif") - 1))));
+  Arcadia_List_insertBackObjectReferenceValue(thread, supportedTypes, Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"tif", sizeof(u8"tif") - 1))));
   self->supportedTypes = Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(supportedTypes));
   //
   Arcadia_LeaveConstructor(Arcadia_Imaging_Windows_TIFImageWriter);

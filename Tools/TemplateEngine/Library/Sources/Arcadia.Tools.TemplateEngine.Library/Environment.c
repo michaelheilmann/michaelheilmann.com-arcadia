@@ -132,7 +132,8 @@ Environment_loadString
   Arcadia_DDL_Parser* syntacticalAnalysis = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
                                                                                                                  Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
-  node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)syntacticalAnalysis, source), _Arcadia_DDL_Node_getType(thread));
+  Arcadia_RuntimeByteArray* runtimeByteArray = Arcadia_RuntimeByteArray_create(thread, Arcadia_String_getBytes(thread, source), Arcadia_String_getNumberOfBytes(thread, source));
+  node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)syntacticalAnalysis, runtimeByteArray), _Arcadia_DDL_Node_getType(thread));
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);
   Environment* variables = Environment_create(thread, NULL);
   if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {

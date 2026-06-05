@@ -21,10 +21,10 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/BigInteger/BigInteger.h"
-typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
+typedef struct Arcadia_RuntimeUTF8String Arcadia_RuntimeUTF8String;
 
 // Convert this BigInteger into a decimal string.
-Arcadia_ImmutableUTF8String*
+Arcadia_RuntimeUTF8String*
 Arcadia_BigInteger_toDecimalString
   (
     Arcadia_Thread* thread,

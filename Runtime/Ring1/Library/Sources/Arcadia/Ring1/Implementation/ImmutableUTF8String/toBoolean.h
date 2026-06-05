@@ -17,13 +17,13 @@
 #define ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TOBOOLEAN_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
-typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
+typedef struct Arcadia_RuntimeUTF8String Arcadia_RuntimeUTF8String;
 
 Arcadia_BooleanValue
 _toBoolean
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TOBOOLEAN_H_INCLUDED

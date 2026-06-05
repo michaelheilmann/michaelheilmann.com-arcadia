@@ -16,8 +16,7 @@
 #if !defined(ARCADIA_RING2_STRINGS_STRINGEXTENSIONS_H_INCLUDED)
 #define ARCADIA_RING2_STRINGS_STRINGEXTENSIONS_H_INCLUDED
 
-#include "Arcadia/Ring2/Strings/String.h"
-#include "Arcadia/Ring2/Strings/StringBuffer.h"
+#include "Arcadia/Ring1/Include.h"
 
 Arcadia_String*
 Arcadia_String_createFromCxxInt
@@ -41,27 +40,63 @@ Arcadia_String_createFromCxxString
   );
 
 void
-Arcadia_StringBuffer_insertBackCxxInt
+Arcadia_StringBuilder_insertBackCxxInt
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
+    Arcadia_StringBuilder* self,
     int x
   );
 
 void
-Arcadia_StringBuffer_insertBackCxxString
+Arcadia_StringBuilder_insertBackCxxString
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
+    Arcadia_StringBuilder* self,
     const char *x
   );
 
 void
-Arcadia_StringBuffer_insertBackString
+Arcadia_StringBuilder_insertFrontString
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
+    Arcadia_StringBuilder* self,
     Arcadia_String* x
+  );
+
+void
+Arcadia_StringBuilder_insertBackString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuilder* self,
+    Arcadia_String* x
+  );
+
+/* @todo Precursor to the iterator API. */
+void
+Arcadia_String_insertByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_SizeValue index,
+    Arcadia_ByteArrayBuilder* target
+  );
+
+/* @todo Precursor to the iterator API. */
+void
+Arcadia_String_insertFrontByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_ByteArrayBuilder* target
+  );
+
+/* @todo Precursor to the iterator API. */
+void
+Arcadia_String_insertBackByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_ByteArrayBuilder* target
   );
 
 #endif // ARCADIA_RING2_STRINGS_STRINGEXTENSIONS_H_INCLUDED

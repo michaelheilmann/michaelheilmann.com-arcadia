@@ -30,8 +30,8 @@ main1
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_FilePath* firstFile = Arcadia_FilePath_parseNative(thread, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, argv[1], strlen(argv[1]))));
-  Arcadia_FilePath* secondFile = Arcadia_FilePath_parseNative(thread, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, argv[2], strlen(argv[2]))));
+  Arcadia_FilePath* firstFile = Arcadia_FilePath_parseNative(thread, Arcadia_String_create_pn(thread, Arcadia_RuntimeByteArray_create(thread, argv[1], strlen(argv[1]))));
+  Arcadia_FilePath* secondFile = Arcadia_FilePath_parseNative(thread, Arcadia_String_create_pn(thread, Arcadia_RuntimeByteArray_create(thread, argv[2], strlen(argv[2]))));
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   if (!Arcadia_FileSystem_regularFileExists(thread, fileSystem, firstFile)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
@@ -41,9 +41,9 @@ main1
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ByteBuffer* firstByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, firstFile);
-  Arcadia_ByteBuffer* secondByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, secondFile);
-  return Arcadia_ByteBuffer_isEqualTo(thread, firstByteBuffer, secondByteBuffer);
+  Arcadia_ByteArrayBuilder* firstByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, firstFile);
+  Arcadia_ByteArrayBuilder* secondByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, secondFile);
+  return Arcadia_ByteArrayBuilder_isEqualTo(thread, firstByteBuffer, secondByteBuffer);
 }
 
 // Returns 2 on failure.

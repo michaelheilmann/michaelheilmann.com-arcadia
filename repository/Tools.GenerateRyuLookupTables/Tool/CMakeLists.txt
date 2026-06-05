@@ -40,7 +40,7 @@ if (NOT TARGET ${MyExecutableName})
 
   EndProduct(${MyExecutableName})
 
-  set_target_properties(${MyExecutableName} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"${CMAKE_CURRENT_BINARY_DIR}\"")
+  set_target_properties(${MyExecutableName} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"\"\"${CMAKE_CURRENT_BINARY_DIR}\"\"\"")
 
   set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools")
 

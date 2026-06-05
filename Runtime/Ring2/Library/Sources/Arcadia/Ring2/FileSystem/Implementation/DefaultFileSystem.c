@@ -171,7 +171,7 @@ Arcadia_DefaultFileSystem_getExecutableImpl
     Arcadia_DefaultFileSystem* self
   );
 
-static Arcadia_ByteBuffer*
+static Arcadia_ByteArrayBuilder*
 Arcadia_DefaultFileSystem_getFileContentsImpl
   (
     Arcadia_Thread* thread,
@@ -223,7 +223,7 @@ Arcadia_DefaultFileSystem_setFileContentsImpl
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self,
     Arcadia_FilePath* path,
-    Arcadia_ByteBuffer * contents
+    Arcadia_ByteArrayBuilder * contents
   );
 
 static Arcadia_DefaultFileSystem*
@@ -315,7 +315,7 @@ Arcadia_DefaultFileSystem_initializeDispatchImpl
 
   ((Arcadia_FileSystemDispatch*)self)->getConfigurationDirectory = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getConfigurationDirectoryImpl;
   ((Arcadia_FileSystemDispatch*)self)->getExecutable = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getExecutableImpl;
-  ((Arcadia_FileSystemDispatch*)self)->getFileContents = (Arcadia_ByteBuffer * (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileContentsImpl;
+  ((Arcadia_FileSystemDispatch*)self)->getFileContents = (Arcadia_ByteArrayBuilder * (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileContentsImpl;
   ((Arcadia_FileSystemDispatch*)self)->getFileType = (Arcadia_FileType(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileTypeImpl;
   ((Arcadia_FileSystemDispatch*)self)->getLastWriteTime = (Arcadia_Natural64Value(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getLastWriteTimeImpl;
   ((Arcadia_FileSystemDispatch*)self)->getSaveDirectory = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getSaveFolderImpl;
@@ -323,7 +323,7 @@ Arcadia_DefaultFileSystem_initializeDispatchImpl
 
   ((Arcadia_FileSystemDispatch*)self)->regularFileExists = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_regularFileExistsImpl;
 
-  ((Arcadia_FileSystemDispatch*)self)->setFileContents = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*, Arcadia_ByteBuffer*)) & Arcadia_DefaultFileSystem_setFileContentsImpl;
+  ((Arcadia_FileSystemDispatch*)self)->setFileContents = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*, Arcadia_ByteArrayBuilder*)) & Arcadia_DefaultFileSystem_setFileContentsImpl;
 }
 
 static void
@@ -551,7 +551,7 @@ Arcadia_DefaultFileSystem_getExecutableImpl
         n = lo;
         Arcadia_Memory_reallocateUnmanaged(thread, (void**)&p, n);
       } else {
-        Arcadia_FilePath* path = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n))));
+        Arcadia_FilePath* path = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, p, n))));
         Arcadia_Memory_deallocateUnmanaged(thread, p);
         p = NULL;
         Arcadia_Thread_popJumpTarget(thread);
@@ -578,13 +578,13 @@ Arcadia_DefaultFileSystem_getExecutableImpl
   }
   // `readlink` returns a string in some encoding.
   // We assume that this encoding is UTF-8 at the moment.
-  return Arcadia_FilePath_parseUnix(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n))));
+  return Arcadia_FilePath_parseUnix(thread, Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, p, n))));
 #else
   #error("environment not (yet) supported")
 #endif
 }
 
-static Arcadia_ByteBuffer*
+static Arcadia_ByteArrayBuilder*
 Arcadia_DefaultFileSystem_getFileContentsImpl
   (
     Arcadia_Thread* thread,
@@ -594,12 +594,12 @@ Arcadia_DefaultFileSystem_getFileContentsImpl
 {
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, (Arcadia_FileSystem*)self);
   Arcadia_FileHandle_openForReading(thread, fileHandle, path);
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
   char p[5012]; size_t n;
   do {
     Arcadia_FileHandle_read(thread, fileHandle, p, 5012, &n);
     if (n > 0) {
-      Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
+      Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteBuffer, p, n);
     }
   } while (n > 0);
   Arcadia_FileHandle_close(thread, fileHandle);
@@ -706,7 +706,7 @@ Arcadia_DefaultFileSystem_getWorkingDirectoryImpl
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, pBuffer, dwBufferSize - 1)));
+    Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, pBuffer, dwBufferSize - 1)));
     Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(thread, filePathString);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getSlabMemoryManager(), pBuffer);
@@ -726,7 +726,7 @@ Arcadia_DefaultFileSystem_getWorkingDirectoryImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, cwd, strlen(cwd))));
+  Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, cwd, strlen(cwd))));
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseUnix(thread, filePathString);
   return filePath;
 #else
@@ -771,7 +771,7 @@ Arcadia_DefaultFileSystem_setFileContentsImpl
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self,
     Arcadia_FilePath* path,
-    Arcadia_ByteBuffer * contents
+    Arcadia_ByteArrayBuilder * contents
   )
 {
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, (Arcadia_FileSystem*)self);

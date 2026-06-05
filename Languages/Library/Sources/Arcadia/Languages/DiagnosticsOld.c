@@ -20,7 +20,7 @@ void
 Arcadia_Languages_DiagnosticsOld_emit
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* message
+    Arcadia_StringBuilder* message
   )
 {
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, Arcadia_FileSystem_getOrCreate(thread));

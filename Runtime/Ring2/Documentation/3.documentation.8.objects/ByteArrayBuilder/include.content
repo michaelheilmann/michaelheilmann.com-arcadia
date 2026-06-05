@@ -1,0 +1,350 @@
+<section class="cxx entity object">
+<h1 id="Arcadia_ByteArrayBuilder">Arcadia_ByteArrayBuilder</h1>
+<p><code>Arcadia_ByteArrayBuilder</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_ByteArrayBuilder</code> represents a mutable sequence of Bytes.</p>
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+@{include("./3.documentation.8.objects/ByteArrayBuilder/clear.content")}
+@{include("./3.documentation.8.objects/ByteArrayBuilder/create.content")}
+@{include("./3.documentation.8.objects/ByteArrayBuilder/getBytes.content")}
+@{include("./3.documentation.8.objects/ByteArrayBuilder/getNumberOfBytes.content")}
+@{include("./3.documentation.8.objects/ByteArrayBuilder/getSize.content")}
+@{include("./3.documentation.8.objects/ByteArrayBuilder/insertBackBytes.content")}
+@{include("./3.documentation.8.objects/ByteArrayBuilder/insertBytes.content")}
+@{include("./3.documentation.8.objects/ByteArrayBuilder/insertFrontBytes.content")}
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_endsWith_pn">Arcadia_ByteArrayBuilder_endsWith_pn</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteArrayBuilder_endsWith_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if a sequence of Bytes is a suffix of this Byte buffer's sequence of Bytes.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this byte buffer's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_startsWith_pn">Arcadia_ByteArrayBuilder_startsWith_pn</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteArrayBuilder_startsWith_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if a sequence of Bytes is a prefix of this Byte buffer's sequence of Bytes.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_isEqualTo_pn">Arcadia_isEqualTo_pn</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteArrayBuilder_isEqualTo_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_isEqualTo">Arcadia_ByteArrayBuilder_isEqualTo</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteArrayBuilder_isEqualTo<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* other<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Compare this Byte buffer with another Byte buffer for equality.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder const* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder const* other</div>
+      <div>A pointer to the other Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this Byte buffer is equal to the other Byte buffer.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_getAt">Arcadia_ByteArrayBuilder_getAt</h1>
+
+  <my-signature><code>
+  Arcadia_Natural8Value<br>
+  Arcadia_ByteArrayBuilder_getAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get the Byte value at the specified index.
+  Remarks: The size of a Byte buffer is the length of the Byte sequence it contains.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The Byte value.</p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_isEmpty">Arcadia_ByteArrayBuilder_isEmpty</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteArrayBuilder_isEmpty<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this Byte buffer is empty.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_swap">Arcadia_ByteArrayBuilder_swap</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteArrayBuilder_swap<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder* other<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Swap the contents of this Byte buffer with the contents of another Byte buffer.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to the other Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>other</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>

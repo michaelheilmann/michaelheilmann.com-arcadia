@@ -592,7 +592,7 @@ onConstructorDefinition
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
-  Arcadia_String* name = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"<constructor>", sizeof(u8"<constructor>") - 1));
+  Arcadia_String* name = Arcadia_String_create_pn(thread, Arcadia_RuntimeByteArray_create(thread, u8"<constructor>", sizeof(u8"<constructor>") - 1));
   Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(name);
   Arcadia_Value v = Arcadia_Map_get(thread, symbolTable, k);
   if (!Arcadia_Value_isVoidValue(&v)) {
@@ -747,14 +747,14 @@ makeIdentifier
     Arcadia_MILC_AST_IdentifierNode* node
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
   Arcadia_String* dot = Arcadia_String_createFromCxxString(thread, u8".");
   Arcadia_String* name = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)node->names, 0, _Arcadia_String_getType(thread));
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, name);
   for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->names); i < n; ++i) {
-    Arcadia_StringBuffer_insertBackString(thread, stringBuffer, dot);
+    Arcadia_StringBuilder_insertBackString(thread, stringBuffer, dot);
     name = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)node->names, i, _Arcadia_String_getType(thread));
-    Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+    Arcadia_StringBuilder_insertBackString(thread, stringBuffer, name);
   }
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }

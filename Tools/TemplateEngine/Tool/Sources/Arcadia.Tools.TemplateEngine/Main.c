@@ -25,27 +25,27 @@ help
     Arcadia_Thread* thread
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"Arcadia.TemplateEngine [options]\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"Arcadia.TemplateEngine [options]\n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"[options]:\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"[options]:\n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"--source=<path to source file>                \n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  required. The path to the source file.      \n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"--source=<path to source file>                \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  required. The path to the source file.      \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"--target=<path to target file>                \n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  required. The path to the target file.      \n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"--target=<path to target file>                \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  required. The path to the target file.      \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"--dependencies=<path to dependencies file>    \n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  required. The path to the dependencies file.\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"--dependencies=<path to dependencies file>    \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  required. The path to the dependencies file.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"--environment=<path to environment file>      \n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  optional. The path to the environment file. \n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"--environment=<path to environment file>      \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  optional. The path to the environment file. \n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"  Path must be enclosed by double quotes      \n");
 
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
@@ -64,11 +64,11 @@ Arcadia_CommandLine_fileNotFoundError
     Arcadia_String* path
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"file `");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, path);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` not found\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"file `");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, path);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` not found\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
@@ -86,11 +86,11 @@ Arcadia_CommandLine_requiredArgumentMissingError
     Arcadia_String* key
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"required command-line argument `");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, key);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` missing\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"required command-line argument `");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, key);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` missing\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
@@ -129,8 +129,8 @@ main1
 
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argumentString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
-    Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argumentString);
-    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r);
+    Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_String_ByteReader_create(thread, argumentString));
+    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, reader);
     if (argument->syntacticalError) {
       Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString, log);
     }

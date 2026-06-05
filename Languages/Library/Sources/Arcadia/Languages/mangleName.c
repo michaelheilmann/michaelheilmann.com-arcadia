@@ -42,8 +42,8 @@ on
     'e',
     'f', // 15
   };
-  Arcadia_StringBuffer* target = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCodePoint(thread, target, 'x');
+  Arcadia_StringBuilder* target = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCodePoint(thread, target, 'x');
   const Arcadia_Natural8Value* start = bytes,
                              * end = bytes + numberOfBytes;
   const Arcadia_Natural8Value* current = start;
@@ -54,8 +54,8 @@ on
     // Get the upper digit.
     Arcadia_Natural8Value upper = value / 16;
 
-    Arcadia_StringBuffer_insertBackCodePoint(thread, target, base16DigitCodePoints[upper]);
-    Arcadia_StringBuffer_insertBackCodePoint(thread, target, base16DigitCodePoints[lower]);
+    Arcadia_StringBuilder_insertBackCodePoint(thread, target, base16DigitCodePoints[upper]);
+    Arcadia_StringBuilder_insertBackCodePoint(thread, target, base16DigitCodePoints[lower]);
 
     current++;
   }
@@ -74,9 +74,9 @@ static Arcadia_String*
 onStringBuffer
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* source
+    Arcadia_StringBuilder* source
   )
-{ return on(thread, Arcadia_StringBuffer_getBytes(thread, source), Arcadia_StringBuffer_getNumberOfBytes(thread, source)); }
+{ return on(thread, Arcadia_StringBuilder_getBytes(thread, source), Arcadia_StringBuilder_getNumberOfBytes(thread, source)); }
 
 Arcadia_String*
 Arcadia_Languages_mangleName
@@ -92,8 +92,8 @@ Arcadia_Languages_mangleName
   Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&source);
   if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_String_getType(thread))) {
     return onString(thread, (Arcadia_String*)object);
-  } else if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_StringBuffer_getType(thread))) {
-    return onStringBuffer(thread, (Arcadia_StringBuffer*)object);
+  } else if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_StringBuilder_getType(thread))) {
+    return onStringBuffer(thread, (Arcadia_StringBuilder*)object);
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);

@@ -25,30 +25,36 @@ main1
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  Arcadia_ByteArrayBuilder* byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8FileHandleWriter_create(thread, fileHandle);
+  Arcadia_Unicode_Encoder* encoder = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
 
 #define Emit(String) \
-  Arcadia_UTF8Writer_writeString \
+  Arcadia_ByteArrayBuilder_clear(thread, byteBuffer); \
+\
+  Arcadia_Unicode_Encoder_encodeString \
     ( \
       thread, \
-      writer, \
+      encoder, \
       Arcadia_String_create \
         ( \
           thread, \
-          Arcadia_Value_makeImmutableUTF8StringValue \
+          Arcadia_Value_makeRuntimeUTF8StringValue \
             ( \
-              Arcadia_ImmutableUTF8String_create \
+              Arcadia_RuntimeUTF8String_create \
                 ( \
                   thread, \
                   String, \
                   sizeof(String) - 1 \
                 ) \
             ) \
-        ) \
-    );
+        ), \
+      byteBuffer \
+    ); \
+\
+  Arcadia_FileHandle_writeByteBuffer(thread, fileHandle, byteBuffer);
 
   // Test some escape sequences according to VT102, ECMA - 48, ISO / IEC 6429, ANSI X3.64.
   // `\033[38;2;<red>;<green>;<blue>;m` where <red>, <green>, <blue> are a integer literal within the range of [0,255] without signs or leading zeroes.

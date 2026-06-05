@@ -24,7 +24,7 @@ test1
     Arcadia_Thread* thread
   )
 {
-  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"png", sizeof(u8"png") - 1)));
+  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"png", sizeof(u8"png") - 1)));
   Arcadia_Imaging_ImageWriterParameters* parameters = NULL;
   Arcadia_String* path = NULL;
   Arcadia_List* pixelBufferList = (Arcadia_List*)Arcadia_ArrayList_create(thread);
@@ -39,42 +39,42 @@ test1
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBufferList);
   pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, 256, 256, Arcadia_Media_PixelFormat_RedGreenBlueNatural8);
   Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);
-  path = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"rn8gn8bn8.png", sizeof(u8"rn8gn8bn8.png") - 1)));
+  path = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"rn8gn8bn8.png", sizeof(u8"rn8gn8bn8.png") - 1)));
   parameters = Arcadia_Imaging_ImageWriterParameters_createFile(thread, path, extension);
   Arcadia_Imaging_ImageWriter_write(thread, writer, pixelBufferList, parameters);
 
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBufferList);
   pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, 256, 256, Arcadia_Media_PixelFormat_RedGreenBlueAlphaNatural8);
   Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);
-  path = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"rn8gn8bn8an8.png", sizeof(u8"rn8gn8bn8an8.png") - 1)));
+  path = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"rn8gn8bn8an8.png", sizeof(u8"rn8gn8bn8an8.png") - 1)));
   parameters = Arcadia_Imaging_ImageWriterParameters_createFile(thread, path, extension);
   Arcadia_Imaging_ImageWriter_write(thread, writer, pixelBufferList, parameters);
 
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBufferList);
   pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, 256, 256, Arcadia_Media_PixelFormat_AlphaRedGreenBlueNatural8);
   Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);
-  path = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"an8rn8gn8bn8.png", sizeof(u8"an8rn8gn8bn8.png") - 1)));
+  path = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"an8rn8gn8bn8.png", sizeof(u8"an8rn8gn8bn8.png") - 1)));
   parameters = Arcadia_Imaging_ImageWriterParameters_createFile(thread, path, extension);
   Arcadia_Imaging_ImageWriter_write(thread, writer, pixelBufferList, parameters);
 
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBufferList);
   pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, 256, 256, Arcadia_Media_PixelFormat_BlueGreenRedNatural8);
   Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);
-  path = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"bn8gn8rn8.png", sizeof(u8"bn8gn8rn8.png") - 1)));
+  path = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"bn8gn8rn8.png", sizeof(u8"bn8gn8rn8.png") - 1)));
   parameters = Arcadia_Imaging_ImageWriterParameters_createFile(thread, path, extension);
   Arcadia_Imaging_ImageWriter_write(thread, writer, pixelBufferList, parameters);
 
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBufferList);
   pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, 256, 256, Arcadia_Media_PixelFormat_BlueGreenRedAlphaNatural8);
   Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);
-  path = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"bn8gn8rn8an8.png", sizeof(u8"bn8gn8rn8an8.png") - 1)));
+  path = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"bn8gn8rn8an8.png", sizeof(u8"bn8gn8rn8an8.png") - 1)));
   parameters = Arcadia_Imaging_ImageWriterParameters_createFile(thread, path, extension);
   Arcadia_Imaging_ImageWriter_write(thread, writer, pixelBufferList, parameters);
 
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBufferList);
   pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, 256, 256, Arcadia_Media_PixelFormat_AlphaBlueGreenRedNatural8);
   Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);
-  path = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"an8bn8gn8rn8.png", sizeof(u8"an8bn8gn8rn8.png") - 1)));
+  path = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"an8bn8gn8rn8.png", sizeof(u8"an8bn8gn8rn8.png") - 1)));
   parameters = Arcadia_Imaging_ImageWriterParameters_createFile(thread, path, extension);
   Arcadia_Imaging_ImageWriter_write(thread, writer, pixelBufferList, parameters);
 }

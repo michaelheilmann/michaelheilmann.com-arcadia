@@ -202,7 +202,7 @@ Arcadia_FileSystem_getExecutable
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_FileSystem, getExecutable, self); }
 
-Arcadia_ByteBuffer*
+Arcadia_ByteArrayBuilder*
 Arcadia_FileSystem_getFileContents
   (
     Arcadia_Thread* thread,
@@ -252,7 +252,7 @@ Arcadia_FileSystem_setFileContents
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path,
-    Arcadia_ByteBuffer* contents
+    Arcadia_ByteArrayBuilder* contents
   )
 { Arcadia_VirtualCall(Arcadia_FileSystem, setFileContents, self, path, contents); }
 

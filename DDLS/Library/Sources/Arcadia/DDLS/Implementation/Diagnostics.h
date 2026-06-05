@@ -38,7 +38,7 @@ struct Arcadia_DDLS_Diagnostics {
   Arcadia_String* SCHEMAREFERENCE;
   Arcadia_String* STRING;
   Arcadia_String* VOID;
-  Arcadia_StringBuffer* stringBuffer;
+  Arcadia_StringBuilder* stringBuffer;
   Arcadia_Languages_StringTable* stringTable;
 };
 

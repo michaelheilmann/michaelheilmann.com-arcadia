@@ -94,7 +94,7 @@ Context_constructImpl
     u8"  generatorHome : \"https://michaelheilmann.com\",\n"
     u8"}\n"
     ;
-  Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
+  Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
   self->environment = Environment_loadString(thread, sourceString);
   Arcadia_TemplateEngine_registerTimeLibrary(thread, self->environment);
 
@@ -110,11 +110,11 @@ Context_constructImpl
 
   self->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
 
-  self->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  self->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->targetBuffer);
+  self->targetBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  self->target = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
 
-  self->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  self->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->temporaryBuffer);
+  self->temporaryBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  self->temporary = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
 
   Arcadia_LeaveConstructor(Context);
 }
@@ -216,11 +216,11 @@ onRecursionGuard
     Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(thread, self->files, i);
     if (Arcadia_FilePath_isEqualTo(thread, p, path)) {
       Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, p);
-      Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+      Arcadia_StringBuilder* sb = Arcadia_StringBuilder_create(thread);
       Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue(ps);
-      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"recursive include of file `");
-      Arcadia_StringBuffer_insertBack(thread, sb, v);
-      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`\n");
+      Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"recursive include of file `");
+      Arcadia_StringBuilder_insertBack(thread, sb, v);
+      Arcadia_StringBuilder_insertBackCxxString(thread, sb, u8"`\n");
 
       Arcadia_Log_error(thread, self->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sb)));
 

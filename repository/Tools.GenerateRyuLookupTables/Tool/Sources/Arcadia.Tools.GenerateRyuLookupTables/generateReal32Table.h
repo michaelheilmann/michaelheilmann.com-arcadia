@@ -22,7 +22,7 @@ void
 Arcadia_Tools_RyuLookupTableGenerator_generateReal32Table
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* target
+    Arcadia_StringBuilder* target
   );
 
 #endif // ARCADIA_TOOLS_RYULOOKUPTABLEGENERATOR_GENERATEREAL32TABLE_H_INCLUDED

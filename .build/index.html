@@ -37,99 +37,106 @@
 
 
   <link rel='canonical' href='https://michaelheilmann.com/'>
-  <title>Homepage of Michael Heilmann</title>
+  <title>Michael Heilmann's Project Arcadia</title>
   
-  <meta property="og:title" content="Homepage of Michael Heilmann">
-  <meta property="og:description" content="Homepage of Michael Heilmann - Information System Architect">
-  <meta name="description" content="Homepage of Michael Heilmann - Information System Architect">
-  <meta name="keywords" content="Arcadia, Information Security">
+  <meta property="og:title" content="Michael Heilmann's Project Arcadia">
+  <meta property="og:description" content="Homepage of Michael Heilmann's Project Arcadia">
+  <meta name="description" content="Homepage of Michael Heilmann's Project Arcadia">
+  <meta name="keywords" content="Arcadia, Procedural Generation, Audials, Visuals, Hapticals, Open Source, Free Software">
   <meta name="author" content="Michael Heilmann">
-
 </head>
 <body class="my-index-page-1">
   <header>
-    <div class="banner">
-      <div>michael heilmann</div>
-      <div>information system architect</div>
+    <div class="banner left-column">
+      <div>Michael Heilmann's</div>
+      <div>Project Arcadia</div>
     </div>
-    <div></div>
-    <div></div>
+    <div class="center-column"></div>
+    <div class="right-column">
+      <nav>
+        <ul>
+          <li><a href="https://michaelheilmann.com/Arcadia">Documentation</a></li>
+          <li><a href='https://github.com/michaelheilmann'>GitHub</a</li>
+          <li><a href='https://discord.gg/XtPA6pwAsp'>Discord</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
   <main>
-  <div>
-    <div class="topic">
-      <div class="header">
-        <span>Software</span>
-      </div>
-      <div class="body">
-        <div class="entries">
-          <p>
-          <em>Project Arcadia</em> is an open environment for creating, regenerating, and preserving games.
-          Its mission is to give developers, artists, and tinkerer's a future-proof space where games aren't just built - they are understood, reborn, and kept alive.
-          </p>
-          <p>Find out more under <a href='https://michaelheilmann.com/Arcadia/'>https://michaelheilmann.com/Arcadia/</a></p>
-          <div style="margin-top: 1.5rem; font-weight: bold">Update 2026-02-24</div>
-          <div>
-            <ul style="list-style-position: inside">
-              <li><em>Arcadia Engine.Visuals</em> and <em>Arcadia Engine.Audials</em> were merged into <em>Arcadia Engine</em>; this acknowledges that more complex nodes, for example a user interface, use both audials and visuals</li>
-              <li>pixel buffers and pixel formats, and pixel buffer operations, as well as sample buffers, sample formats, and sample buffer operations were assembled into <em>Arcadia Media</em>; this library will subsume most procedural functionality</li>
-              <li>confine external functionality related to image loading and saving into <em>Arcadia ImageIO</em> library. This library supports the formats bmp, ico (both the bmp and png variants), and png on all platforms.</li>
-              <li><em>Arcadia ADL</em>, which stands for <em>Asset Description Language</em>, which is not yet documented, adds support for descriptions of 
-                <ul>
-                  <li>pixel buffers, fill, checkerboard fill</li>
-                  <li>sample buffers, generation of sine waves and white noise</li>
-                  <li>textures, meshes, models</li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="topic">
-      <div class="header">
-        <span>Information Security</span>
-      </div>
-      <div class="body">
-        <div class="entries">
-          <div>
-              <p><em>Information security</em> is the practice of protecting information in an information system from unauthorized access, use, disclosure, disruption, modification, or destruction.
-              This section is a growing recollection of single articles on information security which - at some point - will be converted into a book at some point.</p>
-              <p>Find out more under <a href='https://michaelheilmann.com/information-security/'>https://michaelheilmann.com/information-security/</a></p>
-         </div>
-      </div>
-      </div>
-    </div>
-    
-    <div class="topic">
-      <div class="header">
-        <span>Organizational</span>
-      </div>
-      <div class="body">
-        <div class="entries">
-          <a href="https://michaelheilmann.com/imprint">Imprint</a>
-          <a href="https://michaelheilmann.com/data-protection-statement">Data Protection Statement</a>
-          <a href='https://github.com/michaelheilmann'>GitHub</a>
-          <a href='https://discord.gg/XtPA6pwAsp'>Discord</a>
-          <a href='mailto:contact@michaelheilmann.com'>contact@michaelheilmann.com</a>
-        </div>
-      </div>
-    </div>
+    <div class="left-column">
+    </div> <!-- left-column -->
+    <div class="center-column" style="flex-direction: column">
+        <h1 style="margin-top: 6rem; margin-bottom: 6rem">News</h1>
+        <div class="news">
+        <div class="news-item">
+
+  <div class="news-item-header">
+
+    <h2>2026-04-01</h2>
 
   </div>
+
+  <div class="news-item-body">
+    <p><em>Arcadia Ring 1</em> and <em>Arcadia Ring 2</em> provide now a consistent pattern for reading Bytes (<code>Arcadia.ByteReader</code>) and converting them to Unicode code points (<code>Arcadia.UnicodeCodePointReader</code>).</p>
+  </div>
+
+</div>
+
+        <div class="news-item">
+
+  <div class="news-item-header">
+
+    <h2>2026-03-07</h2>
+
+  </div>
+
+  <div class="news-item-body">
+  <ul style="list-style-position: inside">
+    <li><em>Arcadia Engine.Visuals</em> and <em>Arcadia Engine.Audials</em> were merged into <em>Arcadia Engine</em>. This change reflects the fact that more sophisticated engine components, such as user interfaces, typically integrate both visual and auditory elements.</li>
+    <li>Pixel buffers, pixel formats, and pixel-buffer operations, together with sample buffers, sample formats, and sample-buffer operations, have been consolidated into <em>Arcadia Media</em>.
+    This library is intended to subsume the majority of procedural media-processing functionality.</li>
+    <li>
+    Functionality related to image loading and saving has been isolated in the <em>Arcadia PixelBufferIO</em> library.
+    The library provides cross-platform support for the BMP, ICO (both BMP-based and PNG-based variants), and PNG image formats.
+    </li>
+    <li><em>Arcadia ADL</em> (Asset Description Language), which is currently undocumented, introduces support for declarative descriptions of:
+      <ul>
+        <li>pixel buffers, including solid fills and checkerboard fills</li>
+        <li>sample buffers, including sine-wave and white-noise generation</li>
+        <li>textures, meshes, models</li>
+      </ul>
+    </li>
+  </ul>
+  </div>
+
+</div>
+
+        <a href="https://michaelheilmann.com/Arcadia/news">Older news ...</a>
+        </div>
+    </div><!-- center-column -->
+    <div class="right-column"></div><!-- right-column -->
   </main>
   <footer>
-    <div class="left-column">
+  <div class="left-column">
+    <div>
+    <div>Website maintained by Michael Heilmann.</div>
+    <div>Last modified on 8 June 2026.</div> 
     </div>
-    <div class="center-column">
+  </div>
+  <div class="center-column">
+    <div>
       <div><a href="https://michaelheilmann.com/imprint">Imprint</a></div>
       <div><a href="https://michaelheilmann.com/data-protection-statement">Data Protection Statement</a></div>
     </div>
-    <div class="right-column" style="display: flex; flex-direction: column">
+  </div>
+  <div class="right-column">
+    <div>
+      <div><a href='https://github.com/michaelheilmann'>GitHub</a></div>
       <div><a href='https://discord.gg/XtPA6pwAsp'>Discord</a></div>
       <div><a href='mailto:contact@michaelheilmann.com'>contact@michaelheilmann.com</a></div>
     </div>
-  </footer>
+  </div>
+</footer>
+
 </body>
 </html>

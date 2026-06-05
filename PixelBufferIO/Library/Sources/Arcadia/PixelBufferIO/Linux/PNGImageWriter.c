@@ -65,7 +65,7 @@ Arcadia_Imaging_Linux_PNGImageWriter_writePngToByteBufferImpl
     Arcadia_Thread* thread,
     Arcadia_Imaging_Linux_PNGImageWriter* self,
     Arcadia_Media_PixelBuffer* sourcePixelBuffer,
-    Arcadia_ByteBuffer* targetByteBuffer
+    Arcadia_ByteArrayBuilder* targetByteArrayBuilder
   );
 
 static void
@@ -84,7 +84,7 @@ typedef struct LibPngState {
 } LibPngState;
 
 typedef struct LibPngWriteState {
-  Arcadia_ByteBuffer* byteBuffer;
+  Arcadia_ByteArrayBuilder* byteArrayBuilder;
   Arcadia_Process* process;
 } LibPngWriteState;
 
@@ -157,7 +157,7 @@ on_write
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_ByteBuffer_insertBackBytes(thread, ws->byteBuffer, data, length);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, ws->byteArrayBuilder, data, length);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -220,7 +220,7 @@ Arcadia_Imaging_Linux_PNGImageWriter_writePngToByteBufferImpl
     Arcadia_Thread* thread,
     Arcadia_Imaging_Linux_PNGImageWriter* self,
     Arcadia_Media_PixelBuffer* sourcePixelBuffer,
-    Arcadia_ByteBuffer* targetByteBuffer
+    Arcadia_ByteArrayBuilder* targetByteArrayBuilder
   )
 {
   LibPngState* state = NULL;
@@ -267,7 +267,7 @@ Arcadia_Imaging_Linux_PNGImageWriter_writePngToByteBufferImpl
     for (size_t i = 0; i < height; ++i) {
       state->row_pointers[i] = pixels + lineStride * i;
     }
-    LibPngWriteState writeState = { .byteBuffer = targetByteBuffer, .process = Arcadia_Thread_getProcess(thread) };
+    LibPngWriteState writeState = { .byteArrayBuilder = targetByteArrayBuilder, .process = Arcadia_Thread_getProcess(thread) };
     png_set_write_fn(state->png_struct, &writeState, &on_write, &on_flush),
     png_set_IHDR
       (
@@ -421,7 +421,7 @@ Arcadia_Imaging_Linux_PNGImageWriter_constructImpl
   }
   self->supportedTypes = NULL;
   Arcadia_List* supportedTypes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, supportedTypes, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"png", sizeof(u8"png") - 1))));
+  Arcadia_List_insertBackObjectReferenceValue(thread, supportedTypes, Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"png", sizeof(u8"png") - 1))));
   self->supportedTypes = Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(supportedTypes));
   Arcadia_LeaveConstructor(Arcadia_Imaging_Linux_PNGImageWriter);
 }

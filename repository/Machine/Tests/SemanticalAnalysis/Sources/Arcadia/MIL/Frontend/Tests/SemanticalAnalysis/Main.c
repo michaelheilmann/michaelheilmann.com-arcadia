@@ -106,8 +106,9 @@ compile
     } else {
       absoluteSourceFilePath = sourceFilePath;
     }
-    Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
-    Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sourceFileContents))), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
+    Arcadia_ByteArrayBuilder* temporary = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
+    Arcadia_RuntimeByteArray* sourceFileContents = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, temporary), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, temporary));
+    Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser, sourceFileContents), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
     Arcadia_List_insertBackObjectReferenceValue(thread, compilationUnits, compilationUnitNode);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)compilationUnits); i < n; ++i) {
@@ -126,7 +127,7 @@ testNativePrintProcedure
   Arcadia_Map* foreignProcedures = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 #define Define(Name,Function) \
   { \
-    Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, Name, sizeof(Name) - 1))); \
+    Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create_pn(thread, Arcadia_RuntimeByteArray_create(thread, Name, sizeof(Name) - 1))); \
     Arcadia_Value v = Arcadia_Value_makeForeignProcedureValue(&Function); \
     Arcadia_Map_set(thread, foreignProcedures, k, v, NULL, NULL); \
   }

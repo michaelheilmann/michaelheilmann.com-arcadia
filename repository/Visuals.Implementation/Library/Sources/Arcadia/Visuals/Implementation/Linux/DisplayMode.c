@@ -182,14 +182,14 @@ Arcadia_Visuals_Linux_DisplayMode_applyImpl
     Arcadia_Visuals_Linux_DisplayMode* self
   )
 {
-  Arcadia_StringBuffer* log = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, log, __FILE__);
-  Arcadia_StringBuffer_insertBackCxxString(thread, log, u8":");
-  Arcadia_StringBuffer_insertBackCxxInt(thread, log, __LINE__);
-  Arcadia_StringBuffer_insertBackCxxString(thread, log, u8": setting mode for display ");
-  Arcadia_StringBuffer_insertBackString(thread, log, self->device->name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, log, u8" \n");
-  fwrite(Arcadia_StringBuffer_getBytes(thread, log), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, log), stdout);
+  Arcadia_StringBuilder* log = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, log, __FILE__);
+  Arcadia_StringBuilder_insertBackCxxString(thread, log, u8":");
+  Arcadia_StringBuilder_insertBackCxxInt(thread, log, __LINE__);
+  Arcadia_StringBuilder_insertBackCxxString(thread, log, u8": setting mode for display ");
+  Arcadia_StringBuilder_insertBackString(thread, log, self->device->name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, log, u8" \n");
+  fwrite(Arcadia_StringBuilder_getBytes(thread, log), 1, Arcadia_StringBuilder_getNumberOfBytes(thread, log), stdout);
 
   int defaultScreen;
   Window rootWindow;

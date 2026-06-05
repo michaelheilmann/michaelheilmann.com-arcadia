@@ -47,6 +47,8 @@
 #include "Arcadia/Ring1/Implementation/ImmutableUTF8String.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUTF8StringExtensions.h"
 
+#include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
+
 #include "Arcadia/Ring1/Implementation/Integer16.h"
 #include "Arcadia/Ring1/Implementation/Integer32.h"
 #include "Arcadia/Ring1/Implementation/Integer64.h"
@@ -117,7 +119,7 @@
 
 #include "Arcadia/Ring1/Implementation/Void.h"
 
-#include "Arcadia/Ring1/Implementation/WeakReference.h"
+#include "Arcadia/Ring1/Implementation/Objects/Include.h"
 
 #undef ARCADIA_RING1_EXPORT
 #pragma pop_macro("ARCADIA_RING1_EXPORT")

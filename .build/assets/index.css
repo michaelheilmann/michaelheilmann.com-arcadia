@@ -4,6 +4,7 @@
     --black: rgb(3,3,3);
     --white: rgb(252,252,252);
     --blue: #0044CC;
+    --bright-blue : #85ADFF;
   }
 }
 @media print {
@@ -11,6 +12,7 @@
     --black: black;
     --white: white;
     --blue: #0044CC;
+    --bright-blue : #85ADFF;
   }
 }
 
@@ -78,15 +80,21 @@ html.my-theme-1 {
   --html-text-color: var(--black);
   --html-background-color: var(--white);
    
-  --header-a-color: var(--white);
+  --header-link-color: var(--bright-blue);
   --header-text-color: var(--white);
   --header-background-color: var(--black);
   
-  --footer-a-color: var(--blue);
+  --main-link-color: var(--blue);
+  --main-text-color: var(--black);
+  --main-background-color: var(--white);
+  
+  --footer-link-color: var(--bright-blue);
   --footer-text-color: var(--white);
   --footer-background-color: var(--black);
   
-  --a-color: var(--blue);
+  --html-link-color: var(--blue);
+  --html-text-color: var(--black);
+  --html-background-color: var(--white);
 }
 
 :root {
@@ -116,26 +124,21 @@ html.my-theme-1 {
   --default-font-size: 0.875rem;
 }
 
-a {
-  color: var(--a-color);
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 html.my-theme-1 {
   font-family: var(--font-family-default);
-  color: var(--black);
-  background-color: var(--white);
 }
 
 html.my-theme-1 code {
   font-family: var(--font-family-code);
-  color: var(--html-text-color);
   font-size: var(--default-font-size);
 }
 
 /* Style for the index and the error page. */
-body.my-index-page-1, body.my-error-page {
+body.my-index-page-1,
+body.my-content-page-1,
+body.my-error-page {
   font-family: var(--font-family-sans);
   /*font-size: 2rem;*/
   display: flex;
@@ -148,29 +151,30 @@ body.my-index-page-1, body.my-error-page {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-body.my-error-page-1, body.my-content-page-1 {
+body.my-error-page-1,
+body.my-content-page-1 {
   margin: 16px;
   margin-left: 0px;
   margin-right: 0px;
   margin-top: 0px;
 }
 
-body.my-error-page-1 header, body.my-content-page-1 header {
-  background-color: var(--header-background-color);
-  
-  display: flex;
-  flex-direction: row;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+body.my-error-page-1,
+body.my-content-page-1 {
+  & header {
+    display: flex;
+    flex-direction: row;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;    
+    & a {
+      text-decoration: none;
+    }
+  }
 }
 
-body.my-error-page-1 header a, body.my-content-page-1 header a {
-  text-decoration: none;
-  color: var(--header-text-color);
-}
-
+/*
 body.my-error-page-1 main,
 body.my-content-page-1 main,
 body.my-error-page-1 footer,
@@ -178,64 +182,203 @@ body.my-content-page-1 footer {
   margin-left: 16px;
   margin-right: 16px;
 }
+*/
 
-body.my-error-page-1 footer,
-body.my-content-page-1 footer {
-  border-top-style: solid;
-  border-top-width: 1px;
-  margin-top: 16px;
-  padding-top: 16px;
+body.my-index-page-1,
+body.my-error-page-1,
+body.my-content-page-1 {
+  & > footer {
+    border-top-style: solid;
+    border-top-width: 1px;
+    margin-top: 16px;
+    padding-top: 16px;
+    
+    & > div {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  
 }
 
-body.my-error-page-1 ul li, body.my-content-page-1 ul li {
-  margin-left: 1rem;
+body.my-error-page-1,
+body.my-content-page-1 {
+  & ul li {
+    margin-left: 1rem;
+  }
 }
 
 body.my-error-page-1 ul li, body.my-content-page-1 ol li {
   margin-left: 1rem;
 }
 
-body.my-error-page-1 p, body.my-content-page-1 p,
-body.my-error-page-1 ul, body.my-content-page-1 ul,
-body.my-error-page-1 ol, body.my-content-page-1 ol {
-  &:not(:last-child)  {
-    margin-bottom: 1rem;
+
+body.my-error-page-1, body.my-content-page-1 {
+  & p, & ul, & ol {
+    & :not(:last-child)  {
+      margin-bottom: 1rem;
+    }
   }
 }
 
-body.my-error-page-1 div.left-column, body.my-content-page-1 div.left-column {
-  flex-grow: 0;
-  width: 8vw;
+/****************************************************/
+
+/* 2026 <index page> */
+body.my-index-page-1 {
+  & header {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    & div.center-column {
+      flex-grow: 1;
+    }
+    & div.right-column {
+      flex-grow:0;
+      display: flex;
+      flex-direction: column;
+      padding-right: 2rem;
+      padding-bottom: 2rem;
+      & nav {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        margin-right: 2rem;
+      }
+    }
+  }
+  & main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;  
+    
+    & div.left-column,
+    & div.right-column {
+      flex-grow: 0;
+      width: 24vw;
+    }
+    & div.center-column {
+      flex-grow: 1;
+      width: 52vw;
+    }
+  }
+  & footer {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 2rem;
+    & div.left-column {
+      flex-grow:0;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    & div.center-column {
+      flex-grow: 1;
+    }
+    & div.right-column {
+      flex-grow: 0;
+      display: flex;
+      flex-direction: column;
+      padding-right: 2rem;
+    }
+  }
 }
 
-body.my-content-page-1 div.center-column {
-  flex-grow: 1;
-  width: 72vw;
+/* 2026 <subindex page> */
+body.my-subindex-page-1 {
+  & main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;  
+    
+    & div.left-column,
+    & div.center-column,
+    & div.right-column {
+      flex-grow: 1;
+      width: 33vw;
+    }  
+  }
 }
 
-body.my-error-page-1 div.center-column {
-  flex-grow: 1;
-  width: 80vw;
+/* 2026 <content page> <error page> */
+body.my-content-page-1,
+body.my-error-page-1 {
+  & main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    
+    & div.left-column {
+      flex-grow: 0;
+      width: 24vw;
+    }
+    & div.center-column {
+      flex-grow: 1;
+      width: 52vw;
+    }
+    & div.right-column {
+      flex-grow: 0;
+      width: 24vw;
+    }
+  }
+  & footer {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 2rem;
+    & div.left-column {
+      flex-grow:0;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    & div.center-column {
+      flex-grow: 1;
+    }
+    & div.right-column {
+      flex-grow: 0;
+      display: flex;
+      flex-direction: column;
+      padding-right: 2rem;
+    }
+  }
 }
 
-body.my-content-page-1 div.right-column {
-  flex-grow: 0;
-  width: 24vw;
+body.my-index-page-1 main,
+body.my-subindex-page-1 main {
+  & > div {
+    column-gap: 2rem;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
 }
 
-body.my-error-page-1 div.right-column {
-  flex-grow: 0;
-  width: 24vw;
-}
-
-body.my-error-page-1 main, body.my-content-page-1 main {
-  display: flex;
-  flex-direction: row;
-}
-
-body.my-error-page-1 footer, body.my-content-page-1 footer {
-  display: flex;
-  flex-direction: row;
+body.my-index-page-1,
+body.my-error-page-1,
+body.my-content-page-1 {
+  & h1 {
+    margin: var(--h1-margin);
+    font-size: var(--h1-font-size);
+  }
+  & h2 {
+    margin: var(--h2-margin);
+    font-size: var(--h2-font-size);
+  }
+  & h3 {
+    margin: var(--h3-margin);
+    font-size: var(--h3-font-size); 
+  }
+  & h4 {
+    margin: var(--h4-margin);
+    font-size: var(--h4-font-size);
+  }
+  & h5 {
+    margin: var(--h5-margin);
+    font-size: var(--h5-font-size);
+  }
+  & h6 {
+    margin: var(--h6-margin);
+    font-size: var(--h6-font-size);
+  }
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -251,101 +394,6 @@ body.my-content-page-1 div.right-column nav a {
   text-decoration: none;
 }
 
-body.my-content-page-1 h3 {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-body.my-error-page-1 h1, body.my-content-page-1 h1 {
-  margin: var(--h1-margin);
-  font-size: var(--h1-font-size);
-}
-
-body.my-error-page-1 h2, body.my-content-page-1 h2 {
-  margin: var(--h2-margin);
-  font-size: var(--h2-font-size);
-}
-
-body.my-error-page-1 h3, body.my-content-page-1 h3 {
-  margin: var(--h3-margin);
-  font-size: var(--h3-font-size);
-}
-
-body.my-error-page-1 h4, body.my-content-page-1 h4 {
-  margin: var(--h4-margin);
-  font-size: var(--h4-font-size);
-}
-
-body.my-error-page-1 h5, body.my-content-page-1 h5 {
-  margin: var(--h5-margin);
-  font-size: var(--h5-font-size);
-}
-
-body.my-error-page-1 h6, body.my-content-page-1 h6 {
-  margin: var(--h6-margin);
-  font-size: var(--h6-font-size);
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-body.my-index-page-1 header {
-  flex-grow: 0;
-  display: flex;
-  flex-direction: row;
-}
-
-body.my-index-page-1 main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: row;
-}
-
-body.my-index-page-1 footer {
-  flex-grow: 0;
-  display: flex;
-  flex-direction: row;
-}
-
-body.my-index-page-1 header > div:nth-child(2) {
-  flex-grow: 1;
-}
-
-body.my-index-page-1 header > div:last-child {
-  flex-grow:0;
-  padding-right: 2rem;
-  padding-bottom: 2rem;
-}
-
-body.my-index-page-1 main > div:first-child {
-  flex-grow:0;
-  padding-left: 2rem;
-  padding-bottom: 2rem;
-}
-
-body.my-index-page-1 main > div:nth-child(2) {
-  flex-grow: 1;
-}
-
-body.my-index-page-1 main > div:last-child {
-  flex-grow:0;
-  padding-right: 2rem;
-  padding-bottom: 2rem;
-}
-
-body.my-index-page-1 footer > div:first-child {
-  flex-grow:0;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-bottom: 2rem;
-}
-body.my-index-page-1 footer > div:nth-child(2) {
-  flex-grow: 1;
-}
-body.my-index-page-1 footer > div:last-child {
-  flex-grow:0;
-  padding-right: 2rem;
-  padding-bottom: 2rem;
-}
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -356,21 +404,7 @@ body.my-index-page-1 div.entries {
   flex-direction:column;
 }
 
-body.my-index-page-1 footer > div > div {
-  line-height: 1rem;
-}
 
-body.my-index-page-1 footer > div > div > a {
-  text-decoration: none;
-}
-
-body.my-subindex-page-1 main > div {
-  width:100%;
-  display: flex;
-  column-gap: 2rem;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
 
 body.my-subindex-page-1 header {
   background-color: var(--header-background-color);
@@ -382,20 +416,8 @@ body.my-subindex-page-1 header {
 
 body.my-subindex-page-1 header a {
   text-decoration: none;
-  color: var(--header-a-color);
 }
 
-body.my-index-page-1 main > div {
-  width:100%;
-  display: flex;
-  column-gap: 2rem;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-
-body.my-index-page-1 footer > div > div {
-  line-height: 1rem;
-}
 
 body.my-index-page-1 footer p, a {
   text-decoration: none;
@@ -403,7 +425,8 @@ body.my-index-page-1 footer p, a {
 }
 
 body.my-index-page-1 div.entries {
-  display:flex; flex-direction:column;
+  display:flex;
+  flex-direction:column;
 }
 
 div.banner {
@@ -419,20 +442,20 @@ div.banner {
   padding: 2rem;
 }
 
-body.my-index-page-1 div.banner {
-  background-color: var(--white);
-  color: var(--black);
+
+body.my-index-page-1 header div.right-column ul {
+  list-style: none;;
 }
 
-body.my-subindex-page-1 header div.banner {
-  background-color: var(--black);
-  color: var(--white);
+body.my-index-page-1 header div.right-column ul li {
+  display: inline;
 }
 
 body.my-subindex-page-1 header div.navigation.breadcrumbs {
   padding-top: 2rem;
   padding-left: 2rem;
 }
+
 
 /* Copyright (c) 2024-2025 Michael Heilmann. All rights reserved. */
 div.topic div p a {
@@ -441,7 +464,6 @@ div.topic div p a {
 }
 
 body.my-index-page-1 div.topic div.header {
-  display: inline;
   font-size: var(--h6-font-size);
 }
 
@@ -459,6 +481,8 @@ body.my-subindex-page-1 div.topic:not(:first-child) {
 }
 
 body.my-index-page-1 div.topic {
+  display: flex;
+  flex-direction: column;
   background-color: rgb(250,250,250);
   padding-left: 16px;
   padding-right: 16px;
@@ -470,5 +494,57 @@ body.my-index-page-1 div.topic {
 body.my-index-page-1 div.topic {
   padding-top: 1rem;
   padding-bottom: 1rem;
+  justify-content: flex-start;
+}
+
+
+div.news-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.news {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6rem;
+  column-gap: 6rem;
+}
+
+.news-item-body {
+  margin-top: 0.25rem;
+}
+
+.news-item-header > h2 {
+  margin: 0 !important;
+  margin-right: 2rem !important;
+}
+
+/* Copyright (c) 2024-2025 Michael Heilmann. All rights reserved. */
+
+html.my-theme-1 {
+  color: var(--html-text-colork);
+  background-color: var(--html-background-color);
+  & code {
+    color: var(--html-text-color);
+  }
+  & a {
+    color: var(--html-link-color);
+  }
+  & body.my-index-page-1, body.my-content-page-1, & body.my-subindex-page-1, & body.my-error-page-1 {
+    & > header {
+      background-color: var(--header-background-color);
+      color: var(--header-text-color);
+      & a {
+        color: var(--header-link-color);
+      }
+    }
+    & > footer {
+      background-color: var(--footer-background-color);
+      color: var(--footer-text-color);
+      & a {
+        color: var(--footer-link-color);
+      }
+    }
+  }
 }
 

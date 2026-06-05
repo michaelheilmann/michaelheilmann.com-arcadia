@@ -87,10 +87,10 @@ Arcadia_ADL_MeshDefinition_visitImpl
   )
 {
   if (self->vertexPositions) {
-    Arcadia_InternalImmutableByteArray_visit(thread, self->vertexPositions);
+    Arcadia_RuntimeByteArray_visit(thread, self->vertexPositions);
   }
   if (self->vertexAmbientColors) {
-    Arcadia_InternalImmutableByteArray_visit(thread, self->vertexAmbientColors);
+    Arcadia_RuntimeByteArray_visit(thread, self->vertexAmbientColors);
   }
   if (self->ambientColor) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->ambientColor);
@@ -119,9 +119,9 @@ Arcadia_ADL_MeshDefinition_constructImpl
     Arcadia_Thread_jump(thread);
   }
   self->numberOfVertices = Arcadia_ValueStack_getSizeValue(thread, 5);
-  self->vertexPositions = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 4);
-  self->vertexAmbientColors = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 3);
-  self->vertexAmbientTextureCoordinates = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 2);
+  self->vertexPositions = Arcadia_ValueStack_getRuntimeByteArrayValue(thread, 4);
+  self->vertexAmbientColors = Arcadia_ValueStack_getRuntimeByteArrayValue(thread, 3);
+  self->vertexAmbientTextureCoordinates = Arcadia_ValueStack_getRuntimeByteArrayValue(thread, 2);
   self->ambientColor = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                                             (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
   Arcadia_LeaveConstructor(Arcadia_ADL_MeshDefinition);
@@ -144,9 +144,9 @@ Arcadia_ADL_MeshDefinition_create
     Arcadia_ADL_Definitions* definitions,
     Arcadia_String* name,
     Arcadia_SizeValue numberOfVertices,
-    Arcadia_InternalImmutableByteArray* vertexPositions,
-    Arcadia_InternalImmutableByteArray* vertexAmbientColors,
-    Arcadia_InternalImmutableByteArray* vertexAmbientTextureCoordinates,
+    Arcadia_RuntimeByteArray* vertexPositions,
+    Arcadia_RuntimeByteArray* vertexAmbientColors,
+    Arcadia_RuntimeByteArray* vertexAmbientTextureCoordinates,
     Arcadia_String* ambientColorName
   )
 {
@@ -154,9 +154,9 @@ Arcadia_ADL_MeshDefinition_create
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushSizeValue(thread, numberOfVertices);
-  Arcadia_ValueStack_pushInternalImmutableByteArrayValue(thread, vertexPositions);
-  Arcadia_ValueStack_pushInternalImmutableByteArrayValue(thread, vertexAmbientColors);
-  Arcadia_ValueStack_pushInternalImmutableByteArrayValue(thread, vertexAmbientTextureCoordinates);
+  Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, vertexPositions);
+  Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, vertexAmbientColors);
+  Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, vertexAmbientTextureCoordinates);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)ambientColorName);
   Arcadia_ValueStack_pushNatural8Value(thread, 7);
   ARCADIA_CREATEOBJECT(Arcadia_ADL_MeshDefinition);
@@ -170,7 +170,7 @@ Arcadia_ADL_MeshDefinition_getNumberOfVertices
   )
 { return self->numberOfVertices; }
 
-Arcadia_InternalImmutableByteArray*
+Arcadia_RuntimeByteArray*
 Arcadia_ADL_MeshDefinition_getVertexPositions
   (
     Arcadia_Thread* thread,
@@ -178,7 +178,7 @@ Arcadia_ADL_MeshDefinition_getVertexPositions
   )
 { return self->vertexPositions; }
 
-Arcadia_InternalImmutableByteArray*
+Arcadia_RuntimeByteArray*
 Arcadia_ADL_MeshDefinition_getVertexAmbientColors
   (
     Arcadia_Thread* thread,
@@ -186,7 +186,7 @@ Arcadia_ADL_MeshDefinition_getVertexAmbientColors
   )
 { return self->vertexAmbientColors; }
 
-Arcadia_InternalImmutableByteArray*
+Arcadia_RuntimeByteArray*
 Arcadia_ADL_MeshDefinition_getVertexAmbientTextureCoordinates
   (
     Arcadia_Thread* thread,

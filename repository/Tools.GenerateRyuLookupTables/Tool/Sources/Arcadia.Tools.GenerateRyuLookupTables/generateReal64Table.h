@@ -23,7 +23,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
   (
     Arcadia_Thread* thread,
     Arcadia_BooleanValue printLargeTables,
-    Arcadia_StringBuffer *target
+    Arcadia_StringBuilder *target
   );
 
 #endif // ARCADIA_TOOLS_RYULOOKUPTABLEGENERATOR_GENERATEREAL64TABLE_H_INCLUDED

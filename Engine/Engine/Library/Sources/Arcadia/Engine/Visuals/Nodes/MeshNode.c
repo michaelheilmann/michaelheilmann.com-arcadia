@@ -137,23 +137,23 @@ Arcadia_Engine_Visuals_MeshNode_constructImpl
   Arcadia_SizeValue numberOfBytes = self->vertexDescriptor->stride * self->numberOfVertices;
   self->vertices = Arcadia_Memory_allocateUnmanaged(thread, numberOfBytes);
 
-  Arcadia_InternalImmutableByteArray* vertexXZZ = Arcadia_ADL_MeshDefinition_getVertexPositions(thread, source);
-  Arcadia_Real32Value const* vertexYZBytes = (Arcadia_Real32Value const*)Arcadia_InternalImmutableByteArray_getBytes(thread, vertexXZZ);
+  Arcadia_RuntimeByteArray* vertexXZZ = Arcadia_ADL_MeshDefinition_getVertexPositions(thread, source);
+  Arcadia_Real32Value const* vertexYZBytes = (Arcadia_Real32Value const*)Arcadia_RuntimeByteArray_getBytes(thread, vertexXZZ);
 
-  Arcadia_InternalImmutableByteArray* vertexAmbientRGBA = Arcadia_ADL_MeshDefinition_getVertexAmbientColors(thread, source);
-  Arcadia_Real32Value const* vertexAmbientRGBBytes = (Arcadia_Real32Value const*)Arcadia_InternalImmutableByteArray_getBytes(thread, vertexAmbientRGBA);
+  Arcadia_RuntimeByteArray* vertexAmbientRGBA = Arcadia_ADL_MeshDefinition_getVertexAmbientColors(thread, source);
+  Arcadia_Real32Value const* vertexAmbientRGBBytes = (Arcadia_Real32Value const*)Arcadia_RuntimeByteArray_getBytes(thread, vertexAmbientRGBA);
 
-  Arcadia_InternalImmutableByteArray* vertexAmbientUV = Arcadia_ADL_MeshDefinition_getVertexAmbientTextureCoordinates(thread, source);
-  Arcadia_Real32Value const* vertexAmbientUVBytes = (Arcadia_Real32Value const*)Arcadia_InternalImmutableByteArray_getBytes(thread, vertexAmbientUV);
+  Arcadia_RuntimeByteArray* vertexAmbientUV = Arcadia_ADL_MeshDefinition_getVertexAmbientTextureCoordinates(thread, source);
+  Arcadia_Real32Value const* vertexAmbientUVBytes = (Arcadia_Real32Value const*)Arcadia_RuntimeByteArray_getBytes(thread, vertexAmbientUV);
 
-  Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* temporary = Arcadia_ByteArrayBuilder_create(thread);
   for (Arcadia_SizeValue i = 0, n = self->numberOfVertices; i < n; ++i) {
-    Arcadia_ByteBuffer_insertBackBytes(thread, temporary, &vertexYZBytes[i * 3], sizeof(Arcadia_Real32Value) * 3);
-    Arcadia_ByteBuffer_insertBackBytes(thread, temporary, &vertexAmbientRGBBytes[i * 4], sizeof(Arcadia_Real32Value) * 4);
-    Arcadia_ByteBuffer_insertBackBytes(thread, temporary, &vertexAmbientUVBytes[i * 2], sizeof(Arcadia_Real32Value) * 2);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, temporary, &vertexYZBytes[i * 3], sizeof(Arcadia_Real32Value) * 3);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, temporary, &vertexAmbientRGBBytes[i * 4], sizeof(Arcadia_Real32Value) * 4);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, temporary, &vertexAmbientUVBytes[i * 2], sizeof(Arcadia_Real32Value) * 2);
   }
-  Arcadia_Memory_copy(thread, self->vertices, Arcadia_ByteBuffer_getBytes(thread, temporary),
-                                              Arcadia_ByteBuffer_getNumberOfBytes(thread, temporary));
+  Arcadia_Memory_copy(thread, self->vertices, Arcadia_ByteArrayBuilder_getBytes(thread, temporary),
+                                              Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, temporary));
   Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_MeshNode);
 }
 

@@ -155,10 +155,10 @@ Arcadia_ADL_Reference_resolve
   if (!self->definition) {
     self->definition = Arcadia_ADL_Definitions_getDefinitionOrNull(thread, self->definitions, self->definitionName);
     if (!self->definition) {
-      Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-      Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"unable to resolve reference `");
-      Arcadia_StringBuffer_insertBackString(thread, message, self->definitionName);
-      Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"`");
+      Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+      Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"unable to resolve reference `");
+      Arcadia_StringBuilder_insertBackString(thread, message, self->definitionName);
+      Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"`");
       Arcadia_Languages_DiagnosticsOld_emit(thread, message);
 
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);

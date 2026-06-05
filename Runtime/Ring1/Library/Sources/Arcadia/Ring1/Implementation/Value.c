@@ -45,11 +45,11 @@ Arcadia_Value_visit
     case Arcadia_ValueTag_ForeignProcedure: {
       /* Intentionally empty. */
     } break;
-    case Arcadia_ValueTag_InternalImmutableByteArray: {
-      Arcadia_InternalImmutableByteArray_visit(thread, self->internalImmutableByteArrayValue);
+    case Arcadia_ValueTag_RuntimeByteArray: {
+      Arcadia_RuntimeByteArray_visit(thread, self->runtimeByteArrayValue);
     } break;
-    case Arcadia_ValueTag_ImmutableUTF8String: {
-      Arcadia_ImmutableUTF8String_visit(thread, self->immutableUTF8StringValue);
+    case Arcadia_ValueTag_RuntimeUTF8String: {
+      Arcadia_RuntimeUTF8String_visit(thread, self->runtimeUTF8StringValue);
     } break;
     case Arcadia_ValueTag_Integer16: {
       /* Intentionally empty. */
@@ -123,11 +123,11 @@ Arcadia_Value_getType
     case Arcadia_ValueTag_ForeignProcedure: {
       return _Arcadia_ForeignProcedureValue_getType(thread);
     } break;
-    case Arcadia_ValueTag_InternalImmutableByteArray: {
-      return _Arcadia_InternalImmutableByteArrayValue_getType(thread);
+    case Arcadia_ValueTag_RuntimeByteArray: {
+      return _Arcadia_RuntimeByteArrayValue_getType(thread);
     } break;
-    case Arcadia_ValueTag_ImmutableUTF8String: {
-      return _Arcadia_ImmutableUTF8StringValue_getType(thread);
+    case Arcadia_ValueTag_RuntimeUTF8String: {
+      return _Arcadia_RuntimeUTF8StringValue_getType(thread);
     } break;
     case Arcadia_ValueTag_Integer16: {
       return _Arcadia_Integer16Value_getType(thread);
@@ -209,7 +209,7 @@ Arcadia_Value_isEqualTo
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      // TODO: Add and use isEqualTo similar to BigInteger, ImmutableByteArray, ImmutableUTF8String, etc.
+      // TODO: Add and use isEqualTo similar to BigInteger, RuntimeByteArray, RuntimeUTF8String, etc.
       if (!Arcadia_Value_isAtomValue(other)) {
         return Arcadia_BooleanValue_False;
       }
@@ -218,8 +218,8 @@ Arcadia_Value_isEqualTo
     OnRelational(BigInteger, isEqualTo);
     OnRelational(Boolean, isEqualTo);
     OnRelational(ForeignProcedure, isEqualTo);
-    OnRelational(InternalImmutableByteArray, isEqualTo);
-    OnRelational(ImmutableUTF8String, isEqualTo);
+    OnRelational(RuntimeByteArray, isEqualTo);
+    OnRelational(RuntimeUTF8String, isEqualTo);
     OnRelational(Integer16, isEqualTo);
     OnRelational(Integer32, isEqualTo);
     OnRelational(Integer64, isEqualTo);
@@ -262,7 +262,7 @@ Arcadia_Value_isNotEqualTo
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      // TODO: Add and use notEqualTo similar to BigInteger, ImmutableByteArray, ImmutableUTF8String, etc.
+      // TODO: Add and use notEqualTo similar to BigInteger, RuntimeByteArray, RuntimeUTF8String, etc.
       if (!Arcadia_Value_isAtomValue(other)) {
         return Arcadia_BooleanValue_True;
       }
@@ -271,8 +271,8 @@ Arcadia_Value_isNotEqualTo
     OnRelational(BigInteger, isNotEqualTo);
     OnRelational(Boolean, isNotEqualTo);
     OnRelational(ForeignProcedure, isNotEqualTo);
-    OnRelational(InternalImmutableByteArray, isNotEqualTo);
-    OnRelational(ImmutableUTF8String, isNotEqualTo);
+    OnRelational(RuntimeByteArray, isNotEqualTo);
+    OnRelational(RuntimeUTF8String, isNotEqualTo);
     OnRelational(Integer16, isNotEqualTo);
     OnRelational(Integer32, isNotEqualTo);
     OnRelational(Integer64, isNotEqualTo);
@@ -318,8 +318,8 @@ Arcadia_Value_isLowerThan
     OnRelational(BigInteger, isLowerThan);
     OnRelational(Boolean, isLowerThan);
     OnRelational(ForeignProcedure, isLowerThan);
-    OnRelational(InternalImmutableByteArray, isLowerThan);
-    OnRelational(ImmutableUTF8String, isLowerThan);
+    OnRelational(RuntimeByteArray, isLowerThan);
+    OnRelational(RuntimeUTF8String, isLowerThan);
     OnRelational(Integer16, isLowerThan);
     OnRelational(Integer32, isLowerThan);
     OnRelational(Integer64, isLowerThan);
@@ -372,8 +372,8 @@ Arcadia_Value_isLowerThanOrEqualTo
     OnRelational(BigInteger, isLowerThanOrEqualTo);
     OnRelational(Boolean, isLowerThanOrEqualTo);
     OnRelational(ForeignProcedure, isLowerThanOrEqualTo);
-    OnRelational(InternalImmutableByteArray, isLowerThanOrEqualTo);
-    OnRelational(ImmutableUTF8String, isLowerThanOrEqualTo);
+    OnRelational(RuntimeByteArray, isLowerThanOrEqualTo);
+    OnRelational(RuntimeUTF8String, isLowerThanOrEqualTo);
     OnRelational(Integer16, isLowerThanOrEqualTo);
     OnRelational(Integer32, isLowerThanOrEqualTo);
     OnRelational(Integer64, isLowerThanOrEqualTo);
@@ -426,8 +426,8 @@ Arcadia_Value_isGreaterThan
     OnRelational(BigInteger, isGreaterThan);
     OnRelational(Boolean, isGreaterThan);
     OnRelational(ForeignProcedure, isGreaterThan);
-    OnRelational(InternalImmutableByteArray, isGreaterThan);
-    OnRelational(ImmutableUTF8String, isGreaterThan);
+    OnRelational(RuntimeByteArray, isGreaterThan);
+    OnRelational(RuntimeUTF8String, isGreaterThan);
     OnRelational(Integer16, isGreaterThan);
     OnRelational(Integer32, isGreaterThan);
     OnRelational(Integer64, isGreaterThan);
@@ -480,8 +480,8 @@ Arcadia_Value_isGreaterThanOrEqualTo
     OnRelational(BigInteger, isGreaterThanOrEqualTo);
     OnRelational(Boolean, isGreaterThanOrEqualTo);
     OnRelational(ForeignProcedure, isGreaterThanOrEqualTo);
-    OnRelational(InternalImmutableByteArray, isGreaterThanOrEqualTo);
-    OnRelational(ImmutableUTF8String, isGreaterThanOrEqualTo);
+    OnRelational(RuntimeByteArray, isGreaterThanOrEqualTo);
+    OnRelational(RuntimeUTF8String, isGreaterThanOrEqualTo);
     OnRelational(Integer16, isGreaterThanOrEqualTo);
     OnRelational(Integer32, isGreaterThanOrEqualTo);
     OnRelational(Integer64, isGreaterThanOrEqualTo);
@@ -555,8 +555,8 @@ Arcadia_Value_getHash
     OnGetHash(BigInteger);
     OnGetHash(Boolean);
     OnGetHash(ForeignProcedure);
-    OnGetHash(InternalImmutableByteArray);
-    OnGetHash(ImmutableUTF8String);
+    OnGetHash(RuntimeByteArray);
+    OnGetHash(RuntimeUTF8String);
     OnGetHash(Integer16);
     OnGetHash(Integer32);
     OnGetHash(Integer64);
@@ -607,8 +607,8 @@ Arcadia_Value_isInstanceOf
     OnIsInstanceOf(BigInteger);
     OnIsInstanceOf(Boolean);
     OnIsInstanceOf(ForeignProcedure);
-    OnIsInstanceOf(InternalImmutableByteArray);
-    OnIsInstanceOf(ImmutableUTF8String);
+    OnIsInstanceOf(RuntimeByteArray);
+    OnIsInstanceOf(RuntimeUTF8String);
     OnIsInstanceOf(Integer16);
     OnIsInstanceOf(Integer32);
     OnIsInstanceOf(Integer64);

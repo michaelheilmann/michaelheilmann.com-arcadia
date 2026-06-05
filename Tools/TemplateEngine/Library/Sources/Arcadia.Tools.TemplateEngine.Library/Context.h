@@ -30,11 +30,11 @@ struct ContextDispatch {
 struct Context {
   Arcadia_Object _parent;
 
-  Arcadia_UTF8Writer* target;
-  Arcadia_ByteBuffer* targetBuffer;
+  Arcadia_Unicode_Encoder* target;
+  Arcadia_ByteArrayBuilder* targetBuffer;
 
-  Arcadia_UTF8Writer* temporary;
-  Arcadia_ByteBuffer* temporaryBuffer;
+  Arcadia_Unicode_Encoder* temporary;
+  Arcadia_ByteArrayBuilder* temporaryBuffer;
 
   /// The source file path.
   Arcadia_FilePath* sourceFilePath;

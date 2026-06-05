@@ -22,7 +22,7 @@ Arcadia_SizeValue
 _toSize
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
 #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture

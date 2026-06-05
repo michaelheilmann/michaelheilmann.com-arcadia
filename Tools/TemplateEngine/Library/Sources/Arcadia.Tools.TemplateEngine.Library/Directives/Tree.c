@@ -76,18 +76,22 @@ Directives_Tree_visit
   )
 {
   switch (self->type) {
-    case Directives_TreeKind_At: {
+    case Directives_TreeKind_AtLiteralExpr: {
       // Intentionally empty.
     } break;
-    case Directives_TreeKind_GetVariable: {
-      Arcadia_Object_visit(thread, (Arcadia_Object*)self->getVariable.name);
+    case Directives_TreeKind_NameExpr: {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->nameExpr.name);
     } break;
-    case Directives_TreeKind_String: {
-      Arcadia_Object_visit(thread, (Arcadia_Object*)self->string);
+    case Directives_TreeKind_StringLiteralExpr: {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->stringLiteralExpr.string);
     } break;
-    case Directives_TreeKind_Invoke: {
-      Arcadia_Object_visit(thread, (Arcadia_Object*)self->invoke.name);
-      Arcadia_Object_visit(thread, (Arcadia_Object*)self->invoke.arguments);
+    case Directives_TreeKind_InvokeExpr: {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->invokeExpr.target);
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->invokeExpr.arguments);
+    } break;
+    case Directives_TreeKind_AssignmentExpr: {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->assignmentExpr.target);
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->assignmentExpr.source);
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -114,18 +118,18 @@ Directives_Tree_constructImpl
   }
   self->type = Arcadia_ValueStack_getInteger32Value(thread, _numberOfArguments);
   switch (self->type) {
-    case Directives_TreeKind_At: {
+    case Directives_TreeKind_AtLiteralExpr: {
 
     } break;
-    case Directives_TreeKind_GetVariable: {
-      self->getVariable.name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
+    case Directives_TreeKind_NameExpr: {
+      self->nameExpr.name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
     } break;
-    case Directives_TreeKind_String: {
-      self->string = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
+    case Directives_TreeKind_StringLiteralExpr: {
+      self->stringLiteralExpr.string = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
     } break;
-    case Directives_TreeKind_Invoke: {
-      self->invoke.name = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
-      self->invoke.arguments = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
+    case Directives_TreeKind_InvokeExpr: {
+      self->invokeExpr.target = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
+      self->invokeExpr.arguments = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -163,7 +167,7 @@ Directives_Tree_create
 }
 
 Directives_Tree*
-Directives_Tree_createInvoke
+Directives_Tree_createInvokeExpr
   (
     Arcadia_Thread* thread,
     Arcadia_String* name,
@@ -171,7 +175,7 @@ Directives_Tree_createInvoke
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushInteger32Value(thread, Directives_TreeKind_Invoke);
+  Arcadia_ValueStack_pushInteger32Value(thread, Directives_TreeKind_InvokeExpr);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)arguments);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
@@ -179,26 +183,26 @@ Directives_Tree_createInvoke
 }
 
 Directives_Tree*
-Directives_Tree_createAt
+Directives_Tree_createAtLiteralExpr
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushInteger32Value(thread, Directives_TreeKind_At);
+  Arcadia_ValueStack_pushInteger32Value(thread, Directives_TreeKind_AtLiteralExpr);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
   ARCADIA_CREATEOBJECT(Directives_Tree);
 }
 
 Directives_Tree*
-Directives_Tree_createGetVariable
+Directives_Tree_createNameExpr
   (
     Arcadia_Thread* thread,
     Arcadia_String* name
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushInteger32Value(thread, Directives_TreeKind_GetVariable);
+  Arcadia_ValueStack_pushInteger32Value(thread, Directives_TreeKind_NameExpr);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Directives_Tree);

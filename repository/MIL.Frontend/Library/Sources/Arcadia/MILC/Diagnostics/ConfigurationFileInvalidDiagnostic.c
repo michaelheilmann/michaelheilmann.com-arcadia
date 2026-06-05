@@ -129,10 +129,10 @@ getMessageImpl
     Arcadia_MILC_Diagnostics_ConfigurationFileInvalidDiagnostic* self
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"error: configuration file `");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, Arcadia_FilePath_toNative(thread, self->path, Arcadia_BooleanValue_False));
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` not found\n");
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"error: configuration file `");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, Arcadia_FilePath_toNative(thread, self->path, Arcadia_BooleanValue_False));
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` not found\n");
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }
 

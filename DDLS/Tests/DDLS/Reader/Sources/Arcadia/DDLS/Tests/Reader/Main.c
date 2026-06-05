@@ -14,7 +14,9 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include "Arcadia/DDLS/Tests/Reader/Schema1.h"
+
 #include "Arcadia/DDLS/Include.h"
+#include <string.h>
 
 static void
 testAcceptChoice1
@@ -48,10 +50,11 @@ testAcceptChoice1
       (
         thread,
         ddlsReader,
-        Arcadia_String_createFromCxxString
+        Arcadia_RuntimeByteArray_create
           (
             thread,
-            DDLS
+            DDLS,
+            strlen(DDLS)
           )
       );
   ddlsNode = NULL;

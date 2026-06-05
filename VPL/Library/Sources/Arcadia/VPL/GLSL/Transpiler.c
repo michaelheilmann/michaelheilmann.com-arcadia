@@ -44,7 +44,7 @@ static void
 emitCxxString
   (
     Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* target,
+    Arcadia_ByteArrayBuilder* target,
     const char* p
   );
 
@@ -52,7 +52,7 @@ static void
 emitString
   (
     Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* target,
+    Arcadia_ByteArrayBuilder* target,
     Arcadia_String* p
   );
 
@@ -62,7 +62,7 @@ writeType
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Symbols_Symbol* type,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -73,7 +73,7 @@ writeVariableScalar
     Context context,
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_VPL_Symbols_VariableScalar* variableScalar,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -85,7 +85,7 @@ writeConstantScalar
     Arcadia_Map* constantMapping,
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_VPL_Symbols_ConstantScalar* constantScalar,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -97,7 +97,7 @@ writeConstantRecord
     Arcadia_Map* constantMapping,
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_VPL_Symbols_ConstantRecord* constantBlock,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -192,19 +192,19 @@ static void
 emitCxxString
   (
     Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* target,
+    Arcadia_ByteArrayBuilder* target,
     const char* p
   )
-{ Arcadia_ByteBuffer_insertBackBytes(thread, target, p, strlen(p)); }
+{ Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, p, strlen(p)); }
 
 static void
 emitString
   (
     Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* target,
+    Arcadia_ByteArrayBuilder* target,
     Arcadia_String* p
   )
-{ Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, p), Arcadia_String_getNumberOfBytes(thread, p)); }
+{ Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, p), Arcadia_String_getNumberOfBytes(thread, p)); }
 
 static void
 writeType
@@ -212,7 +212,7 @@ writeType
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Symbols_Symbol* type,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_VPL_Symbols_BuiltinType_getType(thread))) {
@@ -236,7 +236,7 @@ writeVariableScalar
     Context context,
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_VPL_Symbols_VariableScalar* variableScalar,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   switch (context) {
@@ -327,16 +327,16 @@ writeConstantScalar
     Arcadia_Map* constantMapping,
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_VPL_Symbols_ConstantScalar* constantScalar,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   // <uniform> : 'uniform' <type> <instance name>;
   Arcadia_String* name = Arcadia_VPL_Symbols_Symbol_getName(thread, (Arcadia_VPL_Symbols_Symbol*)constantScalar);
 
   // Add the VPL constant scalar name to GL uniform scalar name to the map.
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
-  Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, '\0');
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, name);
+  Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, '\0');
   Arcadia_String* glName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
   Arcadia_Map_set(thread, constantMapping, Arcadia_Value_makeObjectReferenceValue(name), Arcadia_Value_makeObjectReferenceValue(glName), NULL, NULL);
   Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(constantScalar), Arcadia_Value_makeObjectReferenceValue(name), NULL, NULL);
@@ -358,7 +358,7 @@ writeConstantRecord
     Arcadia_Map* constantMapping,
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_VPL_Symbols_ConstantRecord* constantBlock,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   // <uniform block> : 'layout(std140)' 'uniform' <name> '{' <fields> '} '_'<name> ';'
@@ -383,23 +383,23 @@ writeConstantRecord
   Arcadia_String* name = Arcadia_VPL_Symbols_Symbol_getName(thread, (Arcadia_VPL_Symbols_Symbol*)constantBlock);
 
   // Add the VPL constant block name to GL uniform block name to the map.
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
-  Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, '\0');
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, name);
+  Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, '\0');
   Arcadia_String* glName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
   Arcadia_Map_set(thread, constantMapping, Arcadia_Value_makeObjectReferenceValue(name), Arcadia_Value_makeObjectReferenceValue(glName), NULL, NULL);
 
   // Generate an <instance name>.
-  Arcadia_StringBuffer_clear(thread, stringBuffer);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, "_");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, Arcadia_String_createFromNatural32(thread, self->numberOfConstantBlocks++));
+  Arcadia_StringBuilder_clear(thread, stringBuffer);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, "_");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, name);
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, Arcadia_String_createFromNatural32(thread, self->numberOfConstantBlocks++));
   Arcadia_String* glInstanceName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
   Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(constantBlock), Arcadia_Value_makeObjectReferenceValue(glInstanceName), NULL, NULL);
 
   Arcadia_List* fields = Arcadia_VPL_Symbols_ConstantRecord_getFields(thread, constantBlock);
   emitCxxString(thread, target, u8"layout(std140) uniform ");
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, name), Arcadia_String_getNumberOfBytes(thread, name));
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, name), Arcadia_String_getNumberOfBytes(thread, name));
   emitCxxString(thread, target, u8" {\n");
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)fields); i < n; ++i) {
     Arcadia_VPL_Symbols_Variable* field = Arcadia_List_getObjectReferenceValueAt(thread, fields, i);
@@ -420,7 +420,7 @@ onParameterVariableDefinitionTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Tree_Node* tree,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -429,7 +429,7 @@ onExprTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Tree_Node* tree,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -438,7 +438,7 @@ onNameExprTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Tree_NameExprNode* tree,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -447,7 +447,7 @@ onStatementListTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_List* statementList,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -456,7 +456,7 @@ onProcedureSymbol
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Symbols_Procedure* symbol,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static void
@@ -465,7 +465,7 @@ onParameterVariableDefinitionTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Tree_Node* tree,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   if (tree->flags != Arcadia_VPL_Tree_NodeFlags_VariableDefinition) {
@@ -483,7 +483,7 @@ onExprTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Tree_Node* tree,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   switch (tree->flags) {
@@ -575,7 +575,7 @@ onNameExprTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Tree_NameExprNode* node,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   if (!node->symbol) {
@@ -627,7 +627,7 @@ onStatementListTree
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_List* statementList,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)statementList); i < n; ++i) {
@@ -660,7 +660,7 @@ onProcedureSymbol
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Arcadia_VPL_Symbols_Procedure* symbol,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   Arcadia_VPL_Tree_ProcedureDefnNode* node = (Arcadia_VPL_Tree_ProcedureDefnNode*)symbol->node;
@@ -745,7 +745,7 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_Map* constantMapping,
     Arcadia_Map* vertexShaderVariableScalarMapping,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   self->symbolNameMapping = computeInitialSymbolNameMapping(thread, program);
@@ -775,7 +775,7 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
   }
 
   // the zero terminator
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
 }
 
 void
@@ -787,7 +787,7 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
     Arcadia_Map* constantMapping,
     Arcadia_Map* fragmentShaderVariableScalarMapping,
     Arcadia_String** fragmentColorOutput,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   self->symbolNameMapping = computeInitialSymbolNameMapping(thread, program);
@@ -816,10 +816,10 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
   }
 
   // the zero terminator
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
 
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"_2_fragmentColor");
-  Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, '\0');
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"_2_fragmentColor");
+  Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, '\0');
   *fragmentColorOutput = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }

@@ -33,17 +33,18 @@ onReadWriteTestFixture
     size_t n
   )
 {
-  Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_insertBackBytes(thread, sourceByteBuffer, p, n);
-  Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_UTF8Reader* reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
-  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, targetByteBuffer);
-  while (Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
-    Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
-    Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
-    Arcadia_UTF8Reader_next(thread, reader);
+  Arcadia_ByteArrayBuilder* sourceByteArrayBuilder = Arcadia_ByteArrayBuilder_create(thread);
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, sourceByteArrayBuilder, p, n);
+  Arcadia_ByteArrayBuilder* targetByteArrayBuilder = Arcadia_ByteArrayBuilder_create(thread);
+  Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArrayBuilder_ByteReader_create(thread, sourceByteArrayBuilder));
+
+  Arcadia_Unicode_Encoder* writer = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
+  while (Arcadia_UnicodeCodePointReader_hasValue(thread, reader)) {
+    Arcadia_Natural32Value codePoint = Arcadia_UnicodeCodePointReader_getValue(thread, reader);
+    Arcadia_Unicode_Encoder_encodeCodePoints(thread, writer, &codePoint, 1, targetByteArrayBuilder);
+    Arcadia_UnicodeCodePointReader_nextValue(thread, reader);
   }
-  if (!Arcadia_ByteBuffer_isEqualTo(thread, sourceByteBuffer, targetByteBuffer)) {
+  if (!Arcadia_ByteArrayBuilder_isEqualTo(thread, sourceByteArrayBuilder, targetByteArrayBuilder)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }

@@ -21,21 +21,24 @@
 Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Directives.Tree", Directives_Tree,
                           u8"Arcadia.Object");
 
-/// <name> : <NAME>
-#define Directives_TreeKind_GetVariable (1)
+/// <name expr> : <NAME>
+#define Directives_TreeKind_NameExpr (1)
 
-/// <string> : <STRING>
-#define Directives_TreeKind_String (2)
-/// The '@' symbol.
-/// <at> : '@' '@'
-#define Directives_TreeKind_At (3)
+/// <string literal expr> : <STRING>
+#define Directives_TreeKind_StringLiteralExpr (2)
 
-/// <invoke> : <NAME>'(' <arguments> ')'
+/// <at literal expr> : '@' '@'
+#define Directives_TreeKind_AtLiteralExpr (3)
+
+/// <invoke expr> : <NAME>'(' <arguments> ')'
 /// <arguments> : e
 ///             | <argument>
-///             | <argument> <argumentRest>
-/// <argumentRest> : ',' <argument> <arguments>
-#define Directives_TreeKind_Invoke (4)
+///             | <argument> <argument rest>
+/// <argument rest> : ',' <argument> <arguments>
+#define Directives_TreeKind_InvokeExpr (4)
+
+/// <assignment expr> : <NAME> ':=' <expr>
+#define Directives_TreeKind_AssignmentExpr (5)
 
 struct Directives_TreeDispatch {
   Arcadia_ObjectDispatch _parent;
@@ -48,19 +51,26 @@ struct Directives_Tree {
   Arcadia_Natural8Value type;
 
   struct {
-    // Directives_TreeKind_GetVariable: The name of the variable.
+    // Directives_TreeKind_NameExpr: The name of the variable.
     Arcadia_String* name;
-  } getVariable;
-
-  // Directives_TreeKind_String: The string.
-  Arcadia_String* string;
+  } nameExpr;
 
   struct {
-    /// Directives_TreeKind_Invoke: The name of the procedure.
-    Arcadia_String* name;
-    /// Directives_TreeKind_Invoke: List of arguments.
+    // Directives_TreeKind_StringLiteralExpr: The string.
+    Arcadia_String* string;
+  } stringLiteralExpr;
+
+  struct {
+    /// Directives_TreeKind_InvokeExor: The name of the procedure.
+    Arcadia_String* target;
+    /// Directives_TreeKind_InvokeExpr: List of arguments.
     Arcadia_List* arguments;
-  } invoke;
+  } invokeExpr;
+
+  struct {
+    Arcadia_String* target;
+    Directives_Tree* source;
+  } assignmentExpr;
 
 };
 
@@ -73,7 +83,7 @@ Directives_Tree_create
   );
 
 Directives_Tree*
-Directives_Tree_createInvoke
+Directives_Tree_createInvokeExpr
   (
     Arcadia_Thread* thread,
     Arcadia_String* name,
@@ -81,13 +91,13 @@ Directives_Tree_createInvoke
   );
 
 Directives_Tree*
-Directives_Tree_createAt
+Directives_Tree_createAtLiteralExpr
   (
     Arcadia_Thread* thread
   );
 
 Directives_Tree*
-Directives_Tree_createGetVariable
+Directives_Tree_createNameExpr
   (
     Arcadia_Thread* thread,
     Arcadia_String* name

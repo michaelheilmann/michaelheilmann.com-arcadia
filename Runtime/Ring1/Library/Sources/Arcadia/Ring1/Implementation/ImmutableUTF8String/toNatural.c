@@ -109,7 +109,7 @@ Arcadia_Natural16Value
 _toNatural16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   Arcadia_Natural64Value w = _toNatural64(thread, immutableUTF8StringValue);
@@ -125,7 +125,7 @@ Arcadia_Natural32Value
 _toNatural32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   Arcadia_Natural64Value w = _toNatural64(thread, immutableUTF8StringValue);
@@ -141,12 +141,12 @@ Arcadia_Natural64Value
 _toNatural64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   _State state;
-  _State_init(&state, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue),
-                      Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
+  _State_init(&state, Arcadia_RuntimeUTF8String_getBytes(thread, immutableUTF8StringValue),
+                      Arcadia_RuntimeUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
   Arcadia_Natural64Value value;
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -166,7 +166,7 @@ Arcadia_Natural8Value
 _toNatural8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   Arcadia_Natural64Value w = _toNatural64(thread, immutableUTF8StringValue);

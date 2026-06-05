@@ -17,7 +17,6 @@
 #include "Arcadia/Ring2/FileSystem/Linux/DirectoryIteratorLinux.h"
 
 #include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
-#include "Arcadia/Ring2/Strings/StringBuffer.h"
 #include "Arcadia/Ring2/FileSystem/FilePath.h"
 
 #include <string.h>
@@ -194,7 +193,7 @@ Arcadia_DirectoryIteratorLinux_getValue
   )
 {
   if (self->dirent) {
-    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, self->dirent->d_name, strlen(self->dirent->d_name))));
+    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, self->dirent->d_name, strlen(self->dirent->d_name))));
     return Arcadia_FilePath_parseNative(thread, fileNameString);
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);

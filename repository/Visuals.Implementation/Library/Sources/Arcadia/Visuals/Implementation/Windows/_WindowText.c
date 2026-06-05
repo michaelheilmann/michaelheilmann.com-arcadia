@@ -58,7 +58,7 @@ _getWindowText
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    text = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, buffer, bufferSize - 1)));
+    text = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, buffer, bufferSize - 1)));
     free(buffer);
     buffer = NULL;
     Arcadia_Thread_popJumpTarget(thread);
@@ -80,8 +80,8 @@ _setWindowText
   )
 {
   Arcadia_Natural32Value zeroTerminator = 0;
-  Arcadia_StringBuffer* buffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBack(thread, buffer, Arcadia_Value_makeObjectReferenceValue(text));
-  Arcadia_StringBuffer_insertBackCodePoints(thread, buffer, &zeroTerminator, 1);
-  SendMessageA(hWnd, WM_SETTEXT, (WPARAM)0, (LPARAM)Arcadia_StringBuffer_getBytes(thread, buffer));
+  Arcadia_StringBuilder* buffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBack(thread, buffer, Arcadia_Value_makeObjectReferenceValue(text));
+  Arcadia_StringBuilder_insertBackCodePoints(thread, buffer, &zeroTerminator, 1);
+  SendMessageA(hWnd, WM_SETTEXT, (WPARAM)0, (LPARAM)Arcadia_StringBuilder_getBytes(thread, buffer));
 }

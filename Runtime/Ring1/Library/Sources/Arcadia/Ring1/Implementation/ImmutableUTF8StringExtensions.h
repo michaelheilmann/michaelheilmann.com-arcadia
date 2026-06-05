@@ -28,10 +28,10 @@
 /// @param codePoint the code point.
 /// @return An Arcadia.Size value denoting the zero-based code point index from the start of the string if the code point was found, Arcadia.Void otherwise.
 Arcadia_Value
-Arcadia_ImmutableUTF8String_findFirstOccurrence
+Arcadia_RuntimeUTF8String_findFirstOccurrence
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* self,
+    Arcadia_RuntimeUTF8String* self,
     Arcadia_Natural32Value codePoint
   );
 
@@ -41,18 +41,18 @@ Arcadia_ImmutableUTF8String_findFirstOccurrence
 /// @param codePoint the code point.
 /// @return An Arcadia.Size value denoting the zero-based code point index from the start of the string if the code point was found, Arcadia.Void otherwise.
 Arcadia_Value
-Arcadia_ImmutableUTF8String_findLastOccurrence
+Arcadia_RuntimeUTF8String_findLastOccurrence
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* self,
+    Arcadia_RuntimeUTF8String* self,
     Arcadia_Natural32Value codePoint
   );
 
 /// @brief Create an empty string.
 /// @param thread A pointer to this thread.
 /// @return A pointer to the string.
-Arcadia_ImmutableUTF8String*
-Arcadia_ImmutableUTF8String_createEmpty
+Arcadia_RuntimeUTF8String*
+Arcadia_RuntimeUTF8String_createEmpty
   (
     Arcadia_Thread* thread
   );
@@ -61,11 +61,11 @@ Arcadia_ImmutableUTF8String_createEmpty
 /// @param start The code point index of at which the substring starts at.
 /// @param length The length, in code points, of the substring as a Arcadia_SizeValue or an Arcadia_Void value.
 /// @return A pointer to the substring.
-Arcadia_ImmutableUTF8String*
-Arcadia_ImmutableUTF8String_substring
+Arcadia_RuntimeUTF8String*
+Arcadia_RuntimeUTF8String_substring
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* self,
+    Arcadia_RuntimeUTF8String* self,
     Arcadia_SizeValue start,
     Arcadia_Value length
   );

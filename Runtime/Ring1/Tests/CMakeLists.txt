@@ -38,3 +38,5 @@ add_subdirectory(WeakReferenceTests)
 
 add_subdirectory(UTF8ArrayIteratorTests)
 add_subdirectory(SubStringTests)
+
+add_subdirectory(UnicodeCodePointReaderTests)

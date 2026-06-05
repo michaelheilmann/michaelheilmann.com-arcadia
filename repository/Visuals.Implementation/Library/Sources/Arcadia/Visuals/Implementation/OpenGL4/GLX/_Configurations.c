@@ -14,8 +14,8 @@ integerToString
     Arcadia_Integer32Value integer32Value
   )
 {
-  Arcadia_ImmutableUTF8String* immutableUTF8StringValue = Arcadia_ImmutableUTF8String_createFromInteger32(thread, integer32Value);
-  Arcadia_Value value = { .tag = Arcadia_ValueTag_ImmutableUTF8String, .immutableUTF8StringValue = immutableUTF8StringValue };
+  Arcadia_RuntimeUTF8String* runtimeUTF8StringValue = Arcadia_RuntimeUTF8String_createFromInteger32(thread, integer32Value);
+  Arcadia_Value value = { .tag = Arcadia_ValueTag_RuntimeUTF8String, .runtimeUTF8StringValue = runtimeUTF8StringValue };
   return Arcadia_String_create(thread, value);
 }
 

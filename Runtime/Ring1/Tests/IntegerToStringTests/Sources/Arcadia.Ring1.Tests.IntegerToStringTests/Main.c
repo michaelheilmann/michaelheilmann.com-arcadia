@@ -23,8 +23,8 @@ testFixture
     Arcadia_Integer64Value v
   )
 {
-  Arcadia_ImmutableUTF8String* u = Arcadia_ImmutableUTF8String_createFromInteger64(thread, v);
-  Arcadia_Integer64Value w = Arcadia_ImmutableUTF8String_toInteger64(thread, u);
+  Arcadia_RuntimeUTF8String* u = Arcadia_RuntimeUTF8String_createFromInteger64(thread, v);
+  Arcadia_Integer64Value w = Arcadia_RuntimeUTF8String_toInteger64(thread, u);
   Arcadia_Tests_assertTrue(thread, v == w);
 }
 

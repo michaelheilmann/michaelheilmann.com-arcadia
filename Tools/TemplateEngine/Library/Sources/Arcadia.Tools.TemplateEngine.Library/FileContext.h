@@ -37,8 +37,12 @@ struct FileContext {
   Arcadia_FilePath* includingFilePath;
   /// The path to the included file.
   Arcadia_FilePath* includedFilePath;
-  /// UTF8 reader for the included file.
-  Arcadia_UTF8Reader* reader;
+
+  /// The Bytes of this file.
+  Arcadia_RuntimeByteArray* fileBytes;
+
+  /// Unicode decoder for the included file.
+  Arcadia_UnicodeCodePointReader* reader;
   /// The environment.
   Environment* environment;
 

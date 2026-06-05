@@ -196,13 +196,13 @@ onIdentifierNode
     Arcadia_MILC_AST_IdentifierNode* identifierNode
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
   Arcadia_String* name = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)identifierNode->names, 0, _Arcadia_String_getType(thread));
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, name);
   for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)identifierNode->names); i < n; ++i) {
-    Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, '.');
+    Arcadia_StringBuilder_insertBackCodePoint(thread, stringBuffer, '.');
     name = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)identifierNode->names, i, _Arcadia_String_getType(thread));
-    Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+    Arcadia_StringBuilder_insertBackString(thread, stringBuffer, name);
   }
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }

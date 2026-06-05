@@ -263,26 +263,30 @@ Arcadia_Unicode_encodeCodePointsUtf32Le
   }
 }
 
-void
-Arcadia_Unicode_encodeBytesUTF8
+typedef struct Arcadia_Unicode_UTF8EncoderState {
+  Arcadia_Natural8Value const* bytes;
+  Arcadia_SizeValue numberOfBytes;
+  Arcadia_Unicode_EncodeCodePointCallbackContext* context;
+  Arcadia_Unicode_EncodeCodePointCallbackFunction* function;
+} Arcadia_Unicode_UTF8EncoderState;
+
+static void
+Arcadia_Unicode_encodeBytesUTF8Internal
   (
     Arcadia_Thread* thread,
-    Arcadia_Natural8Value const* bytes,
-    Arcadia_SizeValue numberOfBytes,
-    Arcadia_Unicode_EncodeCodePointCallbackContext* context,
-    Arcadia_Unicode_EncodeCodePointCallbackFunction* function
+    Arcadia_Unicode_UTF8EncoderState* state
   )
-{
-  if (!numberOfBytes) {
+{ 
+  if (!state->numberOfBytes) {
     return;
   }
-  for (Arcadia_Natural8Value const* current = (Arcadia_Natural8Value const*)bytes, *end = (Arcadia_Natural8Value const*)bytes + numberOfBytes; current != end; ) {
+  for (Arcadia_Natural8Value const* current = (Arcadia_Natural8Value const*)state->bytes, *end = (Arcadia_Natural8Value const*)state->bytes + state->numberOfBytes; current != end; ) {
     Arcadia_Natural8Value x = *current;
     if (x <= 0x7f) {
-      (*function)(thread, context, current, Arcadia_SizeValue_Literal(1));
+      (*state->function)(thread, state->context, current, Arcadia_SizeValue_Literal(1));
       current++;
     } else if (x <= 0x7ff) {
-      (*function)(thread, context, current, Arcadia_SizeValue_Literal(1));
+      (*state->function)(thread, state->context, current, Arcadia_SizeValue_Literal(1));
       if (end - current < 2) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
         Arcadia_Thread_jump(thread);
@@ -293,11 +297,11 @@ Arcadia_Unicode_encodeBytesUTF8
           Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
           Arcadia_Thread_jump(thread);
         }
-        (*function)(thread, context, current, Arcadia_SizeValue_Literal(1));
+        (*state->function)(thread, state->context, current, Arcadia_SizeValue_Literal(1));
         current++;
       }
     } else if (x <= 0xffff) {
-      (*function)(thread, context, current, Arcadia_SizeValue_Literal(1));
+      (*state->function)(thread, state->context, current, Arcadia_SizeValue_Literal(1));
       if (end - current < 3) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
         Arcadia_Thread_jump(thread);
@@ -308,11 +312,11 @@ Arcadia_Unicode_encodeBytesUTF8
           Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
           Arcadia_Thread_jump(thread);
         }
-        (*function)(thread, context, current, Arcadia_SizeValue_Literal(1));
+        (*state->function)(thread, state->context, current, Arcadia_SizeValue_Literal(1));
         current++;
       }
     } else if (x <= 0x10ffff) {
-      (*function)(thread, context, current, Arcadia_SizeValue_Literal(1));
+      (*state->function)(thread, state->context, current, Arcadia_SizeValue_Literal(1));
       if (end - current < 4) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
         Arcadia_Thread_jump(thread);
@@ -323,7 +327,82 @@ Arcadia_Unicode_encodeBytesUTF8
           Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
           Arcadia_Thread_jump(thread);
         }
-        (*function)(thread, context, current, Arcadia_SizeValue_Literal(1));
+        (*state->function)(thread, state->context, current, Arcadia_SizeValue_Literal(1));
+        current++;
+      }
+    } else {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+  }
+}
+
+void
+Arcadia_Unicode_encodeBytesUTF8
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Natural8Value const* bytes,
+    Arcadia_SizeValue numberOfBytes,
+    Arcadia_Unicode_EncodeCodePointCallbackContext* context,
+    Arcadia_Unicode_EncodeCodePointCallbackFunction* function
+  )
+{
+  Arcadia_Unicode_UTF8EncoderState s;
+  s.bytes = bytes;
+  s.numberOfBytes = numberOfBytes;
+  s.context = context;
+  s.function = function;
+  if (!numberOfBytes) {
+    return;
+  }
+  for (Arcadia_Natural8Value const* current = (Arcadia_Natural8Value const*)bytes, *end = (Arcadia_Natural8Value const*)bytes + numberOfBytes; current != end; ) {
+    Arcadia_Natural8Value x = *current;
+    if (x <= 0x7f) {
+      (*s.function)(thread, s.context, current, Arcadia_SizeValue_Literal(1));
+      current++;
+    } else if (x <= 0x7ff) {
+      (*function)(thread, s.context, current, Arcadia_SizeValue_Literal(1));
+      if (end - current < 2) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+        Arcadia_Thread_jump(thread);
+      }
+      current++;
+      for (size_t i = 1; i < 2; ++i) {
+        if (0x80 != (*current) & 0xc0) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+          Arcadia_Thread_jump(thread);
+        }
+        (*s.function)(thread, s.context, current, Arcadia_SizeValue_Literal(1));
+        current++;
+      }
+    } else if (x <= 0xffff) {
+      (*s.function)(thread, s.context, current, Arcadia_SizeValue_Literal(1));
+      if (end - current < 3) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+        Arcadia_Thread_jump(thread);
+      }
+      current++;
+      for (size_t i = 1; i < 3; ++i) {
+        if (0x80 != (*current) & 0xc0) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+          Arcadia_Thread_jump(thread);
+        }
+        (*s.function)(thread, s.context, current, Arcadia_SizeValue_Literal(1));
+        current++;
+      }
+    } else if (x <= 0x10ffff) {
+      (*s.function)(thread, s.context, current, Arcadia_SizeValue_Literal(1));
+      if (end - current < 4) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+        Arcadia_Thread_jump(thread);
+      }
+      current++;
+      for (size_t i = 1; i < 4; ++i) {
+        if (0x80 != (*current) & 0xc0) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+          Arcadia_Thread_jump(thread);
+        }
+        (*s.function)(thread, s.context, current, Arcadia_SizeValue_Literal(1));
         current++;
       }
     } else {

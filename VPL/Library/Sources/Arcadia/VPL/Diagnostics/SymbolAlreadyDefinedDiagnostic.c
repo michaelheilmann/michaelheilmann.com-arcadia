@@ -124,10 +124,10 @@ getMessageImpl
     Arcadia_VPL_Diagnostics_SymbolAlreadyDefinedDiagnostic* self
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"semantical error: symbol `");
-  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, self->name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` already defined\n");
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"semantical error: symbol `");
+  Arcadia_StringBuilder_insertBackString(thread, stringBuffer, self->name);
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` already defined\n");
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }
 

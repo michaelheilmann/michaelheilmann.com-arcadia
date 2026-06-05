@@ -149,11 +149,11 @@ Arcadia_Languages_Scanner_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Scanner* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   )
 { Arcadia_VirtualCall(Arcadia_Languages_Scanner, setInput, self, input); }
 
-Arcadia_String*
+Arcadia_RuntimeByteArray*
 Arcadia_Languages_Scanner_getInput
   (
     Arcadia_Thread* thread,

@@ -7,7 +7,7 @@
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_isEqualTo">Arcadia_Object_isEqualTo</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_isNotEqualTo">Arcadia_Object_isNotEqualTo</a></li>
 
-        @{include("3.documentation.8.objects/ByteBuffer/include.index")}
+        @{include("3.documentation.8.objects/ByteArrayBuilder/include.index")}
         <li>File System</li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ExistingFilePolicy">Arcadia_ExistingFilePolicy</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileAccessMode">Arcadia_FileAccessMode</a></li>
@@ -26,18 +26,11 @@
         @{include("3.documentation.8.objects/Set/include.index")}
         @{include("3.documentation.8.objects/Stack/include.index")}
         @{include("3.documentation.8.objects/String/include.index")}
-        @{include("3.documentation.8.objects/StringBuffer/include.index")}
+        @{include("3.documentation.8.objects/StringBuilder/include.index")}
       </ul>
     </nav>
   </div>
   </main>
-  <footer>
-    <div class="left-column"></div>
-    <div class="center-column"></div>
-    <div class="right-column">
-      <div>Website maintained by @{siteAuthor}.</div>
-      <div>Last modified on @{dayOfMonth()} @{monthName()} @{year()}.</div>
-    </div>
-  </footer>
+  @{include("./../../../Documentation/footer.i")}
   </body>
 </html>

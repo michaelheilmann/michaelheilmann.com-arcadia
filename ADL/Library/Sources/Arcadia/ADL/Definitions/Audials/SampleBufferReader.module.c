@@ -20,6 +20,7 @@
 #include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Reference.h"
 #include "Arcadia/ADL/Definitions/Audials/Include.h"
+#include <string.h>
 
 static const char* SCHEMA =
 "{\n"
@@ -170,7 +171,7 @@ Arcadia_ADL_SampleBufferReader_constructImpl
   }
   {
     Arcadia_DDLS_DefaultReader* reader = (Arcadia_DDLS_DefaultReader*)Arcadia_DDLS_DefaultReader_create(thread);
-    Arcadia_DDLS_Node* node = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, SCHEMA));
+    Arcadia_DDLS_Node* node = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_RuntimeByteArray_create(thread, SCHEMA, strlen(SCHEMA)));
     if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node, _Arcadia_DDLS_SchemaNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);

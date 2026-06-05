@@ -40,8 +40,8 @@ struct Arcadia_Languages_ScannerDispatch {
 
   void (*step)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
-  void (*setInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self, Arcadia_String* input);
-  Arcadia_String* (*getInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
+  void (*setInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self, Arcadia_RuntimeByteArray* input);
+  Arcadia_RuntimeByteArray* (*getInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
   Arcadia_Languages_StringTable* (*getStringTable)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
   Arcadia_Languages_Diagnostics* (*getDiagnostics)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
@@ -114,14 +114,14 @@ Arcadia_Languages_Scanner_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Scanner* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   );
 
 /// @brief Get the input.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this scanner.
 /// @return A pointer to the input string.
-Arcadia_String*
+Arcadia_RuntimeByteArray*
 Arcadia_Languages_Scanner_getInput
   (
     Arcadia_Thread* thread,

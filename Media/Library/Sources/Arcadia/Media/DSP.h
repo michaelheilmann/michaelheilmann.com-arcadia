@@ -24,7 +24,7 @@ Arcadia_declareObjectType(u8"Arcadia.Media.DSP", Arcadia_Media_DSP,
 struct Arcadia_Media_DSPDispatch {
   Arcadia_ObjectDispatch parent;
 
-  void (*generate)(Arcadia_Thread* thread, Arcadia_Media_DSP* self, Arcadia_Natural32Value samples, Arcadia_Natural32Value numberOfSamples, Arcadia_ByteBuffer* target);
+  void (*generate)(Arcadia_Thread* thread, Arcadia_Media_DSP* self, Arcadia_Natural32Value samples, Arcadia_Natural32Value numberOfSamples, Arcadia_ByteArrayBuilder* target);
 };
 
 struct Arcadia_Media_DSP {
@@ -44,7 +44,7 @@ Arcadia_Media_DSP_generate
     Arcadia_Media_DSP* self,
     Arcadia_Natural32Value sampleRate,
     Arcadia_Natural32Value numberOfSamples,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 #endif // ARCADIA_MEDIA_SAMPLEBUFFEROPERATION_H_INCLUDED

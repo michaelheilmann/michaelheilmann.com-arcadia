@@ -29,23 +29,23 @@ Arcadia_Visuals_Diagnostics_dumpDeviceBounds
   Arcadia_Integer32Value left, top, right, bottom;
   Arcadia_Engine_Visuals_DisplayDevice_getBounds(thread, device, &left, &top, &right, &bottom);
 
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"    bounds:");
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"    bounds:");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     left: ");
-  Arcadia_StringBuffer_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, left));
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"\n     left: ");
+  Arcadia_StringBuilder_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, left));
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     top: ");
-  Arcadia_StringBuffer_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, top));
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"\n     top: ");
+  Arcadia_StringBuilder_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, top));
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     right: ");
-  Arcadia_StringBuffer_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, right));
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"\n     right: ");
+  Arcadia_StringBuilder_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, right));
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     bottom: ");
-  Arcadia_StringBuffer_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, bottom));
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"\n     bottom: ");
+  Arcadia_StringBuilder_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, bottom));
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"\n");
   Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
 }
 
@@ -57,7 +57,7 @@ Arcadia_Visuals_Diagnostics_dumpModes
     Arcadia_Engine_Visuals_DisplayDevice* device
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
   Arcadia_String* a;
 
   Arcadia_List* modes = Arcadia_Engine_Visuals_DisplayDevice_getAvailableDisplayModes(thread, device);
@@ -66,29 +66,29 @@ Arcadia_Visuals_Diagnostics_dumpModes
     Arcadia_Engine_Visuals_DisplayMode* mode =
       (Arcadia_Engine_Visuals_DisplayMode*)Arcadia_List_getObjectReferenceValueAt(thread, modes, i);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"     ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"     ");
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"horizontal resolution: ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"horizontal resolution: ");
 
     a = Arcadia_String_createFromInteger32(thread, Arcadia_Engine_Visuals_DisplayMode_getHorizontalResolution(thread, mode));
-    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    Arcadia_StringBuilder_insertBackString(thread, message, a);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8", vertical resolution: ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8", vertical resolution: ");
 
     a = Arcadia_String_createFromInteger32(thread, Arcadia_Engine_Visuals_DisplayMode_getVerticalResolution(thread, mode));
-    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    Arcadia_StringBuilder_insertBackString(thread, message, a);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8", color depth: ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8", color depth: ");
 
     a = Arcadia_String_createFromInteger32(thread, Arcadia_Engine_Visuals_DisplayMode_getColorDepth(thread, mode));
-    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    Arcadia_StringBuilder_insertBackString(thread, message, a);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8", frequency: ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8", frequency: ");
 
     a = Arcadia_String_createFromInteger32(thread, Arcadia_Engine_Visuals_DisplayMode_getFrequency(thread, mode));
-    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    Arcadia_StringBuilder_insertBackString(thread, message, a);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"\n");
   }
   Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
 }
@@ -100,7 +100,7 @@ Arcadia_Visuals_Diagnostics_dumpDevices
     Arcadia_Engine_Visuals_BackendContext* backendContext
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
   Arcadia_Log* log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   Arcadia_List* displayDevices = Arcadia_Engine_Visuals_BackendContext_getDisplayDevices(thread, backendContext);
 
@@ -110,25 +110,25 @@ Arcadia_Visuals_Diagnostics_dumpDevices
 
     Arcadia_String* a;
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"  ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"  ");
 
     a = Arcadia_String_createFromSize(thread, i);
-    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    Arcadia_StringBuilder_insertBackString(thread, message, a);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8") id: ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8") id: ");
 
     a = Arcadia_Engine_Visuals_DisplayDevice_getId(thread, displayDevice);
-    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    Arcadia_StringBuilder_insertBackString(thread, message, a);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8", name: ");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8", name: ");
 
     a = Arcadia_Engine_Visuals_DisplayDevice_getName(thread, displayDevice);
-    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    Arcadia_StringBuilder_insertBackString(thread, message, a);
 
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"\n");
 
     Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
-    Arcadia_StringBuffer_clear(thread, message);
+    Arcadia_StringBuilder_clear(thread, message);
 
     Arcadia_Visuals_Diagnostics_dumpModes(thread, log, displayDevice);
     Arcadia_Visuals_Diagnostics_dumpDeviceBounds(thread, log, displayDevice);

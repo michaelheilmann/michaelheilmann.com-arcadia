@@ -35,7 +35,7 @@ struct Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource {
   Arcadia_BooleanValue isLooping;
   Arcadia_Real32Value volume;
   Arcadia_Natural8Value dirtyBits;
-  Arcadia_ByteBuffer* byteBuffer;
+  Arcadia_ByteArrayBuilder* byteBuffer;
   ALuint alBufferID;
   ALuint alSourceID;
 };

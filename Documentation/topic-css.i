@@ -5,7 +5,6 @@ div.topic div p a {
 }
 
 body.my-index-page-1 div.topic div.header {
-  display: inline;
   font-size: var(--h6-font-size);
 }
 
@@ -23,6 +22,8 @@ body.my-subindex-page-1 div.topic:not(:first-child) {
 }
 
 body.my-index-page-1 div.topic {
+  display: flex;
+  flex-direction: column;
   background-color: rgb(250,250,250);
   padding-left: 16px;
   padding-right: 16px;
@@ -34,4 +35,5 @@ body.my-index-page-1 div.topic {
 body.my-index-page-1 div.topic {
   padding-top: 1rem;
   padding-bottom: 1rem;
+  justify-content: flex-start;
 }

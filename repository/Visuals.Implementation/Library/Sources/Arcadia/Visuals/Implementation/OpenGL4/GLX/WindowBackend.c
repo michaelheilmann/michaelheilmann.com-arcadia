@@ -276,23 +276,23 @@ applyIcons
       self->smallIcon,
       self->bigIcon,
     };
-    Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
+    Arcadia_ByteArrayBuilder* byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
     for (size_t i = 0; i < 2; ++i) {
       Arcadia_Visuals_Linux_Icon* icon = icons[i];
       if (icon) {
         numberOfElements += icon->width * icon->height + 2;
-        Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, icon->bytes, icon->numberOfBytes);
+        Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteBuffer, icon->bytes, icon->numberOfBytes);
       }
     }
-    void const* p = Arcadia_ByteBuffer_getBytes(thread, byteBuffer);
-    int n = Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer);
+    void const* p = Arcadia_ByteArrayBuilder_getBytes(thread, byteBuffer);
+    int n = Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, byteBuffer);
     XChangeProperty(self->backendContext->display,
                     self->window,
                     self->backendContext->_NET_WM_ICON,
                     XA_CARDINAL,
                     32,
                     PropModeReplace,
-                    Arcadia_ByteBuffer_getBytes(thread, byteBuffer),
+                    Arcadia_ByteArrayBuilder_getBytes(thread, byteBuffer),
                     numberOfElements);
   }
   XSync(self->backendContext->display, False);
@@ -705,16 +705,16 @@ setTitleImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuilder = Arcadia_StringBuilder_create(thread);
   Arcadia_Value value;
   Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)title);
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, value);
-  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"", 1)));
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, value);
+  Arcadia_StringBuilder_insertBack(thread, stringBuilder, value);
+  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_RuntimeByteArray_create(thread, u8"", 1)));
+  Arcadia_StringBuilder_insertBack(thread, stringBuilder, value);
 
   if (self->window) {
     XStoreName(self->backendContext->display, self->window,
-               Arcadia_StringBuffer_getBytes(thread, stringBuffer));
+               Arcadia_StringBuilder_getBytes(thread, stringBuilder));
   }
   ((Arcadia_Engine_Visuals_Window*)self)->title = title;
 }

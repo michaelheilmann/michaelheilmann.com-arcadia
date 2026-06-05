@@ -17,20 +17,35 @@
 #include "Arcadia/Ring2/FileSystem/FileHandleExtensions.h"
 
 #include "Arcadia/Ring2/FileSystem/FileHandle.h"
-#include "Arcadia/Ring2/FileSystem/FileSystem.h"
-#include "Arcadia/Ring2/Strings/String.h"
-#include "Arcadia/Ring2/Strings/StringBuffer.h"
+#include "Arcadia/Ring1/Include.h"
+
+void
+Arcadia_FileHandle_writeByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
+    Arcadia_ByteArrayBuilder* source
+  )
+{
+  Arcadia_SizeValue bytesToWrite = Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, source), bytesWritten = 0;
+  Arcadia_Natural8Value const* bytes = Arcadia_ByteArrayBuilder_getBytes(thread, source);
+  while (bytesToWrite > bytesWritten) {
+    Arcadia_SizeValue bytesWritteNow = 0;
+    Arcadia_FileHandle_write(thread, self, bytes + bytesWritten, bytesToWrite - bytesWritten, &bytesWritteNow);
+    bytesWritten += bytesWritteNow;
+  }
+}
 
 void
 Arcadia_FileHandle_writeString
   (
     Arcadia_Thread* thread,
     Arcadia_FileHandle* self,
-    Arcadia_String* string
+    Arcadia_String* source
   )
 {
-  Arcadia_SizeValue bytesToWrite = Arcadia_String_getNumberOfBytes(thread, string), bytesWritten = 0;
-  Arcadia_Natural8Value const* bytes = Arcadia_String_getBytes(thread, string);
+  Arcadia_SizeValue bytesToWrite = Arcadia_String_getNumberOfBytes(thread, source), bytesWritten = 0;
+  Arcadia_Natural8Value const* bytes = Arcadia_String_getBytes(thread, source);
   while (bytesToWrite > bytesWritten) {
     Arcadia_SizeValue bytesWritteNow = 0;
     Arcadia_FileHandle_write(thread, self, bytes + bytesWritten, bytesToWrite - bytesWritten, &bytesWritteNow);
@@ -43,11 +58,11 @@ Arcadia_FileHandle_writeStringBuffer
   (
     Arcadia_Thread* thread,
     Arcadia_FileHandle* self,
-    Arcadia_StringBuffer* stringBuffer
+    Arcadia_StringBuilder* source
   )
 {
-  Arcadia_SizeValue bytesToWrite = Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer), bytesWritten = 0;
-  Arcadia_Natural8Value const* bytes = Arcadia_StringBuffer_getBytes(thread, stringBuffer);
+  Arcadia_SizeValue bytesToWrite = Arcadia_StringBuilder_getNumberOfBytes(thread, source), bytesWritten = 0;
+  Arcadia_Natural8Value const* bytes = Arcadia_StringBuilder_getBytes(thread, source);
   while (bytesToWrite > bytesWritten) {
     Arcadia_SizeValue bytesWritteNow = 0;
     Arcadia_FileHandle_write(thread, self, bytes + bytesWritten, bytesToWrite - bytesWritten, &bytesWritteNow);

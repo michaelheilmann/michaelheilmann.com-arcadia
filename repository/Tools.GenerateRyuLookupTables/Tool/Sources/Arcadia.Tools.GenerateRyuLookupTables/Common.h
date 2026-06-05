@@ -26,24 +26,24 @@ Arcadia_printInteger32
   );
 
 void
-Arcadia_printImmutableUTF8String
+Arcadia_printRuntimeUTF8String
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* string
+    Arcadia_RuntimeUTF8String* string
   );
 
 void
-Arcadia_printImmutableUTF8String
+Arcadia_printRuntimeUTF8String
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* string
+    Arcadia_RuntimeUTF8String* string
   );
 
 void
 Arcadia_printStringBuffer
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* stringBuffer
+    Arcadia_StringBuilder* stringBuffer
   );
 
 void

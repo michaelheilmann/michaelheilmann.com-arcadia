@@ -40,7 +40,7 @@ Arcadia_Imaging_ImageWriterParameters*
 Arcadia_Imaging_ImageWriterParameters_createByteBuffer
   (
     Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* byteBuffer,
+    Arcadia_ByteArrayBuilder* byteBuffer,
     Arcadia_String* format
   );
 
@@ -65,7 +65,7 @@ Arcadia_Imaging_ImageWriterParameters_hasByteBuffer
     Arcadia_Imaging_ImageWriterParameters* self
   );
 
-Arcadia_ByteBuffer*
+Arcadia_ByteArrayBuilder*
 Arcadia_Imaging_ImageWriterParameters_getByteBuffer
   (
     Arcadia_Thread* thread,

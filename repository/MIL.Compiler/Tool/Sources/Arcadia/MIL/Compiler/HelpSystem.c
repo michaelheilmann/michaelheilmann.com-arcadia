@@ -40,22 +40,22 @@ General_showHelp
     Arcadia_Thread* thread
   )
 {
-  Arcadia_StringBuffer* text = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* text = Arcadia_StringBuilder_create(thread);
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"Arcadia.MIL.Compiler --<tool name> [<tool arguments>]\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"<tool name> can be one of the following:\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"Arcadia.MIL.Compiler --<tool name> [<tool arguments>]\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"<tool name> can be one of the following:\n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"--help     Display the help.\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"           You can specifiy a help topic to display the help on by specified `--topic=<topic>` for `<tool arguments>`.\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"           If no topic is specified or the topic `general` is specified, then this help is displayed.\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"           The following help topics are currently available:\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"           1) `general`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"           2) `mil2c`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"           2) `mil2mil`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"--help     Display the help.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"           You can specifiy a help topic to display the help on by specified `--topic=<topic>` for `<tool arguments>`.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"           If no topic is specified or the topic `general` is specified, then this help is displayed.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"           The following help topics are currently available:\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"           1) `general`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"           2) `mil2c`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"           2) `mil2mil`\n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"--mil2c    Invoke the MIL to C compiler.\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"--mil2mil  Invoke the MIL to MIL compiler.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"--mil2c    Invoke the MIL to C compiler.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"--mil2mil  Invoke the MIL to MIL compiler.\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
@@ -68,17 +68,17 @@ MIL2C_showHelp
     Arcadia_Thread* thread
   )
 {
-  Arcadia_StringBuffer* text = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* text = Arcadia_StringBuilder_create(thread);
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"Arcadia.MIL.Compiler --mil2c --configuration=<configuration>\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"Arcadia.MIL.Compiler --mil2c --configuration=<configuration>\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"\n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"--configuration=<configuration> A DDL configuration file.\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                Consists of a single map with a list of module directories:\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                `{`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                  `modulePaths = [<module paths>]`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                `}`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"<module paths> i a list of paths to modules. If a path is relative, then it is interpreted as relative to the current working directory.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"--configuration=<configuration> A DDL configuration file.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                Consists of a single map with a list of module directories:\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                `{`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                  `modulePaths = [<module paths>]`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                `}`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"<module paths> i a list of paths to modules. If a path is relative, then it is interpreted as relative to the current working directory.\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
@@ -91,17 +91,17 @@ MIL2MIL_showHelp
     Arcadia_Thread* thread
   )
 {
-  Arcadia_StringBuffer* text = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* text = Arcadia_StringBuilder_create(thread);
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"Arcadia.MIL.Compiler --mil2mil --configuration=<configuration>\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"Arcadia.MIL.Compiler --mil2mil --configuration=<configuration>\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"\n");
 
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"--configuration=<configuration> A DDL configuration file.\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                Consists of a single map with a list of module directories:\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                `{`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                  `modulePaths = [<module paths>]`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"                                `}`\n");
-  Arcadia_StringBuffer_insertBackCxxString(thread, text, u8"<module paths> i a list of paths to modules. If a path is relative, then it is interpreted as relative to the current working directory.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"--configuration=<configuration> A DDL configuration file.\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                Consists of a single map with a list of module directories:\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                `{`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                  `modulePaths = [<module paths>]`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"                                `}`\n");
+  Arcadia_StringBuilder_insertBackCxxString(thread, text, u8"<module paths> i a list of paths to modules. If a path is relative, then it is interpreted as relative to the current working directory.\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);

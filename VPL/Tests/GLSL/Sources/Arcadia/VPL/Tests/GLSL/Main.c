@@ -28,10 +28,10 @@ test1
   Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_String* fragmentColorOutput = NULL;
 
-  Arcadia_ByteBuffer* vertexShaderCode = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* vertexShaderCode = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantMapping, vertexShaderVariableScalarMapping, vertexShaderCode);
 
-  Arcadia_ByteBuffer* fragmentShaderCode = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* fragmentShaderCode = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantMapping, fragmentShaderVariableScalarMapping , &fragmentColorOutput, fragmentShaderCode);
 
   Arcadia_FilePath* vertexShaderPath = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));
@@ -56,10 +56,10 @@ test2
   Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_String* fragmentColorOutput = NULL;
 
-  Arcadia_ByteBuffer* vertexShaderCode = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* vertexShaderCode = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantMapping, vertexShaderVariableScalarMapping, vertexShaderCode);
 
-  Arcadia_ByteBuffer* fragmentShaderCode = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* fragmentShaderCode = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantMapping, fragmentShaderVariableScalarMapping , &fragmentColorOutput, fragmentShaderCode);
 
   Arcadia_FilePath* vertexShaderPath = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));
@@ -84,10 +84,10 @@ test3
   Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_String* fragmentColorOutput = NULL;
 
-  Arcadia_ByteBuffer* vertexShaderCode = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* vertexShaderCode = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantMapping, vertexShaderVariableScalarMapping, vertexShaderCode);
 
-  Arcadia_ByteBuffer* fragmentShaderCode = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* fragmentShaderCode = Arcadia_ByteArrayBuilder_create(thread);
   Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantMapping, fragmentShaderVariableScalarMapping , &fragmentColorOutput, fragmentShaderCode);
 
   Arcadia_FilePath* vertexShaderPath = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));

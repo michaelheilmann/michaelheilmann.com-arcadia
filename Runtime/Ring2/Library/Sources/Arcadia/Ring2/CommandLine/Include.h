@@ -22,6 +22,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Logging/Include.h"
+#include "Arcadia/Ring2/Unicode/Include.h"
 #include "Arcadia/Ring2/Strings/Include.h"
 #include "Arcadia/Ring2/CommandLine/CommandLineArgument.h"
 
@@ -36,7 +37,7 @@ Arcadia_CommandLineArgument*
 Arcadia_CommandLine_parseArgument
   (
     Arcadia_Thread* thread,
-    Arcadia_UTF8Reader* reader
+    Arcadia_UnicodeCodePointReader* reader
   );
 
 void

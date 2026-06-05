@@ -22,9 +22,7 @@
 
 #include "Arcadia/Ring2/Implementation/Configure.h"
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 #include "Arcadia/Ring2/Collections/ArrayList.h"
-#include "Arcadia/Ring2/Strings/String.h"
 
 /// @remarks
 /// A general path consists either

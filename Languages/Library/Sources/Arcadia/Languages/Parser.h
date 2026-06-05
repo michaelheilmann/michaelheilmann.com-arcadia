@@ -31,7 +31,7 @@ Arcadia_declareObjectType(u8"Arcadia.Languages.Parser", Arcadia_Languages_Parser
 struct Arcadia_Languages_ParserDispatch {
   Arcadia_ObjectDispatch _parent;
 
-  Arcadia_Value (*run)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self, Arcadia_String* input);
+  Arcadia_Value (*run)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self, Arcadia_RuntimeByteArray* input);
   Arcadia_Languages_StringTable* (*getStringTable)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self);
   Arcadia_Languages_Diagnostics* (*getDiagnostics)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self);
 };
@@ -54,7 +54,7 @@ Arcadia_Languages_Parser_run
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Parser* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   );
 
 /// @brief Get the string table used by this parser.

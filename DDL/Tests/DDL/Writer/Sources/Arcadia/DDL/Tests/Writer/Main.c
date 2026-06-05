@@ -28,9 +28,9 @@ doRead
     size_t n
   )
 {
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
-  Arcadia_String* input = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, p, n));
+  Arcadia_ByteArrayBuilder* byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteBuffer, p, n);
+  Arcadia_RuntimeByteArray* input = Arcadia_RuntimeByteArray_create(thread, p, n);
   Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser, input), _Arcadia_DDL_Node_getType(thread));
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);
   return node;
@@ -46,11 +46,10 @@ doWrite
     size_t n
   )
 {
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_UTF8Writer* utf8Writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer);
-  Arcadia_DataDefinitionLanguage_Unparser_run(thread, unparser, node, utf8Writer);
-  Arcadia_Tests_assertTrue(thread, Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer) == n);
-  Arcadia_Tests_assertTrue(thread, !Arcadia_Memory_compare(thread, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), p, n));
+  Arcadia_ByteArrayBuilder* targetByteBuffer = Arcadia_ByteArrayBuilder_create(thread);
+  Arcadia_DataDefinitionLanguage_Unparser_run(thread, unparser, node, targetByteBuffer);
+  Arcadia_Tests_assertTrue(thread, Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, targetByteBuffer) == n);
+  Arcadia_Tests_assertTrue(thread, !Arcadia_Memory_compare(thread, Arcadia_ByteArrayBuilder_getBytes(thread, targetByteBuffer), p, n));
 }
 
 static inline void
@@ -85,7 +84,8 @@ test1
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
   Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
                                                                                                     Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
-  Arcadia_DataDefinitionLanguage_Unparser* unparser = Arcadia_DataDefinitionLanguage_Unparser_create(thread);
+  Arcadia_Unicode_Encoder* encoder = (Arcadia_Unicode_Encoder*)Arcadia_Unicode_UTF8Encoder_create(thread);
+  Arcadia_DataDefinitionLanguage_Unparser* unparser = Arcadia_DataDefinitionLanguage_Unparser_create(thread, encoder);
   onTest(thread, semanticalAnalysis, parser, unparser,
                  u8"{ prename : \"Michael\", surname: \"Heilmann\",\n}\n",
                  u8"{\n  prename : \"Michael\",\n  surname : \"Heilmann\",\n}\n");

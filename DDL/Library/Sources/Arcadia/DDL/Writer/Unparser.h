@@ -29,19 +29,21 @@ Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Unparser", Arcadia_D
                           u8"Arcadia.Object");
 
 /// @brief Create a Data Definition Language unparser.
-/// @param thread A pointer to the thread.
+/// @param thread A pointer to this thread.
+/// @param encoder The encoder to encode the output.
 /// @return A pointer to the Data Definition Language unparser.
 Arcadia_DataDefinitionLanguage_Unparser*
 Arcadia_DataDefinitionLanguage_Unparser_create
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_Unicode_Encoder* encoder
   );
 
 /// @brief Move to next token.
 /// @param thread A pointer to the thread.
 /// @param self A pointer to this Data Definition Language unparser.
 /// @param node A pointer to the node to write.
-/// @param target A pointer to the UTF8 writer the output is written to.
+/// @param target The Byte array builder to which the output is appended to.
 /// @error Arcadia_Status_SemanticalError two map contains two entries with the same key
 /// @error Arcadia_Status_LexicalError a literal string (boolean, number, string, void) does not represent a valid literal
 void
@@ -50,7 +52,7 @@ Arcadia_DataDefinitionLanguage_Unparser_run
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_Node* node,
-    Arcadia_UTF8Writer* target
+    Arcadia_ByteArrayBuilder* targetBuffer
   );
 
 #endif // ARCADIA_DDL_WRITER_UNPARSER_H_INCLUDED

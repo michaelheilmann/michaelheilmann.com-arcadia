@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring1/Implementation/Thread.h"
 #include "Arcadia/Ring1/Implementation/ThreadExtensions.h"
-#include "Arcadia/Ring1/Implementation/WeakReference.h"
+#include "Arcadia/Ring1/Implementation/Objects/WeakReference.h"
 #include "Arcadia/Ring1/Implementation/Signals/Signal.h"
 
 #include "Arcadia/Ring1/Implementation/Signals/Internal.h"

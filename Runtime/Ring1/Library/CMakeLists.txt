@@ -391,8 +391,46 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Value.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Value.h)
 
-  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/WeakReference.c)
-  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/WeakReference.h)
+  # Objects >>
+
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/Include.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/Include.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.ByteReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.ByteReader.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArrayBuilder.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArrayBuilder.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArrayBuilder.ByteReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArrayBuilder.ByteReader.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteReader.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteReader.UnicodeCodePointReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteReader.UnicodeCodePointReader.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/UnicodeCodePointReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/UnicodeCodePointReader.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteReader.UnicodeCodePointReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteReader.UnicodeCodePointReader.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/RuntimeByteArray.ByteReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/RuntimeByteArray.ByteReader.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/String.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/String.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/String.ByteReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/String.ByteReader.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/StringBuilder.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/StringBuilder.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/StringBuilder.ByteReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/StringBuilder.ByteReader.h)
+  
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/WeakReference.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/WeakReference.h)
+
+  # << Objects
 
   OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Memory.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Memory.h)

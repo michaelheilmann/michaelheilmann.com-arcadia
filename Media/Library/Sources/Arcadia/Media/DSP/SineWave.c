@@ -46,7 +46,7 @@ Arcadia_Media_DSP_SineWave_generate
     Arcadia_Media_DSP_SineWave* self,
     Arcadia_Natural32Value sampleRate,
     Arcadia_Natural32Value numberOfSamples,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -96,7 +96,7 @@ Arcadia_Media_DSP_SineWave_initializeDispatchImpl
     Arcadia_Media_DSP_SineWaveDispatch* self
   )
 {
-  ((Arcadia_Media_DSPDispatch*)self)->generate = (void (*)(Arcadia_Thread*, Arcadia_Media_DSP*, Arcadia_Natural32Value, Arcadia_Natural32Value, Arcadia_ByteBuffer*)) & Arcadia_Media_DSP_SineWave_generate;
+  ((Arcadia_Media_DSPDispatch*)self)->generate = (void (*)(Arcadia_Thread*, Arcadia_Media_DSP*, Arcadia_Natural32Value, Arcadia_Natural32Value, Arcadia_ByteArrayBuilder*)) & Arcadia_Media_DSP_SineWave_generate;
 }
 
 static void
@@ -114,14 +114,14 @@ Arcadia_Media_DSP_SineWave_generate
     Arcadia_Media_DSP_SineWave* self,
     Arcadia_Natural32Value sampleRate,
     Arcadia_Natural32Value numberOfSamples,
-    Arcadia_ByteBuffer* target
+    Arcadia_ByteArrayBuilder* target
   )
 {
   static const Arcadia_Real32Value PI = 3.14159265358979323846;
   const Arcadia_Real32Value c = 2.f * PI * (Arcadia_Real32Value)self->frequency / sampleRate;
   for (Arcadia_SizeValue i = 0, n = numberOfSamples; i < n; ++i) {
     Arcadia_Real32Value v = sinf(c * (Arcadia_Real32Value)i);
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, &v, sizeof(v));
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, target, &v, sizeof(v));
   }
 }
 

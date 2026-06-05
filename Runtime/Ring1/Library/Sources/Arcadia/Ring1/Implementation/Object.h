@@ -280,7 +280,7 @@ Arcadia_Object_isIdenticalTo
   );
 
 /// "toString"
-Arcadia_ImmutableUTF8String*
+Arcadia_RuntimeUTF8String*
 Arcadia_Object_toString
   (
     Arcadia_Thread* thread,

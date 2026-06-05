@@ -17,12 +17,14 @@
 #include "Arcadia/Ring1/Implementation/ImmutableUTF8StringExtensions.h"
 
 #include "Arcadia/Ring1/Implementation/Unicode/UTF8ArrayIterator.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/hash.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/type.h"
 
 Arcadia_Value
-Arcadia_ImmutableUTF8String_findFirstOccurrence
+Arcadia_RuntimeUTF8String_findFirstOccurrence
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* self,
+    Arcadia_RuntimeUTF8String* self,
     Arcadia_Natural32Value codePoint
   )
 {
@@ -51,10 +53,10 @@ Arcadia_ImmutableUTF8String_findFirstOccurrence
 }
 
 Arcadia_Value
-Arcadia_ImmutableUTF8String_findLastOccurrence
+Arcadia_RuntimeUTF8String_findLastOccurrence
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* self,
+    Arcadia_RuntimeUTF8String* self,
     Arcadia_Natural32Value codePoint
   )
 {
@@ -81,18 +83,15 @@ Arcadia_ImmutableUTF8String_findLastOccurrence
   }
 }
 
-#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/hash.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/type.h"
-
-Arcadia_ImmutableUTF8String*
-Arcadia_ImmutableUTF8String_createEmpty
+Arcadia_RuntimeUTF8String*
+Arcadia_RuntimeUTF8String_createEmpty
   (
     Arcadia_Thread* thread
   )
 { 
   _ensureTypeRegistered(thread);
-  Arcadia_ImmutableUTF8String* string = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUTF8String));
+  Arcadia_RuntimeUTF8String* string = NULL;
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_RuntimeUTF8String));
   string->numberOfBytes = 0;
   string->hash = 0;
   return string;
@@ -101,11 +100,11 @@ Arcadia_ImmutableUTF8String_createEmpty
 
 // start must be within the bounds of [0,n].
 // in particular, if start = n then length must be 0.
-Arcadia_ImmutableUTF8String*
-Arcadia_ImmutableUTF8String_substring
+Arcadia_RuntimeUTF8String*
+Arcadia_RuntimeUTF8String_substring
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* self,
+    Arcadia_RuntimeUTF8String* self,
     Arcadia_SizeValue start,
     Arcadia_Value length
   )
@@ -161,8 +160,8 @@ Arcadia_ImmutableUTF8String_substring
     _Arcadia_UTF8ArrayIterator_uninitialize(thread, &it);
 
     _ensureTypeRegistered(thread);
-    Arcadia_ImmutableUTF8String* string = NULL;
-    Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUTF8String) + byteLength);
+    Arcadia_RuntimeUTF8String* string = NULL;
+    Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_RuntimeUTF8String) + byteLength);
     Arcadia_Memory_copy(thread, string->bytes, self->bytes + byteIndex, byteLength);
     string->numberOfBytes = byteLength;
     string->hash = _hashUTF8(thread, string->bytes, byteLength);

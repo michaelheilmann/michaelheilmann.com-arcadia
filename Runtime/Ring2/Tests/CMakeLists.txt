@@ -15,6 +15,7 @@
 
 cmake_minimum_required(VERSION 3.29)
 
+add_subdirectory(UTF8EncoderTests)
 add_subdirectory(UTF8Tests)
 add_subdirectory(StringTests)
 add_subdirectory(FilePathTests)

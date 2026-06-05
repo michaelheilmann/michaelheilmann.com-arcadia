@@ -117,7 +117,7 @@ Arcadia_DDL_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_DefaultReader* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   )
 {
   Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->parser, input), _Arcadia_DDL_Node_getType(thread));

@@ -97,7 +97,7 @@ Arcadia_Integer16Value
 _toInteger16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   Arcadia_Integer64Value v = _toInteger64(thread, immutableUTF8StringValue);
@@ -112,7 +112,7 @@ Arcadia_Integer32Value
 _toInteger32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   Arcadia_Integer64Value v = _toInteger64(thread, immutableUTF8StringValue);
@@ -127,12 +127,12 @@ Arcadia_Integer64Value
 _toInteger64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   _State state;
-  _State_init(&state, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue),
-                      Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
+  _State_init(&state, Arcadia_RuntimeUTF8String_getBytes(thread, immutableUTF8StringValue),
+                      Arcadia_RuntimeUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
   Arcadia_Integer64Value value;
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -152,7 +152,7 @@ Arcadia_Integer8Value
 _toInteger8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   )
 {
   Arcadia_Integer64Value v = _toInteger64(thread, immutableUTF8StringValue);

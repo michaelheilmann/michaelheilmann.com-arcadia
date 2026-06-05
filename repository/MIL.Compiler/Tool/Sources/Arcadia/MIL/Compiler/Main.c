@@ -167,12 +167,12 @@ _invoke
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     /* @todo Add Arcadia.DDL.Reader and derive Arcadia.DDL.DefaultReader from it. */
     Arcadia_DDL_DefaultReader* readerDDL = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
-    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, Arcadia_FileSystem_getOrCreate(thread), configurationFilePath);
-    Arcadia_String* fileString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes));
-    Arcadia_DDL_Node* nodeDDL = Arcadia_DDL_DefaultReader_run(thread, readerDDL, fileString);
+    Arcadia_ByteArrayBuilder* x = Arcadia_FileSystem_getFileContents(thread, Arcadia_FileSystem_getOrCreate(thread), configurationFilePath);
+    Arcadia_RuntimeByteArray* y = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, x), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, x));
+    Arcadia_DDL_Node* nodeDDL = Arcadia_DDL_DefaultReader_run(thread, readerDDL, y);
     /* @todo Add Arcadia.DDLS.Reader and derivce Arcadia.DDLS.DefaultReader from it. */
     Arcadia_DDLS_DefaultReader* readerDDLS = (Arcadia_DDLS_DefaultReader*)Arcadia_DDLS_DefaultReader_create(thread);
-    Arcadia_DDLS_Node* nodeDDLS = Arcadia_DDLS_DefaultReader_run(thread, readerDDLS, Arcadia_String_createFromCxxString(thread, SCHEMA));
+    Arcadia_DDLS_Node* nodeDDLS = Arcadia_DDLS_DefaultReader_run(thread, readerDDLS, Arcadia_RuntimeByteArray_create(thread, SCHEMA, strlen(SCHEMA)));
     Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
     if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)nodeDDLS, _Arcadia_DDLS_ValidationContext_getType(thread))) {
       Arcadia_Languages_Diagnostics_add(thread, context->diagnostics,
@@ -244,7 +244,7 @@ main1
   Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
     Arcadia_String* argumentString = Arcadia_String_createFromCxxString(thread, argv[argi]);
-    Arcadia_UTF8Reader* argumentReader = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, argumentString);
+    Arcadia_UnicodeCodePointReader* argumentReader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_String_ByteReader_create(thread, argumentString));
     Arcadia_CommandLineArgument* commandLineArgument = Arcadia_CommandLine_parseArgument(thread, argumentReader);
     if (commandLineArgument->syntacticalError) {
       Arcadia_CommandLine_invalidCommandLineArgumentError(thread, commandLineArgument->name, context1->log);

@@ -283,11 +283,11 @@ Arcadia_DDLS_SymbolReader_constructImpl
   //
   self->scope = Arcadia_DDLS_Scope_create(thread, NULL);
   //
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
   self->stringTable = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Languages_StringTable_getType(thread));
 #define Define(Variable, Text) \
-  Arcadia_StringBuffer_clear(thread, stringBuffer); \
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, Text); \
+  Arcadia_StringBuilder_clear(thread, stringBuffer); \
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, Text); \
   self->Variable = Arcadia_Value_makeObjectReferenceValue(Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, stringBuffer));
 
   Define(ANY, u8"Any");

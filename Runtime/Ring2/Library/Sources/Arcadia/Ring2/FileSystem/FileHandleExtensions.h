@@ -17,17 +17,41 @@
 #define ARCADIA_RING2_FILESYSTEM_FILEHANDLEEXTENSIONS_H_INCLUDED
 
 #include "Arcadia/Ring2/FileSystem/FileHandle.h"
+typedef struct Arcadia_ByteArrayBuilder Arcadia_ByteArrayBuilder;
 typedef struct Arcadia_String Arcadia_String;
-typedef struct Arcadia_StringBuffer Arcadia_StringBuffer;
+typedef struct Arcadia_StringBuilder Arcadia_StringBuilder;
+
+/// @brief Write the contents of a Byte buffer to this file handle.
+/// @param self A pointer to this file handle.
+/// @param source A pointer to the Byte buffer.
+void
+Arcadia_FileHandle_writeByteBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
+    Arcadia_ByteArrayBuilder* source
+  );
 
 /// @brief Write the contents of a string buffer to this file handle.
 /// @param self A pointer to this file handle.
-/// @param string A pointer to the string.
-void Arcadia_FileHandle_writeString(Arcadia_Thread* thread, Arcadia_FileHandle* self, Arcadia_String* string);
+/// @param source A pointer to the string.
+void
+Arcadia_FileHandle_writeString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
+    Arcadia_String* source
+  );
 
 /// @brief Write the contents of a string buffer to this file handle.
 /// @param self A pointer to this file handle.
-/// @param string A pointer to the string buffer.
-void Arcadia_FileHandle_writeStringBuffer(Arcadia_Thread* thread,Arcadia_FileHandle* self, Arcadia_StringBuffer* stringBuffer);
+/// @param source A pointer to the string buffer.
+void
+Arcadia_FileHandle_writeStringBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
+    Arcadia_StringBuilder* source
+  );
 
 #endif // ARCADIA_RING2_FILESYSTEM_FILEHANDLEEXTENSIONS_H_INCLUDED

@@ -21,7 +21,7 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/Object.h"
-#include "Arcadia/Ring1/Implementation/WeakReference.h"
+#include "Arcadia/Ring1/Implementation/Objects/WeakReference.h"
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 typedef struct Arcadia_Signal Arcadia_Signal;
 

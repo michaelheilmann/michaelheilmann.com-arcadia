@@ -18,20 +18,20 @@
 
 #include "Arcadia/Ring1/Implementation/Real32.h"
 #include "Arcadia/Ring1/Implementation/Real64.h"
-typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
+typedef struct Arcadia_RuntimeUTF8String Arcadia_RuntimeUTF8String;
 
 Arcadia_Real32Value
 _toReal32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   );
 
 Arcadia_Real64Value
 _toReal64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
+    Arcadia_RuntimeUTF8String* immutableUTF8StringValue
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TOREAL_H_INCLUDED

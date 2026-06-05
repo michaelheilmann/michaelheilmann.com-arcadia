@@ -28,10 +28,10 @@ Arcadia_ADL_Diagnostics_raiseNotAPixelBufferDefinition
     Arcadia_String* key
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"ADL definition `");
-  Arcadia_StringBuffer_insertBackString(thread, message, key);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"` is not a pixel buffer definition\n");
+  Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"ADL definition `");
+  Arcadia_StringBuilder_insertBackString(thread, message, key);
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"` is not a pixel buffer definition\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
@@ -50,10 +50,10 @@ Arcadia_ADL_Diagnostics_raisePixelBufferOperationNotYetSupported
     Arcadia_String* key
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"ADL pixel buffer operation `");
-  Arcadia_StringBuffer_insertBackString(thread, message, key);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"` is not (yet) supported\n");
+  Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"ADL pixel buffer operation `");
+  Arcadia_StringBuilder_insertBackString(thread, message, key);
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"` is not (yet) supported\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
@@ -72,10 +72,10 @@ Arcadia_ADL_Diagnostics_raiseDefinitionNotFound
     Arcadia_String* key
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"starting ADL definition `");
-  Arcadia_StringBuffer_insertBackString(thread, message, key);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"` not found\n");
+  Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"starting ADL definition `");
+  Arcadia_StringBuilder_insertBackString(thread, message, key);
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"` not found\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);

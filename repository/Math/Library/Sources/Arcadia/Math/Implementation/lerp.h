@@ -19,10 +19,16 @@
 #include "Arcadia/Math/Implementation/Color4Real32.h"
 #include "Arcadia/Math/Implementation/Color4Real64.h"
 
+#include "Arcadia/Math/Implementation/Vector3Real32.h"
+#include "Arcadia/Math/Implementation/Vector3Real64.h"
+#include "Arcadia/Math/Implementation/Vector4Real32.h"
+#include "Arcadia/Math/Implementation/Vector4Real64.h"
+
 // @brief Lerp between two colors.
 // @param start The start position.
 // @param end The end position.
 // @param t The interpolation factor. If outside [0,1] the function extrapolates beyond the start point or end point.
+// Extrapolations outside of [0,1] are clamped to [0,1].
 void
 Arcadia_Math_Color4Real32Value_lerp
   (
@@ -37,6 +43,7 @@ Arcadia_Math_Color4Real32Value_lerp
 // @param start The start position.
 // @param end The end position.
 // @param t The interpolation factor. If outside [0,1] the function extrapolates beyond the start point or end point.
+// Extrapolations outside of [0,1] are clamped to [0,1].
 void
 Arcadia_Math_Color4Real64Value_lerp
   (
@@ -45,6 +52,46 @@ Arcadia_Math_Color4Real64Value_lerp
     Arcadia_Math_Color4Real64* other,
     Arcadia_Real64Value t,
     Arcadia_Math_Color4Real64* result
+  );
+
+void 
+Arcadia_Math_Vector3Real32Value_lerp
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector3Real32* self,
+    Arcadia_Math_Vector3Real32* other,
+    Arcadia_Real32Value t,
+    Arcadia_Math_Vector3Real32* result
+  );
+
+void 
+Arcadia_Math_Vector4Real32Value_lerp
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector4Real32* self,
+    Arcadia_Math_Vector4Real32* other,
+    Arcadia_Real32Value t,
+    Arcadia_Math_Vector4Real32* result
+  );
+
+void
+Arcadia_Math_Vector3Real64Value_lerp
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector3Real64* self,
+    Arcadia_Math_Vector3Real64* other,
+    Arcadia_Real64Value t,
+    Arcadia_Math_Vector3Real64* result
+  );
+
+void
+Arcadia_Math_Vector4Real64Value_lerp
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector4Real64* self,
+    Arcadia_Math_Vector4Real64* other,
+    Arcadia_Real64Value t,
+    Arcadia_Math_Vector4Real64* result
   );
 
 #endif // ARCADIA_MATH_IMPLEMENTATION_LERP_H_INCLUDE

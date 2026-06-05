@@ -182,7 +182,7 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
   self->volume = 1.f;
   //
   self->dirtyBits = AllDirty;
-  self->byteBuffer = Arcadia_ByteBuffer_create(thread);
+  self->byteBuffer = Arcadia_ByteArrayBuilder_create(thread);
   self->alBufferID = 0;
   self->alSourceID = 0;
   //

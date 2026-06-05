@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_RING1_IMPLEMENTATION_INTERNALIMMUTABLEBYTEARRAY_H_INCLUDED)
-#define ARCADIA_RING1_IMPLEMENTATION_INTERNALIMMUTABLEBYTEARRAY_H_INCLUDED
+#if !defined(ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEBYTEARRAY_H_INCLUDED)
+#define ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEBYTEARRAY_H_INCLUDED
 
 #if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
@@ -25,18 +25,18 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 /// @brief The immutable byte array representation native to Arcadia Ring 1.
-/// @warning Arcadia_ImmutableByteArray's precondition is an initialized type system.
-typedef struct Arcadia_InternalImmutableByteArray Arcadia_InternalImmutableByteArray;
+/// @warning Arcadia_RuntimeByteArray's precondition is an initialized type system.
+typedef struct Arcadia_RuntimeByteArray Arcadia_RuntimeByteArray;
 
-struct Arcadia_InternalImmutableByteArray {
+struct Arcadia_RuntimeByteArray {
   Arcadia_SizeValue numberOfBytes;
   Arcadia_Natural8Value bytes[];
 };
 
-typedef Arcadia_InternalImmutableByteArray* Arcadia_InternalImmutableByteArrayValue;
+typedef Arcadia_RuntimeByteArray* Arcadia_RuntimeByteArrayValue;
 
-Arcadia_InternalImmutableByteArray*
-Arcadia_InternalImmutableByteArray_create
+Arcadia_RuntimeByteArray*
+Arcadia_RuntimeByteArray_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
@@ -44,31 +44,31 @@ Arcadia_InternalImmutableByteArray_create
   );
 
 /// @brief
-/// Visit this Arcadia_ImmutableByteArrayValue object.
+/// Visit this Arcadia_RuntimeByteArrayValue object.
 /// @param thread
 /// A pointer to the Arcadia_Thread object.
 /// @param self
-/// A pointer to this Arcadia_ImmutableByteArrayValue object.
+/// A pointer to this Arcadia_RuntimeByteArrayValue object.
 void
-Arcadia_InternalImmutableByteArray_visit
+Arcadia_RuntimeByteArray_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_InternalImmutableByteArrayValue self
+    Arcadia_RuntimeByteArrayValue self
   );
 
 #if defined(Arcadia_ARMS_Configuration_WithBarriers) && 1 == Arcadia_ARMS_Configuration_WithBarriers
 
 /// @brief
-/// Ensure this Arcadia_ImmutableByteArrayValue object is gray.
+/// Ensure this Arcadia_RuntimeByteArrayValue object is gray.
 /// @param thread
 /// A pointer to this Arcadia_Thread object.
 /// @param self
-/// A pointer to this Arcadia_ImmutableByteArrayValue object.
+/// A pointer to this Arcadia_RuntimeByteArrayValue object.
 void
-Arcadia_InternalImmutableByteArray_ensureGray
+Arcadia_RuntimeByteArray_ensureGray
   (
     Arcadia_Thread* thread,
-    Arcadia_InternalImmutableByteArrayValue self
+    Arcadia_RuntimeByteArrayValue self
   );
 
 #endif
@@ -77,27 +77,27 @@ Arcadia_InternalImmutableByteArray_ensureGray
 /// @return A pointer to the Bytes of the immutable Byte array.
 /// @warning The Bytes of the array must not be modified.
 Arcadia_Natural8Value const*
-Arcadia_InternalImmutableByteArray_getBytes
+Arcadia_RuntimeByteArray_getBytes
   (
     Arcadia_Thread* thread,
-    Arcadia_InternalImmutableByteArrayValue self
+    Arcadia_RuntimeByteArrayValue self
   );
 
 /// @brief Get the number of Bytes in an immutable Byte array.
-/// @param immutableByteArrayA pointer to the immutable Byte array.
+/// @param runtimeByteArrayA pointer to the immutable Byte array.
 /// @return The number of Bytes in the imumutable Byte array.
 Arcadia_SizeValue
-Arcadia_InternalImmutableByteArray_getNumberOfBytes
+Arcadia_RuntimeByteArray_getNumberOfBytes
   (
     Arcadia_Thread* thread,
-    Arcadia_InternalImmutableByteArrayValue self
+    Arcadia_RuntimeByteArrayValue self
   );
 
 /// @return A pointer to an "foreign value" type of name "Arcadia.ImmutableByteArray".
 Arcadia_TypeValue
-_Arcadia_InternalImmutableByteArrayValue_getType
+_Arcadia_RuntimeByteArrayValue_getType
   (
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_RING1_IMPLEMENTATION_INTERNALIMMUTABLEBYTEARRAY_H_INCLUDED
+#endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEBYTEARRAY_H_INCLUDED

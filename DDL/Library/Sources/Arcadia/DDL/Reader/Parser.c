@@ -89,7 +89,7 @@ Arcadia_DDL_Parser_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   );
 
 static Arcadia_Languages_StringTable*
@@ -183,7 +183,7 @@ Arcadia_DDL_Parser_initializeDispatchImpl
     Arcadia_DDL_ParserDispatch* self
   )
 {
-  ((Arcadia_Languages_ParserDispatch*)self)->run = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Languages_Parser*, Arcadia_String*)) & Arcadia_DDL_Parser_runImpl;
+  ((Arcadia_Languages_ParserDispatch*)self)->run = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Languages_Parser*, Arcadia_RuntimeByteArray*)) & Arcadia_DDL_Parser_runImpl;
   ((Arcadia_Languages_ParserDispatch*)self)->getStringTable = (Arcadia_Languages_StringTable* (*)(Arcadia_Thread*, Arcadia_Languages_Parser*))&Arcadia_DDL_Parser_getStringTableImpl;
   ((Arcadia_Languages_ParserDispatch*)self)->getDiagnostics = (Arcadia_Languages_Diagnostics* (*)(Arcadia_Thread*, Arcadia_Languages_Parser*))&Arcadia_DDL_Parser_getDiagnosticsImpl;
 }
@@ -266,8 +266,8 @@ Arcadia_DDL_Parser_onListValue
     }
   }
   if (Arcadia_DDL_WordType_RightSquareBracket != Arcadia_DDL_Parser_getWordType(thread, self)) {
-    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected right square bracket\n");
+    Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"expected right square bracket\n");
     Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
@@ -318,8 +318,8 @@ Arcadia_DDL_Parser_onMapValue
     }
   }
   if (Arcadia_DDL_WordType_RightCurlyBracket != Arcadia_DDL_Parser_getWordType(thread, self)) {
-    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected right curly bracket\n");
+    Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"expected right curly bracket\n");
     Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
@@ -336,8 +336,8 @@ Arcadia_DDL_Parser_onName
   )
 {
   if (Arcadia_DDL_WordType_Name != Arcadia_DDL_Parser_getWordType(thread, self)) {
-    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected name\n");
+    Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"expected name\n");
     Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
@@ -404,8 +404,8 @@ Arcadia_DDL_Parser_onValue
       return node;
     } break;
     default: {
-      Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-      Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected scalar or aggregate\n");
+      Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+      Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"expected scalar or aggregate\n");
       Arcadia_Languages_DiagnosticsOld_emit(thread, message);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
       Arcadia_Thread_jump(thread);
@@ -418,7 +418,7 @@ Arcadia_DDL_Parser_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   )
 { 
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)self->scanner, input);
@@ -432,8 +432,8 @@ Arcadia_DDL_Parser_runImpl
     Arcadia_DDL_Parser_next(thread, self);
   }
   if (Arcadia_DDL_WordType_EndOfInput != Arcadia_DDL_Parser_getWordType(thread, self)) {
-    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected end of input\n");
+    Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+    Arcadia_StringBuilder_insertBackCxxString(thread, message, u8"expected end of input\n");
     Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);

@@ -119,7 +119,7 @@ Arcadia_DDLS_DefaultReader_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_DDLS_DefaultReader_objectTypeOperations = {
@@ -323,11 +323,11 @@ Arcadia_DDLS_DefaultReader_constructImpl
   self->parser = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
                                                                                       Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
   //
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_Parser_getStringTable(thread, (Arcadia_Languages_Parser*)self->parser);
 #define Define(Variable, Text) \
-  Arcadia_StringBuffer_clear(thread, stringBuffer); \
-  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, Text); \
+  Arcadia_StringBuilder_clear(thread, stringBuffer); \
+  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, Text); \
   self->Variable = Arcadia_Value_makeObjectReferenceValue(Arcadia_Languages_StringTable_getOrCreateString(thread, stringTable, stringBuffer));
 
   Define(BOOLEAN, u8"Boolean");
@@ -376,7 +376,7 @@ Arcadia_DDLS_DefaultReader_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   )
 {
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
@@ -406,6 +406,6 @@ Arcadia_DDLS_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_DDLS_DefaultReader, run, self, input); }

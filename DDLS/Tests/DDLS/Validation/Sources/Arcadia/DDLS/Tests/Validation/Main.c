@@ -14,8 +14,10 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include "Arcadia/DDLS/Include.h"
+
 #include "Arcadia/DDL/Include.h"
 #include "Arcadia/DDLS/Tests/Validation/Default.h"
+#include <string.h>
 
 static Arcadia_DDLS_SchemaNode*
 readDDLS
@@ -25,7 +27,7 @@ readDDLS
   )
 {
   Arcadia_DDLS_DefaultReader* reader = Arcadia_DDLS_DefaultReader_create(thread);
-  Arcadia_DDLS_Node* ddlsNode = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, source));
+  Arcadia_DDLS_Node* ddlsNode = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_RuntimeByteArray_create(thread, source, strlen(source)));
   return (Arcadia_DDLS_SchemaNode*)ddlsNode;
 }
 
@@ -37,7 +39,7 @@ readDDL
   )
 {
   Arcadia_DDL_DefaultReader* reader = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
-  Arcadia_DDL_Node* target = Arcadia_DDL_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, source));
+  Arcadia_DDL_Node* target = Arcadia_DDL_DefaultReader_run(thread, reader, Arcadia_RuntimeByteArray_create(thread, source, strlen(source)));
   return target;
 }
 

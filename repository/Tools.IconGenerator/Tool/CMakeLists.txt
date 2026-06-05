@@ -31,7 +31,7 @@ if (NOT TARGET ${MyTool})
 
   EndProduct(${MyTool})
 
-  set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.ico\"")
+  set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"\"\"helloworld.ico\"\"\"")
 
   set_target_properties(${MyTool} PROPERTIES FOLDER "Tools")
 

@@ -241,9 +241,9 @@ Arcadia_Languages_StringTable_getOrCreateString
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_StringTable* self,
-    Arcadia_StringBuffer* stringBuffer
+    Arcadia_StringBuilder* stringBuffer
   )
-{ return Arcadia_Languages_StringTable_getOrCreateStringFromBytes(thread, self, Arcadia_StringBuffer_getBytes(thread, stringBuffer), Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer)); }
+{ return Arcadia_Languages_StringTable_getOrCreateStringFromBytes(thread, self, Arcadia_StringBuilder_getBytes(thread, stringBuffer), Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuffer)); }
 
 Arcadia_String*
 Arcadia_Languages_StringTable_getOrCreateStringFromBytes
@@ -265,7 +265,7 @@ Arcadia_Languages_StringTable_getOrCreateStringFromBytes
       }
     }
   }
-  Arcadia_String* string = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, bytes, numberOfBytes)));
+  Arcadia_String* string = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, bytes, numberOfBytes)));
   Arcadia_Languages_StringTable_Node* node = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Languages_StringTable_Node));
   node->string = string;
   node->hash = hash;

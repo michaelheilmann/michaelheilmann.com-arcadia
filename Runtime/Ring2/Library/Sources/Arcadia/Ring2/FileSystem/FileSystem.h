@@ -113,7 +113,7 @@ struct Arcadia_FileSystemDispatch {
       Arcadia_FileSystem* self
     );
 
-  Arcadia_ByteBuffer*
+  Arcadia_ByteArrayBuilder*
   (*getFileContents)
     (
       Arcadia_Thread* thread,
@@ -165,7 +165,7 @@ struct Arcadia_FileSystemDispatch {
       Arcadia_Thread* thread,
       Arcadia_FileSystem* self,
       Arcadia_FilePath* path,
-      Arcadia_ByteBuffer * contents
+      Arcadia_ByteArrayBuilder * contents
     );
 
 };
@@ -272,7 +272,7 @@ Arcadia_FileSystem_getExecutable
   );
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents
-Arcadia_ByteBuffer*
+Arcadia_ByteArrayBuilder*
 Arcadia_FileSystem_getFileContents
   (
     Arcadia_Thread* thread,
@@ -330,7 +330,7 @@ Arcadia_FileSystem_setFileContents
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path,
-    Arcadia_ByteBuffer * contents
+    Arcadia_ByteArrayBuilder * contents
   );
 
 // https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getOrCreate

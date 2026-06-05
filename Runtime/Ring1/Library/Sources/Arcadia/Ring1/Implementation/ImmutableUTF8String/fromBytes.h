@@ -18,9 +18,9 @@
 
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
-typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
+typedef struct Arcadia_RuntimeUTF8String Arcadia_RuntimeUTF8String;
 
-Arcadia_ImmutableUTF8String*
+Arcadia_RuntimeUTF8String*
 _createFromBytes
   (
     Arcadia_Thread* thread,

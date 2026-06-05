@@ -64,7 +64,7 @@ loadADL
   Arcadia_FilePath_append(thread, path, temporary);
   // (2)
   Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-  Arcadia_ByteBuffer* contents = Arcadia_FileSystem_getFileContents(thread, fileSystem, path);
+  Arcadia_ByteArrayBuilder* contents = Arcadia_FileSystem_getFileContents(thread, fileSystem, path);
   // (3)
   return Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(contents)), Arcadia_BooleanValue_True);
 }
@@ -95,8 +95,8 @@ main1
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argumentString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
-    Arcadia_UTF8StringReader *r = Arcadia_UTF8StringReader_create(thread, argumentString);
-    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r);
+    Arcadia_UnicodeCodePointReader* r = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_String_ByteReader_create(thread, argumentString));
+    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UnicodeCodePointReader*)r);
     if (argument->syntacticalError) {
       Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString, log);
     }
@@ -165,7 +165,7 @@ main1
     raiseNotAPixelBufferDefinition(thread, definition->name); // this is an internal error
   }
   Arcadia_Imaging_ImageManager* imageManager = Arcadia_Imaging_ImageManager_getOrCreate(thread);
-  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"png", sizeof(u8"png") - 1)));
+  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_create(thread, u8"png", sizeof(u8"png") - 1)));
   Arcadia_List* writers = Arcadia_Imaging_ImageManager_getWriters(thread, imageManager, extension);
   if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)writers)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);

@@ -691,7 +691,7 @@ Arcadia_Object_isIdenticalTo
   return returnValue;
 }
 
-Arcadia_ImmutableUTF8String*
+Arcadia_RuntimeUTF8String*
 Arcadia_Object_toString
   (
     Arcadia_Thread* thread,
@@ -715,7 +715,7 @@ Arcadia_Object_toString
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ImmutableUTF8String* string = Arcadia_ValueStack_getImmutableUTF8StringValue(thread, 0);
+  Arcadia_RuntimeUTF8String* string = Arcadia_ValueStack_getRuntimeUTF8StringValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
 
   return string;

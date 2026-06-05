@@ -109,7 +109,7 @@ Arcadia_Languages_Parser_run
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Parser* self,
-    Arcadia_String* input
+    Arcadia_RuntimeByteArray* input
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Languages_Parser, run, self, input); }
 

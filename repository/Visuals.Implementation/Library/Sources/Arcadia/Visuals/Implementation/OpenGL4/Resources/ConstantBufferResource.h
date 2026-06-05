@@ -30,7 +30,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResourceDispatch {
 struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource {
   Arcadia_Visuals_Implementation_ConstantBufferResource _parent;
   Arcadia_BooleanValue dirty;
-  Arcadia_ByteBuffer* byteBuffer;
+  Arcadia_ByteArrayBuilder* byteBuffer;
   GLuint bufferID;
 };
 

@@ -220,7 +220,7 @@ createShader
   if (0 == id) {
     return id;
   }
-  Arcadia_ByteBuffer* code = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteArrayBuilder* code = Arcadia_ByteArrayBuilder_create(thread);
   switch (shaderType) {
     case VertexShader: {
       Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
@@ -237,7 +237,7 @@ createShader
   };
   // (1) set shader source
   while (gl->glGetError()) { }
-  const GLchar* temporary = Arcadia_ByteBuffer_getBytes(thread, code);
+  const GLchar* temporary = Arcadia_ByteArrayBuilder_getBytes(thread, code);
   gl->glShaderSource(id, 1, &temporary, NULL);
   if (gl->glGetError()) {
     gl->glDeleteShader(id);
