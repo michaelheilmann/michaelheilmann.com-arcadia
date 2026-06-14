@@ -115,7 +115,6 @@ Arcadia_ByteArray_ByteReader_initializeDispatch
   ((Arcadia_ByteReaderDispatch*)self)->hasError = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_ByteReader*)) & Arcadia_ByteArray_ByteReader_hasErrorImpl;
   ((Arcadia_ByteReaderDispatch*)self)->hasValue = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_ByteReader*)) & Arcadia_ByteArray_ByteReader_hasValueImpl;
   ((Arcadia_ByteReaderDispatch*)self)->nextValue = (void(*)(Arcadia_Thread*, Arcadia_ByteReader*)) & Arcadia_ByteArray_ByteReader_nextValueImpl;
-
 }
 
 static void
@@ -133,7 +132,7 @@ Arcadia_ByteArray_ByteReader_hasValueImpl
     Arcadia_ByteArray_ByteReader* self
   )
 { 
-  return self->index < self->source->runtimeByteArray->numberOfBytes;
+  return self->index < Arcadia_ByteArray_getSize(thread,self->source);
 }
 
 static Arcadia_BooleanValue
@@ -155,7 +154,7 @@ Arcadia_ByteArray_ByteReader_getValueImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return self->source->runtimeByteArray->bytes[self->index];
+  return Arcadia_ByteArray_getAt(thread, self->source, self->index);
 }
 
 static void

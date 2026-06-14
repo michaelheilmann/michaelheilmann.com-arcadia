@@ -32,24 +32,61 @@ Arcadia_declareObjectType(u8"Arcadia.ByteArray", Arcadia_ByteArray,
 
 struct Arcadia_ByteArrayDispatch {
   Arcadia_ObjectDispatch _parent;
+
+  Arcadia_Natural8Value
+  (*getAt)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_ByteArray const* self,
+      Arcadia_SizeValue index
+    );
+
+  Arcadia_Natural8Value const*
+  (*getBytes)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_ByteArray const* self
+    );
+  
+  Arcadia_SizeValue
+  (*getNumberOfBytes)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_ByteArray const* self
+    );
+
+  Arcadia_SizeValue
+  (*getSize)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_ByteArray const* self
+    );
+
+  Arcadia_BooleanValue
+  (*isEmpty)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_ByteArray const* self
+    );
+
 };
 
 struct Arcadia_ByteArray {
   Arcadia_Object _parent;
-  Arcadia_RuntimeByteArray* runtimeByteArray;
 };
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_create
-Arcadia_ByteArray*
-Arcadia_ByteArray_create
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_getAt
+Arcadia_Natural8Value
+Arcadia_ByteArray_getAt
   (
     Arcadia_Thread* thread,
-    Arcadia_RuntimeByteArray* runtimeByteArray
+    Arcadia_ByteArray const* self,
+    Arcadia_SizeValue index
   );
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_getSize
-Arcadia_SizeValue
-Arcadia_ByteArray_getSize
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_getBytes
+Arcadia_Natural8Value const*
+Arcadia_ByteArray_getBytes
   (
     Arcadia_Thread* thread,
     Arcadia_ByteArray const* self
@@ -63,21 +100,37 @@ Arcadia_ByteArray_getNumberOfBytes
     Arcadia_ByteArray const* self
   );
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_getBytes
-Arcadia_Natural8Value const*
-Arcadia_ByteArray_getBytes
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_getSize
+Arcadia_SizeValue
+Arcadia_ByteArray_getSize
   (
     Arcadia_Thread* thread,
     Arcadia_ByteArray const* self
   );
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_getAt
-Arcadia_Natural8Value
-Arcadia_ByteArray_getAt
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_isEmpty
+Arcadia_BooleanValue
+Arcadia_ByteArray_isEmpty
   (
     Arcadia_Thread* thread,
-    Arcadia_ByteArray const* self,
-    Arcadia_SizeValue index
+    Arcadia_ByteArray const* self
+  );
+
+Arcadia_ByteArray*
+Arcadia_ByteArray_slice
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteArray* self,
+    Arcadia_SizeValue start,
+    Arcadia_SizeValue size
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_ByteArray_createByteArray
+Arcadia_ByteArray*
+Arcadia_ByteArray_createByteArray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_RuntimeByteArray* runtimeByteArray
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECTS_BYTEARRAY_H_INCLUDED

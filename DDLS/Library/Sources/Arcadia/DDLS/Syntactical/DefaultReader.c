@@ -119,7 +119,7 @@ Arcadia_DDLS_DefaultReader_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_ByteArray* input
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_DDLS_DefaultReader_objectTypeOperations = {
@@ -376,11 +376,13 @@ Arcadia_DDLS_DefaultReader_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_ByteArray* input
   )
 {
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
-  Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->parser, input), _Arcadia_DDL_Node_getType(thread));
+  Arcadia_UnicodeCodePointReader* inputReader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, input));
+  Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)self->parser, inputReader);
+  Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->parser), _Arcadia_DDL_Node_getType(thread));
   Arcadia_DDLS_SymbolReader* symbolReader = Arcadia_DDLS_SymbolReader_create(thread, stringTable);
   Arcadia_DDLS_Symbol* symbol = Arcadia_DDLS_SymbolReader_run(thread, symbolReader, node);
   if (Arcadia_DDLS_SymbolKind_Schema != symbol->kind) {
@@ -406,6 +408,6 @@ Arcadia_DDLS_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_ByteArray* input
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_DDLS_DefaultReader, run, self, input); }

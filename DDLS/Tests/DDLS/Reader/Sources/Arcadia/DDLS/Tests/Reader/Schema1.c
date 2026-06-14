@@ -73,12 +73,12 @@ Arcadia_DDLS_Tests_Reader_testAccept1
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
   ddlsNode = NULL;
 }
@@ -143,12 +143,12 @@ Arcadia_DDLS_Tests_Reader_testAccept2
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
   ddlsNode = NULL;
 }
@@ -183,12 +183,12 @@ Arcadia_DDLS_Tests_Reader_testReject1
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
@@ -231,12 +231,12 @@ Arcadia_DDLS_Tests_Reader_testReject2
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
@@ -280,12 +280,12 @@ Arcadia_DDLS_Tests_Reader_testReject3
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
@@ -331,12 +331,12 @@ Arcadia_DDLS_Tests_Reader_testReject4
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
@@ -395,12 +395,12 @@ Arcadia_DDLS_Tests_Reader_testReject5
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);

@@ -33,15 +33,15 @@ struct Arcadia_Languages_ScannerDispatch {
 
   Arcadia_String* (*getWordText)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
-  Arcadia_Natural32Value(*getWordType)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
+  Arcadia_Integer32Value(*getWordType)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
   Arcadia_Natural32Value(*getWordStart)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
   Arcadia_Natural32Value(*getWordLength)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
   void (*step)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
-  void (*setInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self, Arcadia_RuntimeByteArray* input);
-  Arcadia_RuntimeByteArray* (*getInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
+  void (*setInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self, Arcadia_UnicodeCodePointReader* reader);
+  Arcadia_UnicodeCodePointReader* (*getInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
   Arcadia_Languages_StringTable* (*getStringTable)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
   Arcadia_Languages_Diagnostics* (*getDiagnostics)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
@@ -66,7 +66,7 @@ Arcadia_Languages_Scanner_getWordText
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this scanner.
 /// @return The type of the word.
-Arcadia_Natural32Value
+Arcadia_Integer32Value
 Arcadia_Languages_Scanner_getWordType
   (
     Arcadia_Thread* thread,
@@ -114,14 +114,14 @@ Arcadia_Languages_Scanner_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Scanner* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_UnicodeCodePointReader* input
   );
 
 /// @brief Get the input.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this scanner.
 /// @return A pointer to the input string.
-Arcadia_RuntimeByteArray*
+Arcadia_UnicodeCodePointReader*
 Arcadia_Languages_Scanner_getInput
   (
     Arcadia_Thread* thread,

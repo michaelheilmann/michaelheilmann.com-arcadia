@@ -21,6 +21,7 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/Object.h"
+typedef struct Arcadia_ByteArray Arcadia_ByteArray;
 
 /// @code
 /// class Arcadia.String {
@@ -375,6 +376,13 @@ Arcadia_String_substring
     Arcadia_String* self,
     Arcadia_SizeValue start,
     Arcadia_Value length
+  );
+
+Arcadia_ByteArray*
+Arcadia_String_toByteArray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECTS_STRING_H_INCLUDED

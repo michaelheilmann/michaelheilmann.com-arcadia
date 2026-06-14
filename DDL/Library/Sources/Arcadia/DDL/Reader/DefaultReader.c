@@ -117,9 +117,10 @@ Arcadia_DDL_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_DefaultReader* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_UnicodeCodePointReader* input
   )
 {
-  Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->parser, input), _Arcadia_DDL_Node_getType(thread));
+  Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)self->parser, input);
+  Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->parser), _Arcadia_DDL_Node_getType(thread));
   return node;
 }

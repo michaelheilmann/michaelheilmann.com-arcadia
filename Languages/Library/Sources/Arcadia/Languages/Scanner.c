@@ -112,7 +112,7 @@ Arcadia_Languages_Scanner_getWordText
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Languages_Scanner, getWordText, self); }
 
-Arcadia_Natural32Value
+Arcadia_Integer32Value
 Arcadia_Languages_Scanner_getWordType
   (
     Arcadia_Thread* thread,
@@ -149,11 +149,11 @@ Arcadia_Languages_Scanner_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Scanner* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_UnicodeCodePointReader* input
   )
 { Arcadia_VirtualCall(Arcadia_Languages_Scanner, setInput, self, input); }
 
-Arcadia_RuntimeByteArray*
+Arcadia_UnicodeCodePointReader*
 Arcadia_Languages_Scanner_getInput
   (
     Arcadia_Thread* thread,

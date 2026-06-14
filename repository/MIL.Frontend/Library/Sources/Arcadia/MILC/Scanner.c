@@ -53,9 +53,7 @@ struct Arcadia_MILC_Scanner {
   Arcadia_Languages_Scanner _parent;
   // The current symbol "s".
   Arcadia_Natural32Value symbol;
-  // The input string.
-  Arcadia_RuntimeByteArray* inputString;
-  // The input stream.
+  // The input Unicode code point reader.
   Arcadia_UnicodeCodePointReader* input;
   // The context.
   Arcadia_MILC_Context* context;
@@ -69,7 +67,7 @@ struct Arcadia_MILC_Scanner {
     /// The text of the word.
     Arcadia_StringBuilder* text;
     /// The type of the word.
-    Arcadia_Natural32Value type;
+    Arcadia_Integer32Value type;
     /// The start of the word as an offset in Bytes from the beginning of the input.
     Arcadia_Natural32Value start;
     /// The length of the word in Bytes.
@@ -105,7 +103,7 @@ Arcadia_MILC_Scanner_visitImpl
     Arcadia_MILC_Scanner* self
   );
 
-static Arcadia_RuntimeByteArray*
+static Arcadia_UnicodeCodePointReader*
 Arcadia_MILC_Scanner_getInputImpl
   (
     Arcadia_Thread* thread,
@@ -133,7 +131,7 @@ Arcadia_MILC_Scanner_getWordTextImpl
     Arcadia_MILC_Scanner* self
   );
 
-static Arcadia_Natural32Value
+static Arcadia_Integer32Value
 Arcadia_MILC_Scanner_getWordTypeImpl
   (
     Arcadia_Thread* thread,
@@ -166,7 +164,7 @@ Arcadia_MILC_Scanner_setInputImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_Scanner* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_UnicodeCodePointReader* input
   );
 
 static void
@@ -262,7 +260,6 @@ Arcadia_MILC_Scanner_constructImpl
   self->word.length = 0;
   self->stringTable = NULL;
   self->keywords = NULL;
-  self->inputString = NULL;
   self->input = NULL;
   self->symbol = CodePoint_Start;
   // 
@@ -275,8 +272,7 @@ Arcadia_MILC_Scanner_constructImpl
   self->word.type = Arcadia_MILC_WordType_StartOfInput;
   self->word.start = 0;
   self->word.length = 0;
-  self->inputString = Arcadia_RuntimeByteArray_create(thread, u8"", sizeof(u8""));
-  self->input = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_RuntimeByteArray_ByteReader_create(thread, self->inputString));
+  self->input = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, u8"", sizeof(u8"")))));
   self->word.text = Arcadia_StringBuilder_create(thread);
   //
   Arcadia_StringBuilder_insertBackCxxString(thread, self->word.text, u8"<start of input>");
@@ -351,12 +347,12 @@ Arcadia_MILC_Scanner_initializeDispatchImpl
   ((Arcadia_Languages_ScannerDispatch*)self)->getDiagnostics = (Arcadia_Languages_Diagnostics * (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getDiagnosticsImpl;
   ((Arcadia_Languages_ScannerDispatch*)self)->getStringTable = (Arcadia_Languages_StringTable* (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getStringTableImpl;
 
-  ((Arcadia_Languages_ScannerDispatch*)self)->getInput = (Arcadia_RuntimeByteArray* (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getInputImpl;
+  ((Arcadia_Languages_ScannerDispatch*)self)->getInput = (Arcadia_UnicodeCodePointReader* (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getInputImpl;
   ((Arcadia_Languages_ScannerDispatch*)self)->getWordLength = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getWordLengthImpl;
   ((Arcadia_Languages_ScannerDispatch*)self)->getWordStart = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getWordStartImpl;
   ((Arcadia_Languages_ScannerDispatch*)self)->getWordText = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getWordTextImpl;
-  ((Arcadia_Languages_ScannerDispatch*)self)->getWordType = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getWordTypeImpl;
-  ((Arcadia_Languages_ScannerDispatch*)self)->setInput = (void (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*, Arcadia_RuntimeByteArray*)) & Arcadia_MILC_Scanner_setInputImpl;
+  ((Arcadia_Languages_ScannerDispatch*)self)->getWordType = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_getWordTypeImpl;
+  ((Arcadia_Languages_ScannerDispatch*)self)->setInput = (void (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*, Arcadia_UnicodeCodePointReader*)) & Arcadia_MILC_Scanner_setInputImpl;
   ((Arcadia_Languages_ScannerDispatch*)self)->step = (void (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_MILC_Scanner_stepImpl;
 }
 
@@ -386,12 +382,10 @@ Arcadia_MILC_Scanner_visitImpl
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->diagnostics);
   }
 
-  if (self->inputString) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->inputString);
-  }
   if (self->input) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->input);
   }
+
   if (self->word.text) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->word.text);
   }
@@ -493,13 +487,13 @@ Arcadia_MILC_Scanner_create
   ARCADIA_CREATEOBJECT(Arcadia_MILC_Scanner);
 }
 
-static Arcadia_RuntimeByteArray*
+static Arcadia_UnicodeCodePointReader*
 Arcadia_MILC_Scanner_getInputImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_Scanner* self
   )
-{ return self->inputString; }
+{ return self->input; }
 
 static Arcadia_Languages_StringTable*
 Arcadia_MILC_Scanner_getStringTableImpl
@@ -525,7 +519,7 @@ Arcadia_MILC_Scanner_getWordTextImpl
   )
 { return Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, self->word.text); }
 
-static Arcadia_Natural32Value
+static Arcadia_Integer32Value
 Arcadia_MILC_Scanner_getWordTypeImpl
   (
     Arcadia_Thread* thread,
@@ -816,11 +810,10 @@ Arcadia_MILC_Scanner_setInputImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_Scanner* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_UnicodeCodePointReader* input
   )
 {
-  self->inputString = input;
-  self->input = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_RuntimeByteArray_ByteReader_create(thread, self->inputString));
+  self->input = input;
   self->symbol = CodePoint_Start;
   self->word.type = Arcadia_MILC_WordType_StartOfInput;
   self->word.start = 0;

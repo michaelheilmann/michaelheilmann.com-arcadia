@@ -1,0 +1,41 @@
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArray_isEmpty">Arcadia_ByteArray_isEmpty</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteArray_isEmpty<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArray* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this Byte buffer is empty.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArray* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>

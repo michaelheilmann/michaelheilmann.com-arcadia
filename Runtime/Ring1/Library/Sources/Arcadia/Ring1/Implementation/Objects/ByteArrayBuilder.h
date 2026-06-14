@@ -22,6 +22,7 @@
 
 #include "Arcadia/Ring1/Implementation/Object.h"
 #include "Arcadia/Ring1/Implementation/swap.h"
+typedef struct Arcadia_ByteArray Arcadia_ByteArray;
 
 Arcadia_declareObjectType(u8"Arcadia.ByteArrayBuilder", Arcadia_ByteArrayBuilder,
                           u8"Arcadia.Object");
@@ -168,5 +169,12 @@ Arcadia_ByteArrayBuilder_swap
   Arcadia_swapSize(thread, &self->sz, &other->sz);
   Arcadia_swapSize(thread, &self->cp, &other->cp);
 }
+
+Arcadia_ByteArray*
+Arcadia_ByteArrayBuilder_toByteArray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteArrayBuilder* self
+  );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECTS_BYTEARRAYBUILDER_H_INCLUDED

@@ -52,7 +52,7 @@ Arcadia_DDL_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_DefaultReader* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_UnicodeCodePointReader* input
   );
 
 #endif // ARCADIA_DDL_READER_DEFAULTREADER_H_INCLUDED

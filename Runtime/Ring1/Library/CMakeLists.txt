@@ -398,6 +398,11 @@ if (NOT TARGET ${MyLibraryName})
 
   OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArrayDefaultImpl.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArrayDefaultImpl.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArraySliceImpl.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArraySliceImpl.h)
+
   OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.ByteReader.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArray.ByteReader.h)
   OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Objects/ByteArrayBuilder.c)

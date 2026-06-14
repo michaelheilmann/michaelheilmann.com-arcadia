@@ -701,3 +701,11 @@ Arcadia_String_substring
     Arcadia_Value length
   )
 { return Arcadia_String_create(thread, Arcadia_Value_makeRuntimeUTF8StringValue(Arcadia_RuntimeUTF8String_substring(thread, self->immutableUTF8String, start, length))); }
+
+Arcadia_ByteArray*
+Arcadia_String_toByteArray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self
+  )
+{ return Arcadia_ByteArray_createByteArray(thread,Arcadia_RuntimeByteArray_create(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self))); }

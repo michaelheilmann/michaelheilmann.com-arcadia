@@ -17,25 +17,26 @@
 
 #include <stdio.h> // @todo Remove references to `stdio.h`.
 
-#include "Arcadia.Tools.TemplateEngine.Library/Directives/Parser.h"
-#include "Arcadia.Tools.TemplateEngine.Library/Directives/Tree.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Parser/Parser.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Parser/Tree.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Context.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
-static Arcadia_BooleanValue
-is
+static void
+evalInvoke
   (
     Arcadia_Thread* thread,
     FileContext* context,
-    uint32_t expectedCodePoint
-  )
-{
-  if (!Arcadia_UnicodeCodePointReader_hasValue(thread, context->reader)) {
-    return Arcadia_BooleanValue_False;
-  }
-  Arcadia_Natural32Value currentCodePoint = Arcadia_UnicodeCodePointReader_getValue(thread, context->reader);
-  return expectedCodePoint == currentCodePoint;
-}
+    Directives_Tree* ast
+  );
+
+static void
+eval
+  (
+    Arcadia_Thread* thread,
+    FileContext* context,
+    Directives_Tree* ast
+  );
 
 static void
 evalInvoke
@@ -120,7 +121,7 @@ evalInvoke
 }
 
 static void
-evalAst
+eval
   (
     Arcadia_Thread* thread,
     FileContext* context,
@@ -128,11 +129,14 @@ evalAst
   )
 {
   switch (ast->type) {
-    case Directives_TreeKind_AtLiteralExpr: {
+    case Arcadia_TemplateEngine_TreeType_Text: {
+      Arcadia_Unicode_Encoder_encodeString(thread, context->context->target, ast->text.text, context->context->targetBuffer);
+    } break;
+    case Arcadia_TemplateEngine_TreeType_AtLiteralExpr: {
       Arcadia_Natural32Value targetCodePoint = '@';
       Arcadia_Unicode_Encoder_encodeCodePoints(thread, context->context->target, &targetCodePoint, 1, context->context->targetBuffer);
     } break;
-    case Directives_TreeKind_NameExpr: {
+    case Arcadia_TemplateEngine_TreeType_NameExpr: {
       Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->nameExpr.name);
       Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
       if (Arcadia_Value_isVoidValue(&v)) {
@@ -167,7 +171,7 @@ evalAst
       }
       Arcadia_ByteArrayBuilder_insertBackBytes(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(thread, (Arcadia_String*)object));
     } break;
-    case Directives_TreeKind_InvokeExpr: {
+    case Arcadia_TemplateEngine_TreeType_InvokeExpr: {
       if (Arcadia_String_isEqualTo_pn(thread, ast->invokeExpr.target, u8"include", sizeof(u8"include") - 1)) {
         if (1 != Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->invokeExpr.arguments)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -188,7 +192,7 @@ evalAst
         evalInvoke(thread, context, ast);
       }
     } break;
-    case Directives_TreeKind_StringLiteralExpr: {
+    case Arcadia_TemplateEngine_TreeType_StringLiteralExpr: {
       Arcadia_Unicode_Encoder_encodeString(thread, context->context->target, ast->stringLiteralExpr.string, context->context->targetBuffer);
     } break;
     default: {
@@ -205,7 +209,8 @@ parseDirective
     FileContext* context
   )
 {
-  return Directives_Parser_run(thread, context->parser);
+  Arcadia_Value treeValue = Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser);
+  return Arcadia_Value_getObjectReferenceValueChecked(thread, treeValue, _Directives_Tree_getType(thread));
 }
 
 static void
@@ -269,7 +274,7 @@ FileContext_visit
   )
 {
   if (self->fileBytes) {
-    Arcadia_RuntimeByteArray_visit(thread, self->fileBytes);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->fileBytes);
   }
   if (self->context) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->context);
@@ -288,6 +293,9 @@ FileContext_visit
   }
   if (self->parser) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->parser);
+  }
+  if (self->scanner) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scanner);
   }
 }
 
@@ -318,6 +326,7 @@ FileContext_constructImpl
   self->reader = NULL;
 
   self->parser = NULL;
+  self->scanner = NULL;
 
   Arcadia_LeaveConstructor(FileContext);
 }
@@ -349,19 +358,6 @@ FileContext_create
   ARCADIA_CREATEOBJECT(FileContext);
 }
 
-/// Get the Unicode code points of a file.
-/// Emits a diagnostic error if decoding fails.
-Arcadia_List* toCodePoints(Arcadia_Thread* thread, Arcadia_Languages_Diagnostics* diagnostics, Arcadia_RuntimeByteArray* source) {
-  Arcadia_List* codePoints = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  _Arcadia_UTF8ArrayIterator iterator;
-  _Arcadia_UTF8ArrayIterator_initialize(thread, &iterator, Arcadia_RuntimeByteArray_getBytes(thread, source), Arcadia_RuntimeByteArray_getNumberOfBytes(thread, source));
-  while (_Arcadia_UTF8ArrayIterator_hasCodePoint(thread, &iterator)) {
-    Arcadia_Natural32Value codePoint = _Arcadia_UTF8ArrayIterator_getCodePoint(thread, &iterator);
-    Arcadia_List_insertBackNatural32Value(thread, codePoints, codePoint);
-  }
-  return codePoints;
-}
-
 void
 FileContext_execute
   (
@@ -391,23 +387,19 @@ FileContext_execute
 
     Arcadia_Thread_jump(thread);
   }
-  context->fileBytes = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, sourceByteBuffer), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, sourceByteBuffer));
-  context->reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_RuntimeByteArray_ByteReader_create(thread, context->fileBytes));
+  context->fileBytes = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, sourceByteBuffer), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, sourceByteBuffer)));
+  context->reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, context->fileBytes));
   if (!context->parser) {
-    context->parser = Directives_Parser_create(thread, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 0, context->reader);
+    context->parser = Arcadia_TemplateEngine_Parser_create(thread, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 0, context->reader);
   }
-
-  while (Arcadia_UnicodeCodePointReader_hasValue(thread, context->reader)) {
-    Arcadia_Natural32Value sourceCodePoint = Arcadia_UnicodeCodePointReader_getValue(thread, context->reader);
-    if (sourceCodePoint == '@') {
-      Arcadia_UnicodeCodePointReader_nextValue(thread, context->reader);
-      Directives_Parser_setInput(thread, context->parser, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 1, context->reader);
-      Directives_Tree* ast = parseDirective(thread, context);
-      evalAst(thread, context, ast);
-    } else {
-      Arcadia_Natural32Value targetCodePoint = sourceCodePoint;
-      Arcadia_Unicode_Encoder_encodeCodePoints(thread, context->context->target, &targetCodePoint, 1, context->context->targetBuffer);
-      Arcadia_UnicodeCodePointReader_nextValue(thread, context->reader);
-    }
+  if (!context->scanner) {
+    context->scanner = (Arcadia_TemplateEngine_Scanner*)context->parser->scanner;
+  }
+  Arcadia_TemplateEngine_Parser_setPosition(thread, context->parser, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 1);
+  Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)context->parser, context->reader);
+  Directives_Tree* fileAST = (Directives_Tree*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser), _Directives_Tree_getType(thread));
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)fileAST->file.children); i < n; ++i) {
+    Directives_Tree* ast = (Directives_Tree*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, fileAST->file.children, i, _Directives_Tree_getType(thread));
+    eval(thread, context, ast);
   }
 }

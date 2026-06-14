@@ -15,7 +15,7 @@
 
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
-#include "Arcadia.Tools.TemplateEngine.Library/Directives/Tree.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Parser/Tree.h"
 #include "Arcadia/DDL/Include.h"
 
 static void
@@ -132,8 +132,10 @@ Environment_loadString
   Arcadia_DDL_Parser* syntacticalAnalysis = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
                                                                                                                  Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
-  Arcadia_RuntimeByteArray* runtimeByteArray = Arcadia_RuntimeByteArray_create(thread, Arcadia_String_getBytes(thread, source), Arcadia_String_getNumberOfBytes(thread, source));
-  node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)syntacticalAnalysis, runtimeByteArray), _Arcadia_DDL_Node_getType(thread));
+  Arcadia_ByteArray* byteArray = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_String_getBytes(thread, source), Arcadia_String_getNumberOfBytes(thread, source)));
+  Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, byteArray));
+  Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)syntacticalAnalysis, reader);
+  node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)syntacticalAnalysis), _Arcadia_DDL_Node_getType(thread));
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);
   Environment* variables = Environment_create(thread, NULL);
   if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {

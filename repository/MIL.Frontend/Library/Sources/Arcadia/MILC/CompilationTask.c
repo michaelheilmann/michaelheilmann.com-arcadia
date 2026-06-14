@@ -184,7 +184,10 @@ step2
       Arcadia_Languages_Diagnostics_emit(thread, self->context->diagnostics);
     } else {
       Arcadia_ByteArrayBuilder* fileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, moduleFilePath);
-      Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, fileContents), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, fileContents))), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
+      Arcadia_ByteArray* byteArray = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, fileContents), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, fileContents)));
+      Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, byteArray));
+      Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)self->context->parser, reader);
+      Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
       compilationUnitNode->filePath = moduleFilePath;
       Arcadia_MILC_AST_ModuleNode_appendCompilationUnit(thread, moduleNode, compilationUnitNode);
       compilationUnitNode->moduleNode = moduleNode;
@@ -279,8 +282,11 @@ step3
         Arcadia_Log_information(thread, self->log, Arcadia_FilePath_toGeneric(thread, filePath));
         Arcadia_Log_information(thread, self->log, Arcadia_String_createFromCxxString(thread, u8"`\n"));
       #endif
-        Arcadia_ByteArrayBuilder* fileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
-        Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, fileContents), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, fileContents))), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
+        Arcadia_ByteArrayBuilder* x = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
+        Arcadia_ByteArray* y = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, x), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, x)));
+        Arcadia_UnicodeCodePointReader* z = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, y));
+        Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)self->context->parser, z);
+        Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
         compilationUnitNode->filePath = filePath;
         compilationUnitNode->moduleNode = moduleNode;
 #if 0

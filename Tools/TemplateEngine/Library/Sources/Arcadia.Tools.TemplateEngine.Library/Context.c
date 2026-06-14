@@ -262,6 +262,16 @@ Context_onRun
   )
 {
   self->dependenciesContext->dependenciesFilePath = self->dependenciesFilePath;
+
+#if 0
+  Arcadia_StringBuilder* message = Arcadia_StringBuilder_create(thread);
+  Arcadia_FilePath* workingDirectory = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, "working directory: ");
+  Arcadia_StringBuilder_insertBackString(thread, message, Arcadia_FilePath_toNative(thread, workingDirectory, Arcadia_BooleanValue_False));
+  Arcadia_StringBuilder_insertBackCxxString(thread, message, "\n");
+  Arcadia_Log_information(thread, self->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
+#endif
+
   Arcadia_Stack_pushObjectReferenceValue(thread, self->stack, (Arcadia_Object*)self->sourceFilePath);
   Context_onRunInner(thread, self, self->targetFilePath);
   DependenciesContext_write(thread, self->dependenciesContext);

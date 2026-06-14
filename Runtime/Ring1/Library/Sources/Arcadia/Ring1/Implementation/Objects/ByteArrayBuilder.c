@@ -298,3 +298,11 @@ Arcadia_ByteArrayBuilder_getAt
   }
   return *(self->p + index);
 }
+
+Arcadia_ByteArray*
+Arcadia_ByteArrayBuilder_toByteArray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteArrayBuilder* self
+  )
+{ return Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, self), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, self))); }

@@ -16,11 +16,19 @@
 #if !defined(ARCADIA_TEMPLATEENGINE_FILECONTEXT_H_INCLUDED)
 #define ARCADIA_TEMPLATEENGINE_FILECONTEXT_H_INCLUDED
 
-#include "Arcadia.Tools.TemplateEngine.Library/Directives/Parser.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Parser/Parser.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.h"
 #include "Arcadia/Ring2/Include.h"
 typedef struct Context Context;
 typedef struct Environment Environment;
 
+// The read-evaluate procedure parses a file into a tree
+// @code
+// file : (text | directive)*
+// @endcode
+// It then iterates over the file's tree children from left to right
+// text trees is directly written to an output buffer
+// directive trees directives are evaluated.
 Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.FileContext", FileContext,
                           u8"Arcadia.Object");
 
@@ -39,7 +47,7 @@ struct FileContext {
   Arcadia_FilePath* includedFilePath;
 
   /// The Bytes of this file.
-  Arcadia_RuntimeByteArray* fileBytes;
+  Arcadia_ByteArray* fileBytes;
 
   /// Unicode decoder for the included file.
   Arcadia_UnicodeCodePointReader* reader;
@@ -47,7 +55,8 @@ struct FileContext {
   Environment* environment;
 
   /// The directives parser.
-  Directives_Parser* parser;
+  Arcadia_TemplateEngine_Parser* parser;
+  Arcadia_TemplateEngine_Scanner* scanner;
 
 };
 

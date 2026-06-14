@@ -1,0 +1,41 @@
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArray_getAt">Arcadia_ByteArray_getAt</h1>
+
+  <my-signature><code>
+  Arcadia_Natural8Value<br>
+  Arcadia_ByteArray_getAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArray const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get the Byte value at the specified index.
+  Remarks: The size of a Byte buffer is the length of the Byte sequence it contains.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArray* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The Byte value.</p>
+  </section>
+
+</section>

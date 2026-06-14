@@ -25,15 +25,18 @@
 #include "Arcadia/Languages/Diagnostics.h"
 
 /// @brief The base of all parsers.
+/// A parser is designed to perform syntactical analysis over a random-access finite immutable sequence of Bytes.
 Arcadia_declareObjectType(u8"Arcadia.Languages.Parser", Arcadia_Languages_Parser,
                           u8"Arcadia.Object");
 
 struct Arcadia_Languages_ParserDispatch {
   Arcadia_ObjectDispatch _parent;
 
-  Arcadia_Value (*run)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self, Arcadia_RuntimeByteArray* input);
-  Arcadia_Languages_StringTable* (*getStringTable)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self);
   Arcadia_Languages_Diagnostics* (*getDiagnostics)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self);
+  Arcadia_UnicodeCodePointReader* (*getInput)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self);
+  Arcadia_Languages_StringTable* (*getStringTable)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self);
+  Arcadia_Value (*run)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self);
+  void (*setInput)(Arcadia_Thread* thread, Arcadia_Languages_Parser* self, Arcadia_UnicodeCodePointReader* input);
 };
 
 struct Arcadia_Languages_Parser {
@@ -43,18 +46,26 @@ struct Arcadia_Languages_Parser {
   Arcadia_String* input;
 };
 
-/// @brief Run this parser on an input.
-/// @param thread A pointer to this thread.
+/// @brief Get the diagnostics used by this parser.
+/// @param thread A pointer this thread.
 /// @param self A pointer to this parser.
-/// @param input The input to run the parser on.
-/// @return A value representing the result.
-/// This is usually an Arcadia.Object or derived type object representing the root of a conrete tree or an abstract syntax tree.
-Arcadia_Value
-Arcadia_Languages_Parser_run
+/// @return A pointer to the diagnostics.
+Arcadia_Languages_Diagnostics*
+Arcadia_Languages_Parser_getDiagnostics
   (
     Arcadia_Thread* thread,
-    Arcadia_Languages_Parser* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_Languages_Parser* self
+  );
+
+/// @brief Get the input.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this parser.
+/// @return A pointer to the input string.
+Arcadia_UnicodeCodePointReader*
+Arcadia_Languages_Parser_getInput
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Parser* self
   );
 
 /// @brief Get the string table used by this parser.
@@ -68,15 +79,28 @@ Arcadia_Languages_Parser_getStringTable
     Arcadia_Languages_Parser* self
   );
 
-/// @brief Get the diagnostics used by this parser.
-/// @param thread A pointer this thread.
+/// @brief Run this parser on an input.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this parser.
-/// @return A pointer to the diagnostics.
-Arcadia_Languages_Diagnostics*
-Arcadia_Languages_Parser_getDiagnostics
+/// @return A value representing the result.
+/// This is usually an Arcadia.Object or derived type object representing the root of a conrete tree or an abstract syntax tree.
+Arcadia_Value
+Arcadia_Languages_Parser_run
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Parser* self
+  );
+
+/// @brief Set the input.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this parser.
+/// @param input A pointer to the input string.
+void
+Arcadia_Languages_Parser_setInput
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Parser* self,
+    Arcadia_UnicodeCodePointReader* input
   );
 
 #endif // ARCADIA_LANGUAGES_PARSER_H_INCLUDED

@@ -50,12 +50,12 @@ testAcceptChoice1
       (
         thread,
         ddlsReader,
-        Arcadia_RuntimeByteArray_create
+        Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create
           (
             thread,
             DDLS,
             strlen(DDLS)
-          )
+          ))
       );
   ddlsNode = NULL;
 }

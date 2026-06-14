@@ -30,12 +30,14 @@ onTest
   } else {
     absoluteSourceFilePath = sourceFilePath;
   }
-  Arcadia_ByteArrayBuilder* temporary = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
-  Arcadia_RuntimeByteArray* sourceFileContents  = Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, temporary), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, temporary));
+  Arcadia_ByteArrayBuilder* byteArrayBuilder = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
+  Arcadia_ByteArray* byteArray  = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, byteArrayBuilder), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, byteArrayBuilder)));
+  Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, byteArray));
   Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
   context->scanner = context->scanner ? context->scanner : Arcadia_MILC_Scanner_create(thread, context);
   context->parser = context->parser ? context->parser : Arcadia_MILC_Parser_create(thread, context);
-  Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser, sourceFileContents);
+  Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)context->parser, reader);
+  Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser);
 }
 
 void

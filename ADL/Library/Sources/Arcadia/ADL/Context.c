@@ -272,7 +272,8 @@ readFromString
   )
 {
   Arcadia_DDL_DefaultReader* reader = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
-  Arcadia_DDL_Node* node = Arcadia_DDL_DefaultReader_run(thread, reader, Arcadia_RuntimeByteArray_create(thread, Arcadia_String_getBytes(thread, input), Arcadia_String_getNumberOfBytes(thread, input)));
+  Arcadia_UnicodeCodePointReader* x = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, Arcadia_String_toByteArray(thread, input)));
+  Arcadia_DDL_Node* node = Arcadia_DDL_DefaultReader_run(thread, reader, x);
   if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node, _Arcadia_DDL_MapNode_getType(thread))) {
     Arcadia_logf(Arcadia_LogFlags_Error, u8"argument input is not a of type Arcadia.DDL.MapNode\n");
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);

@@ -77,12 +77,18 @@ next
     Arcadia_MILC_Parser* self
   );
 
-static Arcadia_Value
-Arcadia_MILC_Parser_runImpl
+static Arcadia_Languages_Diagnostics*
+Arcadia_MILC_Parser_getDiagnosticsImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MILC_Parser* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_MILC_Parser* self
+  );
+
+static Arcadia_UnicodeCodePointReader*
+Arcadia_MILC_Parser_getInputImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Parser* self
   );
 
 static Arcadia_Languages_StringTable*
@@ -92,11 +98,19 @@ Arcadia_MILC_Parser_getStringTableImpl
     Arcadia_MILC_Parser* self
   );
 
-static Arcadia_Languages_Diagnostics*
-Arcadia_MILC_Parser_getDiagnosticsImpl
+static Arcadia_Value
+Arcadia_MILC_Parser_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_Parser* self
+  );
+
+static void
+Arcadia_MILC_Parser_setInputImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Parser* self,
+    Arcadia_UnicodeCodePointReader* input
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -146,9 +160,11 @@ Arcadia_MILC_Parser_initializeDispatchImpl
     Arcadia_MILC_ParserDispatch* self
   )
 {
-  ((Arcadia_Languages_ParserDispatch*)self)->run = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Languages_Parser*, Arcadia_RuntimeByteArray*)) & Arcadia_MILC_Parser_runImpl;
-  ((Arcadia_Languages_ParserDispatch*)self)->getStringTable = (Arcadia_Languages_StringTable * (*)(Arcadia_Thread*, Arcadia_Languages_Parser*)) & Arcadia_MILC_Parser_getStringTableImpl;
   ((Arcadia_Languages_ParserDispatch*)self)->getDiagnostics = (Arcadia_Languages_Diagnostics * (*)(Arcadia_Thread*, Arcadia_Languages_Parser*)) & Arcadia_MILC_Parser_getDiagnosticsImpl;
+  ((Arcadia_Languages_ParserDispatch*)self)->getInput = (Arcadia_UnicodeCodePointReader * (*)(Arcadia_Thread*, Arcadia_Languages_Parser*)) & Arcadia_MILC_Parser_getInputImpl;
+  ((Arcadia_Languages_ParserDispatch*)self)->getStringTable = (Arcadia_Languages_StringTable * (*)(Arcadia_Thread*, Arcadia_Languages_Parser*)) & Arcadia_MILC_Parser_getStringTableImpl;
+  ((Arcadia_Languages_ParserDispatch*)self)->run = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Languages_Parser*)) & Arcadia_MILC_Parser_runImpl;
+  ((Arcadia_Languages_ParserDispatch*)self)->setInput = (void (*)(Arcadia_Thread*, Arcadia_Languages_Parser*, Arcadia_UnicodeCodePointReader*)) & Arcadia_MILC_Parser_setInputImpl;
 }
 
 static void
@@ -1523,18 +1539,21 @@ onCompilationUnit
   return compilationUnitNode;
 }
 
-static Arcadia_Value
-Arcadia_MILC_Parser_runImpl
+static Arcadia_Languages_Diagnostics*
+Arcadia_MILC_Parser_getDiagnosticsImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MILC_Parser* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_MILC_Parser* self
   )
-{
-  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)self->scanner, input);
-  Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = onCompilationUnit(thread, self);
-  return Arcadia_Value_makeObjectReferenceValue(compilationUnitNode);
-}
+{ return self->diagnostics; }
+
+static Arcadia_UnicodeCodePointReader*
+Arcadia_MILC_Parser_getInputImpl
+(
+  Arcadia_Thread* thread,
+  Arcadia_MILC_Parser* self
+)   {
+ return Arcadia_Languages_Scanner_getInput(thread, (Arcadia_Languages_Scanner*)self->scanner); }
 
 static Arcadia_Languages_StringTable*
 Arcadia_MILC_Parser_getStringTableImpl
@@ -1544,10 +1563,23 @@ Arcadia_MILC_Parser_getStringTableImpl
   )
 { return self->stringTable; }
 
-static Arcadia_Languages_Diagnostics*
-Arcadia_MILC_Parser_getDiagnosticsImpl
+
+static Arcadia_Value
+Arcadia_MILC_Parser_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_Parser* self
   )
-{ return self->diagnostics; }
+{
+  Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = onCompilationUnit(thread, self);
+  return Arcadia_Value_makeObjectReferenceValue(compilationUnitNode);
+}
+
+static void
+Arcadia_MILC_Parser_setInputImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Parser* self,
+    Arcadia_UnicodeCodePointReader* input
+  )
+{ Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)self->scanner, input); }

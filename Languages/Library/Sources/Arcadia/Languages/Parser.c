@@ -104,14 +104,21 @@ Arcadia_Languages_Parser_destruct
   )
 {/*Intentionally empty.*/}
 
-Arcadia_Value
-Arcadia_Languages_Parser_run
+Arcadia_Languages_Diagnostics*
+Arcadia_Languages_Parser_getDiagnostics
   (
     Arcadia_Thread* thread,
-    Arcadia_Languages_Parser* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_Languages_Parser* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Languages_Parser, run, self, input); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Languages_Parser, getDiagnostics, self); }
+
+Arcadia_UnicodeCodePointReader*
+Arcadia_Languages_Parser_getInput
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Parser* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Languages_Parser, getInput, self); }
 
 Arcadia_Languages_StringTable*
 Arcadia_Languages_Parser_getStringTable
@@ -121,10 +128,19 @@ Arcadia_Languages_Parser_getStringTable
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Languages_Parser, getStringTable, self); }
 
-Arcadia_Languages_Diagnostics*
-Arcadia_Languages_Parser_getDiagnostics
+Arcadia_Value
+Arcadia_Languages_Parser_run
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Parser* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Languages_Parser, getDiagnostics, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Languages_Parser, run, self); }
+
+void
+Arcadia_Languages_Parser_setInput
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Parser* self,
+    Arcadia_UnicodeCodePointReader* input
+  )
+{ Arcadia_VirtualCall(Arcadia_Languages_Parser, setInput, self, input); }

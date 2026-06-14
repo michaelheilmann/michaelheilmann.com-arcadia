@@ -24,7 +24,7 @@ Arcadia_declareObjectType(u8"Arcadia.DDLS.DefaultReader", Arcadia_DDLS_DefaultRe
 
 struct Arcadia_DDLS_DefaultReaderDispatch {
   Arcadia_ObjectDispatch parent;
-  Arcadia_DDLS_Node* (*run)(Arcadia_Thread* thread, Arcadia_DDLS_DefaultReader*, Arcadia_RuntimeByteArray*);
+  Arcadia_DDLS_Node* (*run)(Arcadia_Thread* thread, Arcadia_DDLS_DefaultReader*, Arcadia_ByteArray*);
 };
 
 struct Arcadia_DDLS_DefaultReader {
@@ -48,7 +48,7 @@ Arcadia_DDLS_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_RuntimeByteArray* input
+    Arcadia_ByteArray* input
   );
 
 #endif // ARCADIA_DDLS_READER_DEFAULTREADER_H_INCLUDED

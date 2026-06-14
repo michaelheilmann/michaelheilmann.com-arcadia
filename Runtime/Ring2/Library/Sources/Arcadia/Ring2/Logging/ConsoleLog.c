@@ -187,6 +187,9 @@ Arcadia_ConsoleLog_errorImpl
     writeBytes(thread, self, u8"\033[38;2;255;0;0m", sizeof(u8"\033[38;2;255;0;0m") - 1);
   }
   writeBytes(thread, self, p, n);
+  if (self->colorEnabled) {
+    writeBytes(thread, self, u8"\033[0m", sizeof(u8"\033[0m") - 1);
+  }
 }
 
 static void

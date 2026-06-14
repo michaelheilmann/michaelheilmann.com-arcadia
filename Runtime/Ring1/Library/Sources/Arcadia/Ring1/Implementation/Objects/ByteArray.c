@@ -16,6 +16,8 @@
 #define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Objects/ByteArray.h"
 
+#include "Arcadia/Ring1/Implementation/Objects/ByteArrayDefaultImpl.h"
+#include "Arcadia/Ring1/Implementation/Objects/ByteArraySliceImpl.h"
 #include "Arcadia/Ring1/Include.h"
 
 static void
@@ -71,7 +73,6 @@ Arcadia_ByteArray_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->runtimeByteArray = Arcadia_ValueStack_getRuntimeByteArrayValue(thread, 1);
   Arcadia_LeaveConstructor(Arcadia_ByteArray);
 }
 
@@ -91,34 +92,14 @@ Arcadia_ByteArray_destruct
   )
 {/*Intentionally empty.*/}
 
-Arcadia_ByteArray*
-Arcadia_ByteArray_create
+Arcadia_Natural8Value
+Arcadia_ByteArray_getAt
   (
     Arcadia_Thread* thread,
-    Arcadia_RuntimeByteArray* runtimeByteArray
+    Arcadia_ByteArray const* self,
+    Arcadia_SizeValue index
   )
-{
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, runtimeByteArray);
-  Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_ByteArray);
-}
-
-Arcadia_SizeValue
-Arcadia_ByteArray_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteArray const* self
-  )
-{ return Arcadia_RuntimeByteArray_getNumberOfBytes(thread, self->runtimeByteArray); }
-
-Arcadia_SizeValue
-Arcadia_ByteArray_getNumberOfBytes
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteArray const* self
-  )
-{ return Arcadia_RuntimeByteArray_getNumberOfBytes(thread, self->runtimeByteArray); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_ByteArray, getAt, self, index); }
 
 Arcadia_Natural8Value const*
 Arcadia_ByteArray_getBytes
@@ -126,4 +107,47 @@ Arcadia_ByteArray_getBytes
     Arcadia_Thread* thread,
     Arcadia_ByteArray const* self
   )
-{ return Arcadia_RuntimeByteArray_getBytes(thread, self->runtimeByteArray); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_ByteArray, getBytes, self); }
+
+Arcadia_SizeValue
+Arcadia_ByteArray_getNumberOfBytes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteArray const* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_ByteArray, getNumberOfBytes, self); }
+
+Arcadia_SizeValue
+Arcadia_ByteArray_getSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteArray const* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_ByteArray, getSize, self); }
+
+Arcadia_BooleanValue
+Arcadia_ByteArray_isEmpty
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteArray const* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_ByteArray, isEmpty, self); }
+
+Arcadia_ByteArray*
+Arcadia_ByteArray_slice
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteArray* self,
+    Arcadia_SizeValue start,
+    Arcadia_SizeValue size
+  )
+{ return (Arcadia_ByteArray*)Arcadia_ByteArraySliceImpl_create(thread, self, start, size); }
+
+Arcadia_ByteArray*
+Arcadia_ByteArray_createByteArray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_RuntimeByteArray* runtimeByteArray
+  )
+{ return (Arcadia_ByteArray*)Arcadia_ByteArrayDefaultImpl_create(thread, runtimeByteArray); }
+

@@ -250,6 +250,250 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 </section>
 
 <section class="cxx entity object">
+<h1 id="Arcadia_ByteArray">Arcadia_ByteArray</h1>
+<p><code>Arcadia_ByteArray</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_ByteArray</code> represents a mutable sequence of Bytes.</p>
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArray_getAt">Arcadia_ByteArray_getAt</h1>
+
+  <my-signature><code>
+  Arcadia_Natural8Value<br>
+  Arcadia_ByteArray_getAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArray const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get the Byte value at the specified index.
+  Remarks: The size of a Byte buffer is the length of the Byte sequence it contains.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArray* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The Byte value.</p>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_getBytes">Arcadia_ByteArrayBuilder_getBytes</h1>
+
+  <my-signature><code>
+  void const*<br>
+  Arcadia_ByteArrayBuilder_getBytes<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get a pointer to the Bytes in this Byte buffer.
+  Warning: The Bytes must not be modified. The pointer is valid only as long as the Byte buffer object is valid and is not modified.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the Bytes in this Byte buffer.</p>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_getSize">Arcadia_ByteArrayBuilder_getNumberOfBytes</h1>
+
+  <my-signature><code>
+  Arcadia_SizeValue<br>
+  Arcadia_ByteArrayBuilder_getNumberOfBytes<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get the number of Bytes in this Byte buffer.
+  Remarks: This is an alias of Arcadia_ByteArrayBuilder_getSize.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The size of this Byte buffer.</p>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_getSize">Arcadia_ByteArrayBuilder_getSize</h1>
+
+  <my-signature><code>
+  Arcadia_SizeValue<br>
+  Arcadia_ByteArrayBuilder_getSize<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArrayBuilder const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get the size of this Byte buffer.
+  Remarks:
+  The size of a Byte buffer is the number of Bytes in that Byte buffer.
+  This is an alias of Arcadia_ByteArrayBuilder_getNumberOfBytes.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArrayBuilder* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The size of this Byte buffer.</p>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArray_isEmpty">Arcadia_ByteArray_isEmpty</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteArray_isEmpty<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteArray* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this Byte buffer is empty.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteArray* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteArrayBuilder_create">Arcadia_ByteArrayBuilder_create</h1>
+
+  <my-signature><code>
+  Arcadia_ByteArrayBuilder*<br>
+  Arcadia_ByteArrayBuilder_create<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Create a Byte buffer.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the <code>Arcadia_ByteArrayBuilder</code> object.</p>
+  </section>
+
+</section>
+
+<section class="cxx entity object">
 <h1 id="Arcadia_ByteArrayBuilder">Arcadia_ByteArrayBuilder</h1>
 <p><code>Arcadia_ByteArrayBuilder</code> extends <code>Arcadia_Object</code>.</p>
 <p><code>Arcadia_ByteArrayBuilder</code> represents a mutable sequence of Bytes.</p>
@@ -2523,6 +2767,7 @@ The enumeration elements cannot be combined.
 </section>
 
 </section>
+
 
 <section class="cxx entity object">
 <h1 id="Arcadia_Collection">Collection</h1>
@@ -5522,11 +5767,19 @@ The enumeration elements cannot be combined.
   <div class="right-column">
     <nav>
       <ul style="list-style: none">
-        <li>Object</li>
+
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Object">Arcadia_Object</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Object_getHash">Arcadia_Object_getHash</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Object_isEqualTo">Arcadia_Object_isEqualTo</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Object_isNotEqualTo">Arcadia_Object_isNotEqualTo</a></li>
+        <li>Byte Buffer</li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArray">Arcadia_ByteArray</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArray_getAt">Arcadia_ByteArray_create</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArray_getBytes">Arcadia_ByteArray_getBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArray_getNumberOfBytes">Arcadia_ByteArray_getNumberOfBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArray_getSize">Arcadia_ByteArray_getNumberOfBytes</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArray_make">Arcadia_ByteArray_make</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArray_isEmpty">Arcadia_ByteArray_isEmpty</a></li>
 
         <li>Byte Buffer</li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder">Arcadia_ByteArrayBuilder</a></li>
@@ -5538,14 +5791,12 @@ The enumeration elements cannot be combined.
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_insertBackBytes">Arcadia_ByteArrayBuilder_insertBackBytes</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_insertBytes">Arcadia_ByteArrayBuilder_insertBytes</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteArrayBuilder_insertFrontBytes">Arcadia_ByteArrayBuilder_insertFrontBytes</a></li>
-        <li>File System</li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ExistingFilePolicy">Arcadia_ExistingFilePolicy</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileAccessMode">Arcadia_FileAccessMode</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle">Arcadia_FileHandle</a></li>
 
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileAccessMode">Arcadia_FileAccessMode</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle">Arcadia_FileHandle</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
 
-        
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
 
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
@@ -5568,9 +5819,10 @@ The enumeration elements cannot be combined.
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getWorkingDirectory">Arcadia_FileSystem_getWorkingDirectory</a></li>
 
 
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileType">Arcadia_FileType</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_NonExistingFilePolicy">Arcadia_NonExistingFilePolicy</a></li>
-        <li>Collections</li>
+
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileType">Arcadia_FileType</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_NonExistingFilePolicy">Arcadia_NonExistingFilePolicy</a></li>
+
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Collection_clear">Arcadia_Collection_clear</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Collection_getSize">Arcadia_Collection_getSize</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Collection_isEmpty">Arcadia_Collection_isEmpty</a></li>
@@ -5654,6 +5906,7 @@ The enumeration elements cannot be combined.
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuilder_insertFront">Arcadia_StringBuilder_insertFront</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StingBuffer_isEmpty">Arcadia_StringBuilder_isEmpty</a></li>
 
+
       </ul>
     </nav>
   </div>
@@ -5662,7 +5915,7 @@ The enumeration elements cannot be combined.
   <div class="left-column">
     <div>
     <div>Website maintained by Michael Heilmann.</div>
-    <div>Last modified on 8 June 2026.</div> 
+    <div>Last modified on 14 June 2026.</div> 
     </div>
   </div>
   <div class="center-column">
