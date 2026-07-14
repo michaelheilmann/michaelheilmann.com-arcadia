@@ -28,15 +28,15 @@
 ///   construct()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.BackendContext", Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext,
                           u8"Arcadia.Visuals.Implementation.OpenGL4.BackendContext")
 
-struct Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContextDispatch {
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContextDispatch {
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContextDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext {
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext {
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext _parent;
 
   // The display used by the OpenGL/GLX context and the X11 windows.
   Display* display;
@@ -68,19 +68,19 @@ struct Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext {
   GLXContext context;
 
   /// The GLX functions available to us.
-  _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions functionsGLX;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions functionsGLX;
   /// The OpenGL functions available to us.
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions _functions;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions _functions;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext_create
   (
     Arcadia_Thread* thread
   );
 
-Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getOrCreate
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext_getOrCreate
   (
     Arcadia_Thread* thread
   );

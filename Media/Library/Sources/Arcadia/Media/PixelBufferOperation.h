@@ -16,6 +16,9 @@
 #if !defined(ARCADIA_MEDIA_PIXELBUFFEROPERATION_H_INCLUDED)
 #define ARCADIA_MEDIA_PIXELBUFFEROPERATION_H_INCLUDED
 
+#if !defined(ARCADIA_MEDIA_MODULE) || 1 != ARCADIA_MEDIA_MODULE
+  #error("do not include directly, include `Arcadia/Media/Include.h` instead")
+#endif
 #include "Arcadia/Media/PixelBuffer.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Media.PixelBufferOperation", Arcadia_Media_PixelBufferOperation,

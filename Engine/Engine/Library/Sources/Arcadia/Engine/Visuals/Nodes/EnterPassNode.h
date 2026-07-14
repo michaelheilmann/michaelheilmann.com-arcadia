@@ -22,7 +22,7 @@
 #include "Arcadia/Engine/Visuals/Node.h"
 typedef struct Arcadia_Engine_Visuals_CameraNode Arcadia_Engine_Visuals_CameraNode;
 typedef struct Arcadia_Engine_Visuals_ViewportNode Arcadia_Engine_Visuals_ViewportNode;
-typedef struct Arcadia_Visuals_FrameBufferNode Arcadia_Visuals_FrameBufferNode;
+typedef struct Arcadia_Engine_Visuals_FrameBufferNode Arcadia_Engine_Visuals_FrameBufferNode;
 
 // An enter pass node.
 // Inputs:
@@ -51,7 +51,7 @@ struct Arcadia_Engine_Visuals_EnterPassNode {
   Arcadia_Engine_Visuals_ViewportNode* viewportNode;
 
   // A pointer to the frame buffer node (render to frame buffer) or null (render to primary frame buffer).
-  Arcadia_Visuals_FrameBufferNode* frameBufferNode;
+  Arcadia_Engine_Visuals_FrameBufferNode* frameBufferNode;
 
   struct {
     // @todo Remove this. We can obtain that from the rendering context node -> camera node -> viewport node path.
@@ -95,7 +95,24 @@ struct Arcadia_Engine_Visuals_EnterPassNode {
   // The projection matrix.
   // The default value is the identity matrix.
   Arcadia_Math_Matrix4Real32* worldToViewMatrix;
+
+  // The backend context.
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
+
+  // Theenter pass resource.
+  Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource;
 };
+
+/// @brief Create an enter pass mode.
+/// @param thread A pointer to this thread.
+/// @param backendContext A pointer to the backend context or a null pointer.
+/// @return A pointer to the enter pass node.
+Arcadia_Engine_Visuals_EnterPassNode*
+Arcadia_Engine_Visuals_EnterPassNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
 
 void
 Arcadia_Engine_Visuals_EnterPassNode_setViewToProjectionMatrix
@@ -118,10 +135,10 @@ Arcadia_Engine_Visuals_EnterPassNode_setFrameBufferNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_EnterPassNode* self,
-    Arcadia_Visuals_FrameBufferNode* frameBufferNode
+    Arcadia_Engine_Visuals_FrameBufferNode* frameBufferNode
   );
 
-Arcadia_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_FrameBufferNode*
 Arcadia_Engine_Visuals_EnterPassNode_getFrameBufferNode
   (
     Arcadia_Thread* thread,

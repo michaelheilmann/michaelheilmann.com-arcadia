@@ -25,70 +25,70 @@ static void
 openContext
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 applyIcons
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch* self
   );
 
 static void
 openImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 closeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static Arcadia_BooleanValue
 getFullscreenImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 setFullscreenImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_BooleanValue fullscreen
   );
 
@@ -96,7 +96,7 @@ static void
 getRequiredBigIconSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -105,7 +105,7 @@ static void
 getRequiredSmallIconSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -114,14 +114,14 @@ static Arcadia_Visuals_Linux_Icon*
 getBigIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 setBigIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Visuals_Linux_Icon* icon
   );
 
@@ -129,14 +129,14 @@ static Arcadia_Visuals_Linux_Icon*
 getSmallIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 setSmallIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Visuals_Linux_Icon* icon
   );
 
@@ -144,14 +144,14 @@ static Arcadia_String*
 getTitleImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 setTitleImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_String* title
   );
 
@@ -159,7 +159,7 @@ static void
 getCanvasSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -168,21 +168,21 @@ static void
 beginRenderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 endRenderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
 getBorderInfo
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top,
     Arcadia_Integer32Value* right,
@@ -193,7 +193,7 @@ static void
 getPositionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top
   );
@@ -202,7 +202,7 @@ static void
 setPositionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value left,
     Arcadia_Integer32Value top
   );
@@ -211,7 +211,7 @@ static void
 getSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -220,17 +220,17 @@ static void
 setSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -238,7 +238,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.WindowBackend", Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.WindowBackend", Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend,
                          u8"Arcadia.Visuals.WindowBackend", Arcadia_Engine_Visuals_WindowBackend,
                          &_typeOperations);
 
@@ -246,7 +246,7 @@ static void
 openContext
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
   glXMakeCurrent(self->backendContext->display, self->window, self->backendContext->context);
@@ -262,7 +262,7 @@ static void
 applyIcons
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
   if (!self->window) {
@@ -321,13 +321,13 @@ filter
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
-  Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: Enter: Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct\n", __FILE__, __LINE__);
+  Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: Enter: Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct\n", __FILE__, __LINE__);
   if (self->window) {
     XDestroyWindow(self->backendContext->display, self->window);
     self->window = None;
@@ -345,14 +345,14 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
     self->backendContext = NULL;
   }
-  Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: Leave: Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct\n", __FILE__, __LINE__);
+  Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: Leave: Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct\n", __FILE__, __LINE__);
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
   if (self->backendContext) {
@@ -367,13 +367,13 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -383,21 +383,21 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getType(thread));
+  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext_getType(thread));
   Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
   self->smallIcon = NULL;
   self->bigIcon = NULL;
   self->screen = NULL;
   self->window = None;
 
-  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend);
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch* self
   )
 {
   ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->open = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*)) & openImpl;
@@ -434,7 +434,7 @@ static void
 openImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
   if (!self->screen) {
@@ -551,7 +551,7 @@ static void
 closeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
   if (self->window) {
@@ -572,7 +572,7 @@ static Arcadia_BooleanValue
 getFullscreenImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 { return ((Arcadia_Engine_Visuals_Window*)self)->fullscreen; }
 
@@ -580,7 +580,7 @@ static void
 setFullscreenImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_BooleanValue fullscreen
   )
 {
@@ -623,7 +623,7 @@ static void
 getRequiredBigIconSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
@@ -636,7 +636,7 @@ static void
 getRequiredSmallIconSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
@@ -649,7 +649,7 @@ static Arcadia_Visuals_Linux_Icon*
 getBigIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 { return self->bigIcon; }
 
@@ -657,7 +657,7 @@ static void
 setBigIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Visuals_Linux_Icon* icon
   )
 {
@@ -669,7 +669,7 @@ static Arcadia_Visuals_Linux_Icon*
 getSmallIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 { return self->smallIcon; }
 
@@ -677,7 +677,7 @@ static void
 setSmallIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Visuals_Linux_Icon* icon
   )
 {
@@ -689,7 +689,7 @@ static Arcadia_String*
 getTitleImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 { return ((Arcadia_Engine_Visuals_Window*)self)->title; }
 
@@ -697,7 +697,7 @@ static void
 setTitleImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_String* title
   )
 {
@@ -723,7 +723,7 @@ static void
 getCanvasSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
@@ -745,7 +745,7 @@ static void
 beginRenderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
   if (!glXMakeCurrent(self->backendContext->display, self->window, self->backendContext->context)) {
@@ -758,7 +758,7 @@ static void
 endRenderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
   if (self->backendContext->context == glXGetCurrentContext()) {
@@ -770,7 +770,7 @@ static void
 getBorderInfo
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top,
     Arcadia_Integer32Value* right,
@@ -804,7 +804,7 @@ static void
 getPositionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top
   )
@@ -819,7 +819,7 @@ static void
 setPositionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value left,
     Arcadia_Integer32Value top
   )
@@ -840,7 +840,7 @@ static void
 getSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
@@ -855,7 +855,7 @@ static void
 setSizeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   )
@@ -864,11 +864,11 @@ setSizeImpl
   XSync(self->backendContext->display, False);
 }
 
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
@@ -878,5 +878,5 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend);
 }

@@ -29,4 +29,10 @@ struct Arcadia_MILC_EnumerationCompleter {
   Arcadia_MILC_Completer _parent;
 };
 
+Arcadia_MILC_EnumerationCompleter*
+Arcadia_MILC_EnumerationCompleter_create
+  (
+    Arcadia_Thread* thread
+  );
+
 #endif // ARCADIA_MILC_ENUMERATIONCOMPLETER_H_INCLUDED

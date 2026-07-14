@@ -15,44 +15,32 @@
 
 #include "Arcadia/Visuals/Implementation/Include.h"
 
-#if Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
+#if Arcadia_Engine_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
   #include "Arcadia/Visuals/Implementation/Direct3D12/Backend.h"
 #endif
 
-#if Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
+#if Arcadia_Engine_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
   #include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
 #endif
 
-#if Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
+#if Arcadia_Engine_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
   #include "Arcadia/Visuals/Implementation/Vulkan/Backend.h"
 #endif
 
-#include "Arcadia/Visuals/Implementation/NodeFactory.h"
-
 void
-Arcadia_Visuals_Implementation_registerNodeFactories
+Arcadia_Engine_Visuals_Implementation_registerBackends
   (
     Arcadia_Thread* thread,
     Arcadia_Set* types
   )
 {
-  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_NodeFactory_getType(thread)), NULL);
-}
-
-void
-Arcadia_Visuals_Implementation_registerBackends
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Set* types
-  )
-{
-#if Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
-  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_Direct3D12_Backend_getType(thread)), NULL);
+#if Arcadia_Engine_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
+  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Engine_Visuals_Implementation_Direct3D12_Backend_getType(thread)), NULL);
 #endif
-#if Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
-  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_OpenGL4_Backend_getType(thread)), NULL);
+#if Arcadia_Engine_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
+  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Engine_Visuals_Implementation_OpenGL4_Backend_getType(thread)), NULL);
 #endif
-#if Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
-  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_Vulkan_Backend_getType(thread)), NULL);
+#if Arcadia_Engine_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
+  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Engine_Visuals_Implementation_Vulkan_Backend_getType(thread)), NULL);
 #endif
 }

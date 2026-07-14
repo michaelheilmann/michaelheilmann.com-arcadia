@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Ring1.Tests.UTF8ArrayIteratorTests)
+set(this ${MyProjectName}.Ring1.Tests.UTF8ArrayIteratorTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Arcadia.Ring1.Tests.UTF8ArrayIteratorTests/Main.c)
+OnSourceFile(${this} Arcadia.Ring1.Tests.UTF8ArrayIteratorTests/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1)
+OnModuleDependency(${this} ${MyProjectName}.Ring1 PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring1")
+set_target_properties(${this} PROPERTIES FOLDER "Ring1")

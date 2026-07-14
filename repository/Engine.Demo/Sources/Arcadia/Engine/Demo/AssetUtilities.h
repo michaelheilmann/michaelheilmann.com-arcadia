@@ -33,8 +33,12 @@ Arcadia_Engine_Demo_AssetUtilities_enumerateFiles
     } else {
       Arcadia_FilePath* temporary = Arcadia_FilePath_clone(thread, filePath);
       Arcadia_FilePath_append(thread, temporary, elementPath);
-      elementPath = temporary;
-      Arcadia_List_insertBackObjectReferenceValue(thread, files, (Arcadia_Object*)elementPath);
+      if (Arcadia_FileSystem_directoryFileExists(thread, fileSystem, temporary)) {
+        Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, temporary, files);
+      } else {
+        elementPath = temporary;
+        Arcadia_List_insertBackObjectReferenceValue(thread, files, (Arcadia_Object*)elementPath);
+      }
     }
     Arcadia_DirectoryIterator_nextValue(thread, directoryIterator);
   }

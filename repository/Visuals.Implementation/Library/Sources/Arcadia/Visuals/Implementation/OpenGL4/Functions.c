@@ -1,11 +1,11 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/Functions.h"
 
 void
-_Arcadia_Visuals_Implementation_OpenGL4_Functions_initialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions_initialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_Functions* functions,
-    _Arcadia_Visuals_Implementation_OpenGL4_Linker* linker
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* functions,
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Linker* linker
   )
 {
 #define Define(Type, Name) \
@@ -26,10 +26,10 @@ _Arcadia_Visuals_Implementation_OpenGL4_Functions_initialize
 }
 
 void
-_Arcadia_Visuals_Implementation_OpenGL4_Functions_uninitialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions_uninitialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_Functions* functions
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* functions
   )
 {
 #define Define(Type, Name) \

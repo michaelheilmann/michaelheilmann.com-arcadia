@@ -35,6 +35,14 @@
 #include "Arcadia/Media/DSP/WhiteNoise.h"
 #include "Arcadia/Media/SampleFormat.h"
 
+#include "Arcadia/Media/VertexBuffer.h"
+
+#include "Arcadia/Media/VertexDescriptor.h"
+#include "Arcadia/Media/VertexDescriptorBuilder.h"
+#include "Arcadia/Media/VertexElementDescriptor.h"
+#include "Arcadia/Media/VertexElementSemantics.h"
+#include "Arcadia/Media/VertexElementSyntactics.h"
+
 #undef ARCADIA_MEDIA_EXPORT
 #pragma pop_macro("ARCADIA_MEDIA_EXPORT")
 

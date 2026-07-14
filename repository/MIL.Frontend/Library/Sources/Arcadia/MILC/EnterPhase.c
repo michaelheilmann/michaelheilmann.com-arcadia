@@ -26,7 +26,7 @@ constructImpl
   );
 
 static void
-Arcadia_MILC_EnterPhase_initializeDispatchImpl
+initializeDispatchImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_EnterPhaseDispatch* self
@@ -95,7 +95,7 @@ onCompilationUnitNode
   );
 
 static void
-onEnterModuleNode
+onModuleNode
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_EnterPhase* self,
@@ -107,7 +107,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MILC_EnterPhase_initializeDispatchImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -116,7 +116,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.MILC.EnterPhase", Arcadia_MILC_EnterPhase,
-                         u8"Arcadia.Object", Arcadia_Object,
+                         u8"Arcadia.MILC.AST.Visitor", Arcadia_MILC_AST_Visitor,
                          &_typeOperations);
 
 static void
@@ -142,12 +142,18 @@ constructImpl
 }
 
 static void
-Arcadia_MILC_EnterPhase_initializeDispatchImpl
+initializeDispatchImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_EnterPhaseDispatch* self
   )
-{/*Intentionally empty.*/}
+{
+  ((Arcadia_MILC_AST_VisitorDispatch*)self)->visitClassDefinitionNode = (void(*)(Arcadia_Thread*, Arcadia_MILC_AST_Visitor*, Arcadia_MILC_AST_ClassDefinitionNode*)) & onClassDefinitionNode;
+  ((Arcadia_MILC_AST_VisitorDispatch*)self)->visitEnumerationDefinitionNode = (void(*)(Arcadia_Thread*, Arcadia_MILC_AST_Visitor*, Arcadia_MILC_AST_EnumerationDefinitionNode*)) & onEnumerationDefinitionNode;
+  ((Arcadia_MILC_AST_VisitorDispatch*)self)->visitModuleDefinitionNode = (void(*)(Arcadia_Thread*, Arcadia_MILC_AST_Visitor*, Arcadia_MILC_AST_ModuleDefinitionNode*)) & onModuleDefinitionNode;
+  ((Arcadia_MILC_AST_VisitorDispatch*)self)->visitModuleNode = (void(*)(Arcadia_Thread*, Arcadia_MILC_AST_Visitor*, Arcadia_MILC_AST_ModuleNode*)) & onModuleNode;
+  ((Arcadia_MILC_AST_VisitorDispatch*)self)->visitProcedureDefinitionNode = (void(*)(Arcadia_Thread*, Arcadia_MILC_AST_Visitor*, Arcadia_MILC_AST_ProcedureDefinitionNode*)) & onProcedureDefinitionNode;
+}
 
 static void
 destructImpl
@@ -241,6 +247,7 @@ onClassDefinitionNode
       );
   } else {
     Arcadia_Languages_Scope_enter(thread, moduleSymbol->scope, symbolName,  (Arcadia_Object*)symbol);
+    ((Arcadia_MILC_Symbol*)symbol)->completer = self->context->classCompleter;
   }
 }
 
@@ -322,6 +329,7 @@ onEnumerationDefinitionNode
       );
   } else {
     Arcadia_Languages_Scope_enter(thread, moduleSymbol->scope, symbolName, (Arcadia_Object*)symbol);
+    ((Arcadia_MILC_Symbol*)symbol)->completer = self->context->enumerationCompleter;
   }
 }
 
@@ -392,7 +400,7 @@ onCompilationUnitNode
 }
 
 static void
-onEnterModuleNode
+onModuleNode
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_EnterPhase* self,
@@ -422,7 +430,7 @@ Arcadia_MILC_EnterPhase_run
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->context->moduleNodes); i < n; ++i) {
     self->lastSymbol = NULL;
     Arcadia_MILC_AST_ModuleNode* moduleNode = (Arcadia_MILC_AST_ModuleNode*)Arcadia_List_getObjectReferenceValueAt(thread, self->context->moduleNodes, i);
-    onEnterModuleNode(thread, self, moduleNode);
+    onModuleNode(thread, self, moduleNode);
     if (!self->lastSymbol) {
       // LANGUAGE DEFINITION: Assert at least one one module definition exists in a module.
       Arcadia_Languages_Diagnostics_add

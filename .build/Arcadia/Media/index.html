@@ -926,6 +926,216 @@ Get the number of Bytes of a sample of this sample format.
 </section>
 
 
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity object">
+
+  <h1 id="Arcadia_Media_VertexElementDescriptor">[MIL] Arcadia.Media.VertexElementDescriptor</h1>
+
+  <my-signature><code>
+  class Arcadia.Media.VertexElementDesscriptor extends Arcadia.Object { ... }
+  </code></my-signature>
+
+  <my-summary>
+  A application event.
+  </my-summary>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia.Media.VertexElementDescriptor.construct">
+  [MIL] Arcadia.Media.VertexElementDescriptor.construct
+  </h1>
+
+  <my-signature><code>
+    Arcadia.Media.VertexElementDescriptor.construct<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;offset : Arcadia.Natural64,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;semantics : Arcadia.Media.VertexElementSemantics,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;syntactics : Arcadia.Media.VertexElementSyntactics<br>
+    &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Construct this vertex element descriptor.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div>
+      <div>offset : Arcadia.Natural8</div>
+      <div>The offset, in Bytes, of the vertex element from the beginning of the vertex.</div>
+    </div>
+    
+    <div>
+      <div>semantics : Arcadia.Media.VertexElementSemantics</div>
+      <div>The semantics of the vertex element.</div>
+    </div>
+    
+    <div>
+      <div>syntactics : Arcadia.Media.VertexElementSyntactics</div>
+      <div>The syntactics of the vertex element.</div>
+    </div>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia.Media.VertexElementDescriptor.isEqualTo">
+  [MIL] Arcadia.Media.VertexElementDescriptor.isEqualTo
+  </h1>
+
+  <my-signature><code>
+    <br>
+    method isEqualTo<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;other : Arcadia.Object<br>
+    &nbsp;&nbsp;) : Arcadia.Boolean
+  </code></my-signature>
+
+  <my-summary>
+  Compare this vertex element descriptor to another object.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div>
+      <div>other : Arcadia.Object</div>
+      <div>The other object.</div>
+    </div>
+
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia.Boolean.True</code> if the objects are equal, <code>Arcadia.Boolean.False</code> otherwise.</p>
+  </section>
+
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Media_VertexElementSemantics">Arcadia_Media_VertexElementSemantics</h1>
+<my-signature><code>
+typedef enum Arcadia_Media_VertexElementSemantics Arcadia_Media_VertexElementSemantics;
+</code></my-signature>
+
+<my-summary>
+An enumeration of verrex element semantics.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+  <h1>Elements</h1>
+
+  <div>
+    <div>
+      <code>Arcadia_Media_VertexElementSemantics_PositionXyz</code>
+    </div>
+    <div>
+    The vertex element denotes a position coordinate.
+    If the vertex syntax is Arcadia_Media_VertexElementSyntax_Real32Real32, then this the position coordinate is in XY space (model, local, or global).
+    If the vertex syntax is Arcadia_Media_VertexElementSyntax_Real32Real32Real32, then this the position coordinate is in XYZ space (model, local, or global).
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Media_VertexElementSemantics_AmbientRgba</code>
+    </div>
+    <div>
+    The vertex element denotes an ambient color coordinate.
+    <ul>
+      <li>If the vertex syntax is Arcadia_Media_VertexElementSyntax_Real32Real32Real32, then the color is in [0,1] RGB space.
+      The first Arcadia_Real32Value indicates the intensity of the red component,
+      the second Arcadia_Real32Value indicates the intensity of the green component,
+      the third Arcadia_Real32Value indicates the intensity of the blue component.
+      0 indicates minimum intensity, 1 indicates maximum intensity.
+      </li>
+      <li>If the vertex syntax is Arcadia_Media_VertexElementSyntax_Real32Real32Real32Real32, then the color is in [0,1] RGBA space.
+      The first Arcadia_Real32Value indicates the intensity of the red component,
+      the second Arcadia_Real32Value indicates the intensity of the green component,
+      the third Arcadia_Real32Value indicates the intensity of the blue component.
+      0 indicates minimum intensity, 1 indicates maximum intensity.
+      The fourth Arcadia_Real32Value indicates the intensity of the alpha component.
+      0 indicates fully transparent, 1 indicates fully opaque.
+      </li>
+    </ul>
+    </</div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Media_VertexElementSemantics_AmbientUv</code>
+    </div>
+    <div>
+    The vertex element denotes a texture coordinates for an ambient texture.
+    If the vertex syntax is Arcadia_Media_VertexElementSyntax_Real32Real32, then this the texture coordinate is in UV space.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Media_VertexElementSyntactics">Arcadia_Media_VertexElementSyntactics</h1>
+<my-signature><code>
+typedef enum Arcadia_Media_VertexElementSyntactics Arcadia_Media_VertexElementSyntactics;
+</code></my-signature>
+
+<my-summary>
+An enumeration of vertex element syntactics.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+
+  <h1>Elements</h1>
+
+  <div>
+    <div>
+      <code>Arcadia_Media_VertexElementSyntactics_Real32Real32</code>
+    </div>
+    <div>
+    The vertex element consists of two consecutive Arcadia_Real32Value values.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Media_VertexElementSyntactics_Real32Real32Real32</code>
+    </div>
+    <div>
+    The vertex element consists of three consecutive Arcadia_Real32Value values.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Media_VertexElementSyntactics_Real32Real32Real32Real32</code>
+    </div>
+    <div>
+    The vertex element consists of four consecutive Arcadia_Real32Value values.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+
   </div>
   <div class="right-column">
     <nav>
@@ -952,7 +1162,11 @@ Get the number of Bytes of a sample of this sample format.
 
         <li><a href="https://michaelheilmann.com/Arcadia/Media/#Arcadia_Media_SampleFormat">Arcadia_Media_SampleFormat</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Media/#Arcadia_Media_SampleFormat_getNumberOfBytes">Arcadia_Media_SampleFormat_getNumberOfBytes</a></li>
-        </ul>
+        
+        <li><a href="https://michaelheilmann.com/Arcadia/Media/#Arcadia_Media_VertexElementDescriptor">Arcadia_Media_VertexElementDescriptor</a></li>    
+        <li><a href="https://michaelheilmann.com/Arcadia/Media/#Arcadia_Media_VertexElementSemantics">Arcadia_Media_VertexElementSemantics</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Media/#Arcadia_Media_VertexElementSyntactics">Arcadia_Media_VertexElementSyntactics</a></li>          
+      </ul>
     </nav>
   </div>
   </main>
@@ -961,7 +1175,7 @@ Get the number of Bytes of a sample of this sample format.
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 14 June 2026.</div>
+      <div>Last modified on 14 July 2026.</div>
     </div>
   </footer>
   </body>

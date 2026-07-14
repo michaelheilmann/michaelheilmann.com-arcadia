@@ -21,13 +21,12 @@ if (NOT TARGET ${MyTool})
 
   BeginProduct(${MyTool} executable)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h @ONLY)
-  list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i)
-  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h)
+  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i)
 
   OnSourceFile(${MyTool} Tools/IconGenerator/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.PixelBufferIO ${MyProjectName}.Machine)
+  OnModuleDependency(${MyTool} ${MyProjectName}.PixelBufferIO PRIVATE)
+  OnModuleDependency(${MyTool} ${MyProjectName}.Machine PRIVATE)
 
   EndProduct(${MyTool})
 

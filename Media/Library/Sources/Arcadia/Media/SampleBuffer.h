@@ -16,6 +16,9 @@
 #if !defined(ARCADIA_MEDIA_SAMPLEBUFFER_H_INCLUDED)
 #define ARCADIA_MEDIA_SAMPLEBUFFER_H_INCLUDED
 
+#if !defined(ARCADIA_MEDIA_MODULE) || 1 != ARCADIA_MEDIA_MODULE
+  #error("do not include directly, include `Arcadia/Media/Include.h` instead")
+#endif
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Media/SampleFormat.h"
 typedef struct Arcadia_Media_DSP Arcadia_Media_DSP;

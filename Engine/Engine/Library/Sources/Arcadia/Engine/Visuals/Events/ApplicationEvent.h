@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_EVENTS_APPLICATIONEVENT_H_INCLUDED
 
 #include "Arcadia/Engine/Event.h"
-typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext; // FIXME
+typedef struct Arcadia_Engine_Visuals_BackendContext Arcadia_Engine_Visuals_BackendContext;
 
 // The opaque type of an "application" message.
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.ApplicationEvent", Arcadia_Visuals_ApplicationEvent,

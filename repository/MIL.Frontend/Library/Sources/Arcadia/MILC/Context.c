@@ -63,6 +63,9 @@ Arcadia_defineObjectType(u8"Arcadia.MILC.Context", Arcadia_MILC_Context,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
+#include "Arcadia/MILC/Enter/ClassCompleter.h"
+#include "Arcadia/MILC/Enter/EnumerationCompleter.h"
+
 static void
 Arcadia_MILC_Context_constructImpl
   (
@@ -79,15 +82,25 @@ Arcadia_MILC_Context_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+
   self->stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
   self->log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   self->diagnostics = Arcadia_Languages_Diagnostics_create(thread, self->log);
+
   self->scanner = NULL;
   self->parser = NULL;
+
   self->enterPhase = NULL;
+  self->memberEnterPhase = NULL;
+
   self->workingDirectoryPath = NULL;
+
   self->moduleNodes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   self->scope = NULL;
+
+  self->classCompleter = (Arcadia_MILC_Completer*)Arcadia_MILC_ClassCompleter_create(thread);
+  self->enumerationCompleter = (Arcadia_MILC_Completer*)Arcadia_MILC_EnumerationCompleter_create(thread);
+
   Arcadia_LeaveConstructor(Arcadia_MILC_Context);
 }
 
@@ -125,6 +138,9 @@ Arcadia_MILC_Context_visit
   if (self->enterPhase) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->enterPhase);
   }
+  if (self->memberEnterPhase) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->memberEnterPhase);
+  }
 
   if (self->workingDirectoryPath) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->workingDirectoryPath);
@@ -135,6 +151,13 @@ Arcadia_MILC_Context_visit
 
   if (self->scope) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
+  }
+
+  if (self->classCompleter) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->classCompleter);
+  }
+  if (self->enumerationCompleter) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->enumerationCompleter);
   }
 }
 

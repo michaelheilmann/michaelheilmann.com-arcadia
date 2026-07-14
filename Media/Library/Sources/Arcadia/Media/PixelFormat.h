@@ -16,6 +16,9 @@
 #if !defined(ARCADIA_MEDIA_PIXELFORMAT_H_INCLUDED)
 #define ARCADIA_MEDIA_PIXELFORMAT_H_INCLUDED
 
+#if !defined(ARCADIA_MEDIA_MODULE) || 1 != ARCADIA_MEDIA_MODULE
+  #error("do not include directly, include `Arcadia/Media/Include.h` instead")
+#endif
 #include "Arcadia/Ring2/Include.h"
 
 // https://michaelheilmann.com/Arcadia/Media/#Arcadia_Media_PixelFormat

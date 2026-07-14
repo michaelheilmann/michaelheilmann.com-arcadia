@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
@@ -28,30 +28,30 @@ typedef struct Arcadia_Engine_Visuals_Windows_DisplayDevice Arcadia_Engine_Visua
 #endif
 #include <Windows.h>
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpennGL4.WGL.WindowBackend", Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpennGL4.WGL.WindowBackend", Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend,
                           u8"Arcadia.Visuals.WindowBackend");
 
-struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackendDispatch {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackendDispatch {
   Arcadia_Engine_Visuals_WindowBackendDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend {
   Arcadia_Engine_Visuals_WindowBackend _parent;
-  Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext;
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext;
 
   HWND windowHandle;
   HDC deviceContextHandle;
 
-  Arcadia_Visuals_Implementation_Windows_Icon* smallIcon;
-  Arcadia_Visuals_Implementation_Windows_Icon* bigIcon;
+  Arcadia_Engine_Visuals_Implementation_Windows_Icon* smallIcon;
+  Arcadia_Engine_Visuals_Implementation_Windows_Icon* bigIcon;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*
-Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext,
     Arcadia_Engine_Visuals_Windows_DisplayDevice* displayDevice
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED

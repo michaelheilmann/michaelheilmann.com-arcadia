@@ -10,7 +10,7 @@
 /// strings in a single string separated by whitespaces. A GLX
 /// extension string itself does not contain whitespaces.
 Arcadia_Set*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_getExtensions
   (
     Arcadia_Thread* thread,
     Display* display
@@ -19,7 +19,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions
 /// Obtain the set of GLX extension strings.
 /// Check if the specified extension string is contained in that set.
 Arcadia_BooleanValue
-Arcadia_Visuals_Implementation_OpenGL4_GLX_hasExtension
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_hasExtension
   (
     Arcadia_Thread* thread,
     Display* display,

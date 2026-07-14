@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.PixelBufferIO.Tests.WriteBMPTests)
+set(this ${MyProjectName}.PixelBufferIO.Tests.WriteBMPTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Arcadia.PixelBufferIO.Tests.WriteBMPTests/Main.c)
+OnSourceFile(${this} Arcadia.PixelBufferIO.Tests.WriteBMPTests/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.PixelBufferIO)
+OnModuleDependency(${this} ${MyProjectName}.PixelBufferIO)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "PixelBufferIO")
+set_target_properties(${this} PROPERTIES FOLDER "PixelBufferIO")

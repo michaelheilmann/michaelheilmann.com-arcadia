@@ -25,31 +25,31 @@
 #define ProgramDirty (4)
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResourceDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResourceDispatch* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_destructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   );
 
 typedef enum ShaderType {
@@ -61,7 +61,7 @@ static GLuint
 createShader
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl,
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl,
     ShaderType shaderType,
     Arcadia_Map* constantMapping,
     Arcadia_Map* variableScalarMapping,
@@ -70,40 +70,40 @@ createShader
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unlinkImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_unlinkImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
-    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -111,18 +111,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ProgramResource", Arcadia_Visuals_Implementation_OpenGL4_ProgramResource,
-                         u8"Arcadia.Visuals.Implementation.ProgramResource", Arcadia_Visuals_Implementation_ProgramResource,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ProgramResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource,
+                         u8"Arcadia.Visuals.Implementation.ProgramResource", Arcadia_Engine_Visuals_Implementation_ProgramResource,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_ProgramResource);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource);
   if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -144,27 +144,27 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
   self->constantBindings = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   self->fragmentColorOutput = NULL;
 
-  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_ProgramResource);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource);
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResourceDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResourceDispatch* self
   )
 {
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_EnterPassResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_unlinkImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*, Arcadia_Engine_Visuals_Implementation_EnterPassResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl;
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_destructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
   assert(0 == self->vertexShaderID);
@@ -173,10 +173,10 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_destructImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
   if (self->constantBindings) {
@@ -197,7 +197,7 @@ static GLuint
 createShader
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl,
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl,
     ShaderType shaderType,
     Arcadia_Map* constantMapping,
     Arcadia_Map* variableScalarMapping,
@@ -279,14 +279,14 @@ static GLuint
 getUniformLocation
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self,
     Arcadia_VPL_Symbols_ConstantScalar* constantScalar
   )
 {
   Arcadia_String* nameGL = (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->constantMapping, Arcadia_Value_makeObjectReferenceValue(constantScalar->name), _Arcadia_String_getType(thread));
 
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
   while (gl->glGetError()) { }
   return gl->glGetUniformLocation(self->programID, Arcadia_String_getBytes(thread, nameGL));
 }
@@ -296,30 +296,30 @@ static GLuint
 getUniformBlockIndex
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self,
     Arcadia_VPL_Symbols_ConstantRecord* constantRecord
   )
 {
   Arcadia_String* nameGL = (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->constantMapping, Arcadia_Value_makeObjectReferenceValue(constantRecord->name), _Arcadia_String_getType(thread));
 
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
   while (gl->glGetError()) { }
   return gl->glGetUniformBlockIndex(self->programID, Arcadia_String_getBytes(thread, nameGL));
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
   Arcadia_Map* vertexShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
 
   if (self->dirty) {
     // If something is dirty, everything is dirty.
@@ -419,61 +419,61 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
   if (self->programID) {
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-    _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
     gl->glDeleteProgram(self->programID);
     self->programID = 0;
   }
   if (self->fragmentShaderID) {
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-    _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
     gl->glDeleteShader(self->fragmentShaderID);
     self->fragmentShaderID = 0;
   }
   if (self->vertexShaderID) {
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-    _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
     gl->glDeleteShader(self->vertexShaderID);
     self->vertexShaderID = 0;
   }
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unlinkImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_unlinkImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
   assert(0 == self->vertexShaderID);
   assert(0 == self->fragmentShaderID);
   assert(0 == self->programID);
-  ((Arcadia_Visuals_Implementation_Resource*)self)->context = NULL;
+  ((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context = NULL;
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
-    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl(thread, self);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl(thread, self);
 }
 
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
     Arcadia_VPL_Symbols_Program* program
   )
 {
@@ -481,5 +481,5 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (program) Arcadia_ValueStack_pushObjectReferenceValue(thread, program); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_ProgramResource);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource);
 }

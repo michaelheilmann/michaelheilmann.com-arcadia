@@ -45,18 +45,61 @@ if (CMAKE_ASM_MASM_COMPILER)
   enable_language(ASM_MASM)
 endif()
 
+# @param folder The IDE folder under which the targets are generated. Pass the empty string for the IDE root folder.
+# @todo Move into list directory as a library function.
+macro(CopyProductAssets target folder targetDirectory)
+ set(targetFiles "")
+ foreach (sourceDirectory sourceFile IN ZIP_LISTS ${target}.Assets.Directories ${target}.Assets.Files)
+   message(STATUS "(sourceDirectory, sourceFile) := (${sourceDirectory}, ${sourceFile})")
+   set(targetFile ${sourceFile})
+   message(STATUS "(sourceDirectory, sourceFile, targetDirectory, targetFile) := (${sourceDirectory}, ${sourceFile}, ${targetDirectory}, ${targetFile})")
+
+   get_filename_component(targetFileDirectory ${targetDirectory}/${targetFile} DIRECTORY)
+   #message(STATUS "=> target file directory: ${targetFileDirectory}")
+   add_custom_command(OUTPUT ${targetDirectory}/${targetFile}
+                      COMMAND ${CMAKE_COMMAND} -E make_directory ${targetFileDirectory}
+                      COMMAND ${CMAKE_COMMAND} -E copy ${sourceDirectory}/${sourceFile} ${targetDirectory}/${targetFile}
+                      COMMAND ${CMAKE_COMMAND} -E touch ${targetDirectory}/${targetFile}
+                      DEPENDS ${sourceDirectory}/${sourceFile}
+                      VERBATIM
+                      COMMENT "copy file `${sourceDirectory}/${sourceFile}` to `${targetDirectory}/${targetFile}`")
+
+   list(APPEND targetFiles "${targetFileDirectory}" "${targetDirectory}/${targetFile}")
+
+ endforeach()
+
+ add_custom_target(${target}.CopyAssets ALL DEPENDS ${targetFiles})
+ add_dependencies(${target} ${target}.CopyAssets)
+
+
+ # If a folder was specified.
+ if (NOT "${folder}" STREQUAL "")
+   set_target_properties(${target} PROPERTIES FOLDER ${folder})
+ endif()
+
+endmacro()
+
 # Begin a product (library, executable, or test).
 #
 # - if ${type} is `library`, `executable`, or `test`:
 #   The following variables are defined
-#   - ${target}.SourceFiles      List of C/C++ source files. Initially defined but empty
-#   - ${target}.HeaderFiles      List of C/C++ header files. Initially defined but empty
-#   - ${target}.AssetFiles       List of asset files. Initially defined but empty
-#   - ${target}.InlayFiles       List of inlay files. Initially defined but empty
-#   - ${target}.WorkingDirectory for tests and executables only: the working directory. Defaults to ${CMAKE_CURRENT_BINARY_DIR}.
-#   - ${target}.Libaries         List of libraries. Initially defined but empty
-#   - ${target}.PrivateLibaries  List of libraries only visible from within ${target}. Initially defined but empty
-#   - ${target}.Enabled          TRUE if the product should be built. FALSE otherwise. Defaults to TRUE.
+#   - ${target}.SourceFiles
+#     List of C/C++ source files. Initially defined but empty
+#   - ${target}.HeaderFiles
+#     List of C/C++ header files. Initially defined but empty
+#   - ${target}.Assets.(Files|Directories)
+#     At position i in ${target}.AssetFiles is a relative path to a file.
+#     Position i in ${target}.AssetDirectories contains the absolute directory prefix of that file.
+#   - ${target}.InlayFiles
+#     List of inlay files. Initially defined but empty
+#   - ${target}.WorkingDirectory
+#     for tests and executables only: the working directory. Defaults to ${CMAKE_CURRENT_BINARY_DIR}.
+#   - ${target}.Libaries
+#     List of libraries. Initially defined but empty
+#   - ${target}.PrivateLibaries
+#     List of libraries only visible from within ${target}. Initially defined but empty
+#   - ${target}.Enabled
+#     TRUE if the product should be built. FALSE otherwise. Defaults to TRUE.
 #
 # - if ${type} is `template`
 macro(BeginProduct target type)
@@ -65,7 +108,8 @@ macro(BeginProduct target type)
   set(${target}.InlayFiles "")
   set(${target}.ConfigurationTemplateFiles "")
   set(${target}.ConfigurationFiles "")
-  set(${target}.AssetFiles "")
+  set(${target}.Assets.Files "")
+  set(${target}.Assets.Directories "")
   set(${target}.AssemblerFiles "")
   set(${target}.Libraries "")
   set(${target}.PrivateLibraries "")
@@ -116,7 +160,7 @@ macro(EndProduct target)
 
     # Configure warnings and errors.
     ConfigureWarningsAndErrors(${target})
-    
+
     # Configure installation directory.
     set(${target}.InstallationDirectory "${target}")
     get_property(is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -162,7 +206,7 @@ macro(EndProduct target)
     if (${${target}.OperatingSystem} STREQUAL ${${target}.OperatingSystem.Windows} AND ${target}.Windows.ResourceFile)
       list(APPEND allFiles ${${target}.Windows.ResourceFile})
     endif()
-    
+
     set(${target}.PublicFiles "")
     set(${target}.PrivateFiles "")
     # source files, assembler files, and configuration template files are ALWAYS private.
@@ -172,7 +216,7 @@ macro(EndProduct target)
       if (NOT _isPrivate)
         list(APPEND ${target}.PublicFiles ${file})
       else()
-        list(APPEND ${target}.PrivateFiles ${file})   
+        list(APPEND ${target}.PrivateFiles ${file})
       endif()
     endforeach()
     foreach (file ${${target}.HeaderFiles})
@@ -180,7 +224,7 @@ macro(EndProduct target)
       if (NOT _isPrivate)
         list(APPEND ${target}.PublicFiles ${file})
       else()
-        list(APPEND ${target}.PrivateFiles ${file}) 
+        list(APPEND ${target}.PrivateFiles ${file})
       endif()
     endforeach()
     foreach (file ${${target}.ConfigurationFiles})
@@ -188,7 +232,7 @@ macro(EndProduct target)
       if (NOT _isPrivate)
         list(APPEND ${target}.PublicFiles ${file})
       else()
-        list(APPEND ${target}.PrivateFiles ${file}) 
+        list(APPEND ${target}.PrivateFiles ${file})
       endif()
     endforeach()
 
@@ -199,7 +243,7 @@ macro(EndProduct target)
                    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Sources>
                    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/Sources>
                    FILES ${${target}.PublicFiles}
-       
+
                    PRIVATE
                    ${${target}.PrivateFiles}
                    ${${target}.AssemblerFiles}
@@ -264,7 +308,7 @@ macro(EndProduct target)
   endif()
 
   EndFileCopy()
-  
+
   if (${target}.Install)
 
 
@@ -280,14 +324,14 @@ macro(EndProduct target)
                 DESTINATION ${${target}.InstallationDirectory.Libraries}
               FILE_SET publicHeaders
                 DESTINATION ${${target}.InstallationDirectories.Includes})
-      
+
     elseif (${${target}.Type} STREQUAL executable)
-      
+
       install(TARGETS ${target}
               RUNTIME DESTINATION ${${target}.InstallationDirectory}/Binaries)
-    
+
     elseif (${${target}.Type} STREQUAL test)
-    
+
     install(TARGETS ${target}
               RUNTIME DESTINATION ${${target}.InstallationDirectory}/Binaries)
 
@@ -318,41 +362,22 @@ macro(MyCopyFile target sourceFile targetFile)
   list(APPEND ${target}.copyFiles.targets ${targetFile})
 endmacro()
 
-# @param folder The IDE folder under which the targets are generated. Pass the empty string for the IDE root folder.
-macro(CopyProductAssets target folder sourceDirectory targetDirectory)
- #message(STATUS "=> target directory ${targetDirectory}")
- file(GLOB_RECURSE sourceFiles RELATIVE ${sourceDirectory} "${sourceDirectory}/*")
- set(targetFiles "")
- foreach (sourceFile ${sourceFiles})
-   set(targetFile ${sourceFile})
-   #message(STATUS "=> source file: ${sourceDirectory}/${sourceFile}")
-   #message(STATUS "=> target file: ${targetDirectory}/${targetFile}")
-   get_filename_component(targetFileDirectory ${targetDirectory}/${targetFile} DIRECTORY)
-   #message(STATUS "=> target file directory: ${targetFileDirectory}")
-   add_custom_command(OUTPUT ${targetDirectory}/${targetFile}
-                      COMMAND ${CMAKE_COMMAND} -E make_directory ${targetFileDirectory}
-                      COMMAND ${CMAKE_COMMAND} -E copy ${sourceDirectory}/${sourceFile} ${targetDirectory}/${targetFile}
-                      COMMAND ${CMAKE_COMMAND} -E touch ${targetDirectory}/${targetFile}
-                      DEPENDS ${sourceDirectory}/${sourceFile}
-                      VERBATIM
-                      COMMENT "copy file `${sourceDirectory}/${sourceFile}` to `${targetDirectory}/${targetFile}`")
-   list(APPEND targetFiles "${targetFileDirectory}" "${targetDirectory}/${targetFile}")
+# @remark Can only be used between `BeginProduct` and `EndProduct`.
+# @todo Raise an error if the file does not exist.
+macro(OnAssetsDirectory target directory)
+ file(GLOB_RECURSE files RELATIVE ${directory} "${directory}/*")
+ foreach (_file ${files})
+   message(STATUS "(directory, file) := (${directory}, ${_file})")
+   list(APPEND ${target}.Assets.Directories ${directory})
+   list(APPEND ${target}.Assets.Files ${_file})
  endforeach()
-
- add_custom_target(${target} ALL DEPENDS ${targetFiles})
-
- # If a folder was specified.
- if (NOT "${folder}" STREQUAL "")
-   set_target_properties(${target} PROPERTIES FOLDER ${folder})
- endif()
-
 endmacro()
 
 # Define a template file.
 # The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
 # If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
-# Can be used between `BeginProduct` and `EndProduct`.
-# TODO: Raise an error if the file does not exist.
+# @remark Can only be used between `BeginProduct` and `EndProduct`.
+# @todo Raise an error if the file does not exist.
 macro(OnTemplateFile target file)
   set (extra_args ${ARGN})
   list(LENGTH extra_args extra_args_count)
@@ -374,20 +399,17 @@ macro(OnTemplateFile target file)
 endmacro()
 
 # Can be used between `BeginProduct` and `EndProduct`.
-macro(OnConfigurationFile target file)
-  list(APPEND ${target}.ConfigurationFiles ${file})
-endmacro()
-
-# Can be used between `BeginProduct` and `EndProduct`.
-macro(OnConfigurationTemplateFile target file)
-  list(APPEND ${target}.ConfigurationTemplateFiles ${file})
+macro(OnConfigurationFile target configurationFile configurationTemplateFile)
+  configure_file(${configurationTemplateFile} ${configurationFile} @ONLY)
+  list(APPEND ${target}.ConfigurationTemplateFiles ${configurationTemplateFile})
+  list(APPEND ${target}.ConfigurationFiles ${configurationFile})
 endmacro()
 
 # Define an inlay file.
 # The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
 # If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
-# Can be used between `BeginProduct` and `EndProduct`.
-# TODO: Raise an error if the file does not exist.
+# @remark Can only be used between `BeginProduct` and `EndProduct`.
+# @todo Raise an error if the file does not exist.
 macro(OnInlayFile target file)
   set (extra_args ${ARGN})
   list(LENGTH extra_args extra_args_count)
@@ -402,7 +424,7 @@ macro(OnInlayFile target file)
     cmake_path(SET _temporary ${CMAKE_CURRENT_SOURCE_DIR}/Sources/${file})
     #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
   endif()
-  
+
   if (PRIVATE IN_LIST extra_args)
     set_source_files_properties(${_temporary} PROPERTIES PRIVATE ON)
   endif()
@@ -416,8 +438,8 @@ endmacro()
 # Define a header file.
 # The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
 # If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
-# Can be used between `BeginProduct` and `EndProduct`.
-# TODO: Raise an error if the file does not exist.
+# @remark Can only be used between `BeginProduct` and `EndProduct`.
+# @todo Raise an error if the file does not exist.
 macro(OnHeaderFile target file)
   set (extra_args ${ARGN})
   list(LENGTH extra_args extra_args_count)
@@ -432,7 +454,7 @@ macro(OnHeaderFile target file)
     cmake_path(SET _temporary ${CMAKE_CURRENT_SOURCE_DIR}/Sources/${file})
     #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
   endif()
-  
+
   if (PRIVATE IN_LIST extra_args)
     set_source_files_properties(${_temporary} PROPERTIES PRIVATE ON)
   endif()
@@ -445,8 +467,8 @@ endmacro()
 # Define a source file.
 # The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
 # If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
-# Can be used between `BeginProduct` and `EndProduct`.
-# TODO: Raise an error if the file does not exist.
+# @remark Can only be used between `BeginProduct` and `EndProduct`.
+# @todo Raise an error if the file does not exist.
 macro(OnSourceFile target file)
   set (extra_args ${ARGN})
   list(LENGTH extra_args extra_args_count)
@@ -461,12 +483,33 @@ macro(OnSourceFile target file)
     cmake_path(SET _temporary ${CMAKE_CURRENT_SOURCE_DIR}/Sources/${file})
     #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
   endif()
-  
+
   if (PRIVATE IN_LIST extra_args)
     set_source_files_properties(${_temporary} PROPERTIES PRIVATE ON)
   endif()
 
   list(APPEND ${target}.SourceFiles ${_temporary})
+
+  unset(optional_arg)
+endmacro()
+
+# Define a dependency to a module.
+# @remark Can only be used between `BeginProduct` and `EndProduct`.
+# @todo Raise an error if the file does not exist.
+macro(OnModuleDependency target module)
+  set (extra_args ${ARGN})
+  list(LENGTH extra_args extra_args_count)
+  if (${extra_args_count} GREATER 0)
+    list(GET extra_args 0 optional_arg)
+  endif()
+
+  if (PRIVATE IN_LIST extra_args)
+    message(STATUS "adding ${module} to ${target}.PrivateLibraries")
+    list(APPEND ${target}.PrivateLibraries ${module})
+  else()
+    message(STATUS "adding ${module} to ${target}.Libraries")
+    list(APPEND ${target}.Libraries ${module}) 
+  endif()
 
   unset(optional_arg)
 endmacro()

@@ -4,7 +4,7 @@
 #include <GL/glx.h>
 
 Arcadia_Set*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_getExtensions
   (
     Arcadia_Thread* thread,
     Display* display
@@ -48,13 +48,13 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions
 }
 
 Arcadia_BooleanValue
-Arcadia_Visuals_Implementation_OpenGL4_GLX_hasExtension
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_hasExtension
   (
     Arcadia_Thread* thread,
     Display* display,
     Arcadia_String* extension
   )
 {
-  Arcadia_Set* extensions = Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions(thread, display);
+  Arcadia_Set* extensions = Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_getExtensions(thread, display);
   return Arcadia_Set_contains(thread, extensions, Arcadia_Value_makeObjectReferenceValue(extension));
 }

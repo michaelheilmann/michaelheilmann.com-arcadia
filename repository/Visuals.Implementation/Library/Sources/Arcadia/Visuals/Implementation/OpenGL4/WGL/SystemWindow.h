@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEMWINDOW_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEMWINDOW_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEMWINDOW_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEMWINDOW_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
 #if !defined(WIN32_LEAN_AND_MEAN)
@@ -26,14 +26,14 @@
 #include <Windows.h>
 
 // The "system" window is kept around as long as the system exists.
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.SystemWindow", Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.SystemWindow", Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow,
                           u8"Arcadia.Object");
 
-struct Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindowDispatch {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindowDispatch {
   Arcadia_ObjectDispatch parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow {
   Arcadia_Object parent;
   HINSTANCE instanceHandle;
   ATOM classAtom;
@@ -41,24 +41,24 @@ struct Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow {
   HDC deviceContextHandle;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow*
-Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow_create
   (
     Arcadia_Thread* thread
   );
 
 void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_open
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow_open
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow* self
   );
 
 void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_close
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow_close
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow* self
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEMWINDOW_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEMWINDOW_H_INCLUDED

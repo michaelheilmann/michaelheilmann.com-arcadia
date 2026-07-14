@@ -16,6 +16,9 @@
 #if !defined(ARCADIA_MEDIA_SAMPLEBUFFEROPERATIONS_SINEWAVE_H_INCLUDED)
 #define ARCADIA_MEDIA_SAMPLEBUFFEROPERATIONS_SINEWAVE_H_INCLUDED
 
+#if !defined(ARCADIA_MEDIA_MODULE) || 1 != ARCADIA_MEDIA_MODULE
+  #error("do not include directly, include `Arcadia/Media/Include.h` instead")
+#endif
 #include "Arcadia/ADL/Include.h"
 #include "Arcadia/Media/DSP.h"
 

@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyDemoName ${MyProjectName}.Ring2.Demo.ConsoleDemo)
+set(this ${MyProjectName}.Ring2.Demo.ConsoleDemo)
 
 # Create demo executable.
-BeginProduct(${MyDemoName} executable)
+BeginProduct(${this} executable)
 
-OnSourceFile(${MyDemoName} Main.c)
+OnSourceFile(${this} Main.c)
 
-list(APPEND ${MyDemoName}.Libraries ${MyProjectName}.Ring2)
+OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
-EndProduct(${MyDemoName})
+EndProduct(${this})
 
-set_target_properties(${MyDemoName} PROPERTIES FOLDER "Ring2")
+set_target_properties(${this} PROPERTIES FOLDER "Ring2")

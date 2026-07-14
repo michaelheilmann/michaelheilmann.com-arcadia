@@ -264,7 +264,7 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
 
@@ -276,7 +276,7 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
 
@@ -309,7 +309,7 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
           (
             thread,
             (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-            (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+            (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
           );
       Arcadia_Engine_Visuals_ViewportNode_setClearColor(thread, self->viewportNodes[i], Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
       Arcadia_Engine_Visuals_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNodes[i], (i + 0) * 1.f / 3.f, 0.f, (i + 1) * 1.f / 3.f, 1.f);
@@ -328,7 +328,7 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
           (
             thread,
             (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-            (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
+            (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext,
             modelDefinition
           );
     }
@@ -338,7 +338,7 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
     Arcadia_Engine_Visuals_EnterPassNode_setViewportNode(thread, self->enterPassNode, self->viewportNodes[i]);
     Arcadia_Engine_Visuals_EnterPassNode_setCameraNode(thread, self->enterPassNode, self->cameraNode);
     // Render the scene.
-    Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode[i], (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+    Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode[i], (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext);
 
   }
 }

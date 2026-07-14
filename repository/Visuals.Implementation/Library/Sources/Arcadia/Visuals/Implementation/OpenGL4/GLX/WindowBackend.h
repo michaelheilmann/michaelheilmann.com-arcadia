@@ -23,20 +23,20 @@
 #include <X11/Xlib.h>
 #include <GL/glx.h>
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.WindowBackend", Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.WindowBackend", Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend,
                           u8"Arcadia.Visuals.WindowBackend");
 
-struct Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch {
   Arcadia_Engine_Visuals_WindowBackendDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend {
   Arcadia_Engine_Visuals_WindowBackend _parent;
 
   // Each window holds a lock on the application
   // as it uses the atoms and the display of the
   // application.
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext;
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext;
 
   Screen* screen; // Default value is NULL.
   Window window; // Default value is None.
@@ -45,11 +45,11 @@ struct Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend {
   Arcadia_Visuals_Linux_Icon* bigIcon;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED

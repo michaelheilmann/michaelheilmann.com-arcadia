@@ -16,6 +16,8 @@
 #define ARCADIA_ENGINE_PRIVATE (1)
 #include "Arcadia/Engine/Visuals/Nodes/EnterPassNode.h"
 
+#include "Arcadia/Engine/Include.h"
+
 static void
 Arcadia_Engine_Visuals_EnterPassNode_constructImpl
   (
@@ -42,6 +44,22 @@ Arcadia_Engine_Visuals_EnterPassNode_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_EnterPassNode* self
+  );
+
+static void
+Arcadia_Engine_Visuals_EnterPassNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_EnterPassNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  );
+
+static void
+Arcadia_Engine_Visuals_EnterPassNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_EnterPassNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -69,7 +87,7 @@ Arcadia_Engine_Visuals_EnterPassNode_constructImpl
   )
 {
   Arcadia_EnterConstructor(Arcadia_Engine_Visuals_EnterPassNode);
-  if (0 != _numberOfArguments) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -77,7 +95,6 @@ Arcadia_Engine_Visuals_EnterPassNode_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-
   self->cameraNode = NULL;
   self->viewportNode = NULL;
   self->frameBufferNode = NULL;
@@ -103,6 +120,15 @@ Arcadia_Engine_Visuals_EnterPassNode_constructImpl
   self->canvasSize.width = 320.f;
   self->canvasSize.height = 240.f;
 
+  if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
+    self->backendContext = NULL;
+  } else {
+    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Visuals_BackendContext_getType(thread));
+    Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
+  }
+  self->enterPassResource = NULL;
+
+
   Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_EnterPassNode);
 }
 
@@ -112,7 +138,10 @@ Arcadia_Engine_Visuals_EnterPassNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_EnterPassNodeDispatch* self
   )
-{/*Intentionally empty.*/}
+{
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_EnterPassNode_renderImpl;
+  ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_EnterPassNode_setVisualsBackendContextImpl;
+}
 
 static void
 Arcadia_Engine_Visuals_EnterPassNode_destructImpl
@@ -120,7 +149,16 @@ Arcadia_Engine_Visuals_EnterPassNode_destructImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_EnterPassNode* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->backendContext) {
+    if (self->enterPassResource) {
+      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->enterPassResource);
+      self->enterPassResource = NULL;
+    }
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    self->backendContext = NULL;
+  }
+}
 
 static void
 Arcadia_Engine_Visuals_EnterPassNode_visitImpl
@@ -146,6 +184,102 @@ Arcadia_Engine_Visuals_EnterPassNode_visitImpl
   if (self->worldToViewMatrix) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->worldToViewMatrix);
   }
+}
+
+static void
+Arcadia_Engine_Visuals_EnterPassNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_EnterPassNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  )
+{
+  if (self->backendContext) {
+    if (!self->enterPassResource) {
+      self->enterPassResource =
+        Arcadia_Engine_Visuals_BackendContext_createEnterPassResource
+        (
+          thread,
+          (Arcadia_Engine_Visuals_BackendContext*)self->backendContext
+        );
+      Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->enterPassResource);
+    }
+    // Get the camera.
+    Arcadia_Engine_Visuals_CameraNode* cameraNode = ((Arcadia_Engine_Visuals_EnterPassNode*)self)->cameraNode;
+    // Pass the camera's data to the resource.
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setWorldToViewMatrix(thread, self->enterPassResource, Arcadia_Engine_Visuals_CameraNode_getWorldToViewMatrix(thread, cameraNode));
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setViewToProjectionMatrix(thread, self->enterPassResource, Arcadia_Engine_Visuals_CameraNode_getViewToProjectionMatrix(thread, cameraNode));
+    // Get the viewport.
+    Arcadia_Engine_Visuals_ViewportNode* viewportNode = ((Arcadia_Engine_Visuals_EnterPassNode*)self)->viewportNode;
+    // Pass the viewport's data to the resource.
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setClearColor(thread, self->enterPassResource, Arcadia_Engine_Visuals_ViewportNode_getClearColor(thread, viewportNode));
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setClearColorBuffer(thread, self->enterPassResource, Arcadia_Engine_Visuals_ViewportNode_getClearColorBuffer(thread, viewportNode));
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setClearDepth(thread, self->enterPassResource, Arcadia_Engine_Visuals_ViewportNode_getClearDepth(thread, viewportNode));
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setClearDepthBuffer(thread, self->enterPassResource, Arcadia_Engine_Visuals_ViewportNode_getClearDepthBuffer(thread, viewportNode));
+    Arcadia_Real32Value left, bottom, right, top;
+    Arcadia_Engine_Visuals_ViewportNode_getRelativeViewportRectangle(thread, viewportNode, &left, &bottom, &right, &top);
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setRelativeViewportRectangle(thread, self->enterPassResource, left, bottom, right, top);
+    Arcadia_Real32Value width, height;
+    Arcadia_Engine_Visuals_ViewportNode_getCanvasSize(thread, viewportNode, &width, &height);
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource_setCanvasSize(thread, self->enterPassResource, width, height);
+
+    if (((Arcadia_Engine_Visuals_EnterPassNode*)self)->frameBufferNode) {
+      Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)((Arcadia_Engine_Visuals_EnterPassNode*)self)->frameBufferNode, (Arcadia_Engine_Visuals_EnterPassNode*)self);
+      // If there is a frame buffer to render to, render to that frame buffer.
+      Arcadia_Engine_Visuals_FrameBufferNode* frameBufferNode = (Arcadia_Engine_Visuals_FrameBufferNode*)((Arcadia_Engine_Visuals_EnterPassNode*)self)->frameBufferNode;
+      Arcadia_Engine_Visuals_Implementation_EnterPassResource_setTargetFrameBuffer(thread, self->enterPassResource, frameBufferNode->frameBufferResource);
+    } else {
+      // Otherwise render to the default frame buffer.
+      Arcadia_Engine_Visuals_Implementation_EnterPassResource_setTargetFrameBuffer(thread, self->enterPassResource, NULL);
+    }
+    // Load the resouurce.
+    Arcadia_Engine_Visuals_Implementation_Resource_load(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->enterPassResource);
+    // Render the resource.
+    Arcadia_Engine_Visuals_Implementation_Resource_render(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->enterPassResource,
+                                                           enterPassNode->enterPassResource);
+
+    Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)viewportNode, (Arcadia_Engine_Visuals_EnterPassNode*)enterPassNode);
+  }
+}
+
+static void
+Arcadia_Engine_Visuals_EnterPassNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_EnterPassNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{
+  if (backendContext == self->backendContext) {
+    // Only change something if the backend context changes.
+    return;
+  }
+  if (backendContext) {
+    Arcadia_Object_lock(thread, (Arcadia_Object*)backendContext);
+  }
+  if (self->backendContext) {
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+  }
+  if (self->backendContext) {
+    if (self->enterPassResource) {
+      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->enterPassResource);
+      self->enterPassResource = NULL;
+    }
+  }
+  self->backendContext = backendContext;
+}
+
+Arcadia_Engine_Visuals_EnterPassNode*
+Arcadia_Engine_Visuals_EnterPassNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_EnterPassNode);
 }
 
 void
@@ -175,11 +309,11 @@ Arcadia_Engine_Visuals_EnterPassNode_setFrameBufferNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_EnterPassNode* self,
-    Arcadia_Visuals_FrameBufferNode* frameBufferNode
+    Arcadia_Engine_Visuals_FrameBufferNode* frameBufferNode
   )
 { self->frameBufferNode = frameBufferNode; }
 
-Arcadia_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_FrameBufferNode*
 Arcadia_Engine_Visuals_EnterPassNode_getFrameBufferNode
   (
     Arcadia_Thread* thread,

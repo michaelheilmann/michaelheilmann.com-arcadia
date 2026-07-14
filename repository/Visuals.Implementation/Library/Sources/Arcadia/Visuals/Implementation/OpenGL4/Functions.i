@@ -5,6 +5,9 @@ Define(PFNGLBINDBUFFERPROC, glBindBuffer)
 Define(PFNGLBINDBUFFERBASEPROC, glBindBufferBase)
 Define(PFNGLBUFFERDATAPROC, glBufferData)
 
+// *Vertex Buffer*
+Define(PFNGLBINDVERTEXBUFFERPROC, glBindVertexBuffer)
+
 Define(PFNGLBINDFRAGDATALOCATIONPROC, glBindFragDataLocation)
 
 // *VertexArray*
@@ -13,6 +16,7 @@ Define(PFNGLDELETEVERTEXARRAYSPROC, glDeleteVertexArrays)
 Define(PFNGLBINDVERTEXARRAYPROC, glBindVertexArray)
 Define(PFNGLVERTEXATTRIBPOINTERPROC, glVertexAttribPointer)
 Define(PFNGLENABLEVERTEXATTRIBARRAYPROC, glEnableVertexAttribArray)
+Define(PFNGLVERTEXATTRIBFORMATPROC, glVertexAttribFormat)
 
 Define(PFNGLDRAWARRAYSPROC, glDrawArrays)
 

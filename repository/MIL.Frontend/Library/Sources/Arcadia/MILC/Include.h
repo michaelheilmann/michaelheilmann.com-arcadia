@@ -35,7 +35,9 @@
 #include "Arcadia/MILC/Keywords.h"
 #include "Arcadia/MILC/Parser.h"
 #include "Arcadia/MILC/Scanner.h"
+
 #include "Arcadia/MILC/EnterPhase.h"
+#include "Arcadia/MILC/MemberEnterPhase.h"
 
 #include "Arcadia/MILC/Symbols/Symbol.h"
 #include "Arcadia/MILC/Symbols/SymbolKind.h"

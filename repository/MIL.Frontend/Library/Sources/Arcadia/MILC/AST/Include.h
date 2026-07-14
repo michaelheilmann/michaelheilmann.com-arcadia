@@ -67,4 +67,6 @@
 #include "Arcadia/MILC/AST/OperandNode.h"
 #include "Arcadia/MILC/AST/StatementNode.h"
 
+#include "Arcadia/MILC/AST/Visitor.h"
+
 #endif // ARCADIA_MILC_AST_INCLUDE_H_INCLUDED

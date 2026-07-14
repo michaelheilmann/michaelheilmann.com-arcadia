@@ -115,7 +115,7 @@ Arcadia_Visuals_Linux_DisplayDevice_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getType(thread));
+  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext_getType(thread));
   self->id = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
   self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   self->output = 0;
@@ -311,7 +311,7 @@ Arcadia_Visuals_Linux_DisplayDevice*
 Arcadia_Visuals_Linux_DisplayDevice_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext,
     Arcadia_String* id,
     Arcadia_String* name
   )

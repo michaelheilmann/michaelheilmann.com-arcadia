@@ -23,13 +23,11 @@ if (NOT TARGET ${MyToolName})
 
   set(${MyToolName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h @ONLY)
-  list(APPEND ${MyToolName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
-  OnConfigurationFile(${MyToolName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h)
+  OnConfigurationFile(${MyToolName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
 
   OnSourceFile(${MyToolName} Arcadia.Tools.TemplateEngine/Main.c)
 
-  list(APPEND ${MyToolName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)
+  OnModuleDependency(${MyToolName} ${MyProjectName}.Tools.TemplateEngine.Library PRIVATE)
 
   set(${MyToolName}.Install TRUE)
 

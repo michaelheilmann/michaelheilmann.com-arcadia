@@ -17,7 +17,7 @@
 #define ARCADIA_PIXELBUFFERIO_IMAGEWRITER_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
-#include "Arcadia/Media/PixelBuffer.h"
+#include "Arcadia/Media/Include.h"
 #include "Arcadia/PixelBufferIO/ImageWriterParameters.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Imaging.ImageWriter", Arcadia_Imaging_ImageWriter, u8"Arcadia.Object");

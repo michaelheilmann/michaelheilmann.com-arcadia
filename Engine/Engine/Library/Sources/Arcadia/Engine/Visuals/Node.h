@@ -23,7 +23,7 @@
 #include "Arcadia/Math/Include.h"
 typedef struct Arcadia_Engine_Visuals_EnterPassNode Arcadia_Engine_Visuals_EnterPassNode;
 typedef struct Arcadia_Engine_Visuals_NodeFactory Arcadia_Engine_Visuals_NodeFactory;
-typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext; // FIXME
+typedef struct Arcadia_Engine_Visuals_BackendContext Arcadia_Engine_Visuals_BackendContext;
 
 // The base of all visuals nodes.
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Node", Arcadia_Engine_Visuals_Node,

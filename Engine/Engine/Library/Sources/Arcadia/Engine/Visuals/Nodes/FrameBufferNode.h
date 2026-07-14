@@ -25,33 +25,57 @@ typedef struct Arcadia_Engine_Visuals_ViewportNode Arcadia_Engine_Visuals_Viewpo
 // A "framebuffer" node may be attached the "rendering context" node.
 // If a "framebuffer" node is attached, rendering is performed to the framebuffer of that node.
 // Otherwise rendering is performed to the default framebuffer.
-Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.FrameBufferNode", Arcadia_Visuals_FrameBufferNode,
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.FrameBufferNode", Arcadia_Engine_Visuals_FrameBufferNode,
                           u8"Arcadia.Engine.Visuals.Node")
 
-struct Arcadia_Visuals_FrameBufferNodeDispatch {
+struct Arcadia_Engine_Visuals_FrameBufferNodeDispatch {
   Arcadia_Engine_Visuals_NodeDispatch parent;
-  void (*setSize)(Arcadia_Thread* thread, Arcadia_Visuals_FrameBufferNode*, Arcadia_Integer32Value, Arcadia_Integer32Value);
-  void (*getSize)(Arcadia_Thread* thread, Arcadia_Visuals_FrameBufferNode*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*setSize)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_FrameBufferNode*, Arcadia_Integer32Value, Arcadia_Integer32Value);
+  void (*getSize)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_FrameBufferNode*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 };
 
-struct Arcadia_Visuals_FrameBufferNode {
+struct Arcadia_Engine_Visuals_FrameBufferNode {
   Arcadia_Engine_Visuals_Node _parent;
+
+  /// The width, in pixels, of the frame buffer.
+  /// The default value is 320.
+  Arcadia_Integer32Value width;
+
+  /// The height, in pixels, of the frame buffer.
+  /// The default value is 240.
+  Arcadia_Integer32Value height;
+
+  /// The backend context.
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
+
+  /// The frame buffer resource.
+  Arcadia_Engine_Visuals_Implementation_FrameBufferResource* frameBufferResource;
 };
 
-void
-Arcadia_Visuals_FrameBufferNode_getSize
+/// @brief Create an frame buffer mode.
+/// @param backendContext A pointer to the backend context or the null pointer.
+/// @return A pointer to the frame buffer node.
+Arcadia_Engine_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_FrameBufferNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_FrameBufferNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
+
+void
+Arcadia_Engine_Visuals_FrameBufferNode_getSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_FrameBufferNode* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
 
 void
-Arcadia_Visuals_FrameBufferNode_setSize
+Arcadia_Engine_Visuals_FrameBufferNode_setSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_FrameBufferNode* self,
+    Arcadia_Engine_Visuals_FrameBufferNode* self,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   );

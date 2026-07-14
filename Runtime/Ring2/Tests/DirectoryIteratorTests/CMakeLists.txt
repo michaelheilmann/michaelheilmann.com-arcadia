@@ -15,24 +15,25 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Ring2.Tests.DirectoryIteratorTests)
+set(this ${MyProjectName}.Ring2.Tests.DirectoryIteratorTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Main.c)
+OnSourceFile(${this} Main.c)
 
-list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Ring2)
+OnAssetsDirectory(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Assets)
 
-EndProduct(${MyTestName})
+OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring2")
+EndProduct(${this})
+
+set_target_properties(${this} PROPERTIES FOLDER "Ring2")
 
 # Adjust working directory.
-set(${MyTestName}.WorkingDirectory $<TARGET_FILE_DIR:${MyTestName}>)
+set(${this}.WorkingDirectory $<TARGET_FILE_DIR:${this}>)
 
 # Copy assets.
-CopyProductAssets(${MyTestName}.CopyAssets "Ring2" ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
-add_dependencies(${MyTestName} ${MyTestName}.CopyAssets)
+CopyProductAssets(${this} "Ring2" ${CMAKE_CURRENT_BINARY_DIR}/Assets)
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring2")
+set_target_properties(${this} PROPERTIES FOLDER "Ring2")

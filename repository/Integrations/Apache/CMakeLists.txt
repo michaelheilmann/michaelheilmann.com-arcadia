@@ -20,13 +20,11 @@ set(MyTargetName Integrations.Apache)
 # Add executable.
 BeginProduct(${MyTargetName} executable)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h @ONLY)
-list(APPEND ${MyTargetName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure.h.i)
-OnConfigurationFile(${MyTargetName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h)
+OnConfigurationFile(${MyTargetName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure.h.i)
 
 OnSourceFile(${MyTargetName} Integrations/Apache/Main.c)
 
-list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.Machine)
+OnModuleDependency(${MyTargetName} ${MyProjectName}.Machine)
 
 EndProduct(${MyTargetName})
 set_target_properties(${MyTargetName} PROPERTIES OUTPUT_NAME "arcadia")

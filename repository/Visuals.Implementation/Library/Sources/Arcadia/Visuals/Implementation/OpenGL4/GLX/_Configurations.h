@@ -9,7 +9,7 @@
 /// @param self This OpenGL/GLX device information.
 /// @return A list of Arcadia_Visuals_Configuration objects.
 Arcadia_List*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_getConfigurations
   (
     Arcadia_Thread* thread,
     Display* display

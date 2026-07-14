@@ -15,14 +15,14 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Math.Tests.VectorTests)
+set(this ${MyProjectName}.Math.Tests.VectorTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Arcadia.Math.Tests.VectorTests/Main.c)
+OnSourceFile(${this} Arcadia.Math.Tests.VectorTests/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Math)
+OnModuleDependency(${this} ${MyProjectName}.Math PRIVATE)
 
-EndProduct(${MyTestName})
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Math")
+EndProduct(${this})
+set_target_properties(${this} PROPERTIES FOLDER "Math")

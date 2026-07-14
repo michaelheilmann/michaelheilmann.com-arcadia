@@ -16,6 +16,9 @@
 #if !defined(ARCADIA_MEDIA_QUANTIZATION_H_INCLUDED)
 #define ARCADIA_MEDIA_QUANTIZATION_H_INCLUDED
 
+#if !defined(ARCADIA_MEDIA_MODULE) || 1 != ARCADIA_MEDIA_MODULE
+  #error("do not include directly, include `Arcadia/Media/Include.h` instead")
+#endif
 #include <assert.h>
 #include <math.h>
 #include "Arcadia/Media/SampleBuffer.h"

@@ -45,12 +45,6 @@
 #include "Arcadia/Engine/Visuals/TextureAddressMode.h"
 #include "Arcadia/Engine/Visuals/TextureFilter.h"
 
-#include "Arcadia/Engine/Visuals/VertexDescriptor.h"
-#include "Arcadia/Engine/Visuals/VertexDescriptorBuilder.h"
-#include "Arcadia/Engine/Visuals/VertexElementDescriptor.h"
-#include "Arcadia/Engine/Visuals/VertexElementSemantics.h"
-#include "Arcadia/Engine/Visuals/VertexElementSyntactics.h"
-
 #include "Arcadia/VPL/Include.h"
 
 #include "Arcadia/Engine/Visuals/WindingMode.h"
@@ -59,7 +53,7 @@
 #include "Arcadia/Engine/Visuals/WindowBackend.h"
 
 //{
-//
+
 #include "Arcadia/Engine/Visuals/Diagnostics.h"
 
 #include "Arcadia/Engine/Visuals/Events/ApplicationQuitRequestedEvent.h"
@@ -78,6 +72,23 @@
 
 #include "Arcadia/Engine/Visuals/DisplayDevice.h"
 #include "Arcadia/Engine/Visuals/DisplayMode.h"
+
 //}
+
+#include "Arcadia/Engine/Visuals/Resources/ConstantBufferResource.h"
+#include "Arcadia/Engine/Visuals/Resources/FrameBufferResource.h"
+#include "Arcadia/Engine/Visuals/Resources/EnterPassResource.h"
+#include "Arcadia/Engine/Visuals/Resources/MaterialResource.h"
+#include "Arcadia/Engine/Visuals/Resources/ModelResource.h"
+#include "Arcadia/Engine/Visuals/Resources/ProgramResource.h"
+#include "Arcadia/Engine/Visuals/Resources/TextureResource.h"
+#include "Arcadia/Engine/Visuals/Resources/VertexBufferResource.h"
+
+void
+Arcadia_Engine_Visuals_registerNodeFactories
+  ( 
+    Arcadia_Thread* thread,
+    Arcadia_Set* types
+  );
 
 #endif // ARCADIA_ENGINE_VISUALS_INCLUDE_H_INCLUDED

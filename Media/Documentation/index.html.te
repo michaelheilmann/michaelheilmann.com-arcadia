@@ -24,4 +24,8 @@
 @{include("SampleFormat.i")}
 @{include("SampleFormat_getNumberOfBytes.i")}
 
+@{include("VertexElementDescriptor.i")}
+@{include("VertexElementSemantics.i")}
+@{include("VertexElementSyntactics.i")}
+
 @{include("footer.i")}

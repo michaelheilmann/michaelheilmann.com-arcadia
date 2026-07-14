@@ -22,7 +22,7 @@ Arcadia_Engine_Visuals_renderScene
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_EnterPassNode* enterPassNode,
     Arcadia_Engine_Visuals_ModelNode* modelNode,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Engine_Visuals_BackendContext* backendContext
   )
 {
   Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)enterPassNode, (Arcadia_Engine_Visuals_BackendContext*)backendContext);

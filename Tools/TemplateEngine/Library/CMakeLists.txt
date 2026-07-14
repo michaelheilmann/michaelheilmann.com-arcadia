@@ -15,44 +15,42 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyLibraryName ${MyProjectName}.Tools.TemplateEngine.Library)
+set(this ${MyProjectName}.Tools.TemplateEngine.Library)
 
-if (NOT TARGET ${MyLibraryName})
+if (NOT TARGET ${this})
 
-  BeginProduct(${MyLibraryName} library)
+  BeginProduct(${this} library)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h @ONLY)
-  OnConfigurationTemplateFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h.i)
-  OnConfigurationFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h.i)
 
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.h)
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Scanner/WordType.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Scanner/WordType.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/WordType.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/WordType.h)
 
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Parser/Parser.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Parser/Parser.h)
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Parser/Tree.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Parser/Tree.h)
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Parser/TreeType.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Parser/TreeType.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Parser.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Parser.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Tree.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Tree.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/TreeType.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/TreeType.h)
 
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Context.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Context.h)
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Environment.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Environment.h)
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/FileContext.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/FileContext.h)
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Library.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/Library.h)
-  OnSourceFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/DependenciesContext.c)
-  OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/DependenciesContext.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Context.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Context.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Environment.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Environment.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/FileContext.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/FileContext.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Library.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Library.h)
+  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/DependenciesContext.c)
+  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/DependenciesContext.h)
 
+  OnModuleDependency(${this} ${MyProjectName}.DDL)
+  OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.DDL ${MyProjectName}.Ring2)
+  EndProduct(${this})
 
-  EndProduct(${MyLibraryName})
-
-  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Tools/TemplateEngine")
+  set_target_properties(${this} PROPERTIES FOLDER "Tools/TemplateEngine")
 
 endif()

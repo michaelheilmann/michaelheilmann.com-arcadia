@@ -17,9 +17,9 @@
 #define ARCADIA_PIXELBUFFERIO_WINDOWS_WICIMAGEWRITERBASE_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Media/Include.h"
 #include "Arcadia/PixelBufferIO/ImageWriter.h"
 #include "Arcadia/PixelBufferIO/ImageWriterParameters.h"
-#include "Arcadia/Media/PixelBuffer.h"
 
 // WIC header
 #define COBJMACROS (1)

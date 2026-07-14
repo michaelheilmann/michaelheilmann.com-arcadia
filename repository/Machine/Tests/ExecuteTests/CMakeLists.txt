@@ -16,14 +16,14 @@
 cmake_minimum_required(VERSION 3.29)
 
 set(MyTestFolder Machine)
-set(MyTestName ${MyProjectName}.Machine.Tests.Execute)
+set(this ${MyProjectName}.Machine.Tests.Execute)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Main.c)
+OnSourceFile(${this} Main.c)
 
-list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Machine)
+OnModuleDependency(${this} ${MyProjectName}.Machine)
 
-EndProduct(${MyTestName})
-set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})
+EndProduct(${this})
+set_target_properties(${this} PROPERTIES FOLDER ${MyTestFolder})

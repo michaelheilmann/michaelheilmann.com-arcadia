@@ -43,7 +43,20 @@ struct Arcadia_Engine_Audials_SoundSourceNode {
   Arcadia_Engine_Audials_Node _parent;
   // The sample buffer definition used by this sound source.
   Arcadia_ADL_SampleBufferDefinition* source;
+  Arcadia_Engine_Audials_BackendContext* backendContext;
+  Arcadia_Engine_Audials_Implementation_SoundSourceResource* soundSourceResource;
+  Arcadia_Natural8Value dirtyBits;
+  Arcadia_BooleanValue isLooping;
+  Arcadia_Real32Value volume;
 };
+
+Arcadia_Engine_Audials_SoundSourceNode*
+Arcadia_Engine_Audials_SoundSourceNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_BackendContext* backendContext,
+    Arcadia_ADL_SampleBufferDefinition* source
+  );
 
 // Get if this sound source is playing.
 // Raises an error if this is invoked before the resource was rendered.

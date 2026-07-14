@@ -18,9 +18,9 @@
 
 #include "Arcadia/Ring2/Include.h"
 
-typedef struct _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions;
+typedef struct _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions;
 
-struct _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions {
+struct _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions {
   int dummy;
 #define Define(Type, Name) \
   Type Name;
@@ -30,18 +30,18 @@ struct _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions {
 
 /// @error functions is a null pointer
 void
-_Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions_initialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions_initialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions* functions
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions* functions
   );
 
 /// @error functions is a null pointer
 void
-_Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions_uninitialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions_uninitialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions* functions
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_Functions* functions
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_FUNCTIONS_H_INCLUDED

@@ -13,32 +13,32 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_CONSTANTBUFFERRESOURCE_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_CONSTANTBUFFERRESOURCE_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_CONSTANTBUFFERRESOURCE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_CONSTANTBUFFERRESOURCE_H_INCLUDED
 
-#include "Arcadia/Visuals/Implementation/Resources/ConstantBufferResource.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
+typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext;
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ConstantBufferResource", Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ConstantBufferResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource,
                           u8"Arcadia.Visuals.Implementation.ConstantBufferResource");
 
-struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResourceDispatch {
-  Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResourceDispatch {
+  Arcadia_Engine_Visuals_Implementation_ConstantBufferResourceDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource {
-  Arcadia_Visuals_Implementation_ConstantBufferResource _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource {
+  Arcadia_Engine_Visuals_Implementation_ConstantBufferResource _parent;
   Arcadia_BooleanValue dirty;
   Arcadia_ByteArrayBuilder* byteBuffer;
   GLuint bufferID;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*
-Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_CONSTANTBUFFERRESOURCE_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_CONSTANTBUFFERRESOURCE_H_INCLUDED

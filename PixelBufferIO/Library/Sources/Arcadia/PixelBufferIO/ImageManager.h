@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_PIXELBUFFERIO_IMAGEMANAGER_H_INCLUDED)
 #define ARCADIA_PIXELBUFFERIO_IMAGEMANAGER_H_INCLUDED
 
-#include "Arcadia/Media/PixelBuffer.h"
+#include "Arcadia/Media/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Imaging.ImageManager", Arcadia_Imaging_ImageManager,
                           u8"Arcadia.Object");

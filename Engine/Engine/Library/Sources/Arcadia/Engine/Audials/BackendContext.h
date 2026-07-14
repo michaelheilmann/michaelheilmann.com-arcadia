@@ -21,17 +21,34 @@
 #endif
 
 #include "Arcadia/Engine/BackendContext.h"
+#include "Arcadia/Media/Include.h"
+typedef struct Arcadia_Engine_Audials_Implementation_SoundSourceResource Arcadia_Engine_Audials_Implementation_SoundSourceResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Audials.BackendContext", Arcadia_Engine_Audials_BackendContext,
                           u8"Arcadia.Engine.BackendContext");
 
 struct Arcadia_Engine_Audials_BackendContextDispatch {
   Arcadia_Engine_BackendContextDispatch _parent;
+
+  Arcadia_Engine_Audials_Implementation_SoundSourceResource*
+  (*createSoundSourceResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Audials_BackendContext* self,
+      Arcadia_Media_SampleBuffer* sampleBuffer
+    );
 };
 
 struct Arcadia_Engine_Audials_BackendContext {
   Arcadia_Engine_BackendContext _parent;
 };
 
+Arcadia_Engine_Audials_Implementation_SoundSourceResource*
+Arcadia_Engine_Audials_BackendContext_createSoundSourceResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_BackendContext* self,
+    Arcadia_Media_SampleBuffer* sampleBuffer
+  );
 
 #endif // ARCADIA_ENGINE_AUDIALS_BACKENDCONTEXT_H_INCLUDED

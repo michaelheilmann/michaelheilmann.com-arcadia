@@ -21,15 +21,15 @@ if (NOT TARGET ${MyTool})
 
   BeginProduct(${MyTool} executable)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Compiler/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Compiler/Configure.h @ONLY)
-  list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Compiler/Configure.h.i)
-  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Compiler/Configure.h)
+  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Compiler/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Compiler/Configure.h.i)
 
   OnSourceFile(${MyTool} Arcadia/MIL/Compiler/Main.c)
   OnSourceFile(${MyTool} Arcadia/MIL/Compiler/HelpSystem.c)
   OnHeaderFile(${MyTool} Arcadia/MIL/Compiler/HelpSystem.h)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.DDL ${MyProjectName}.DDLS ${MyProjectName}.MIL.Frontend)
+  OnModuleDependency(${MyTool} ${MyProjectName}.MIL.Frontend PRIVATE)
+  OnModuleDependency(${MyTool} ${MyProjectName}.DDL PRIVATE)
+  OnModuleDependency(${MyTool} ${MyProjectName}.DDLS PRIVATE)
 
   EndProduct(${MyTool})
 

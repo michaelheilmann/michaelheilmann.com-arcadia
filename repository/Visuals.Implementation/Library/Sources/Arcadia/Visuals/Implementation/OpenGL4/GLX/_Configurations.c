@@ -73,16 +73,16 @@ addIfNotExisting
 }
 
 Arcadia_List*
-Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
+Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_getConfigurations
   (
     Arcadia_Thread* thread,
     Display* display
   )
 {
   Arcadia_List* configurations = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Set* extensions = Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions(thread, display);
+  Arcadia_Set* extensions = Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_getExtensions(thread, display);
 
-  if (!Arcadia_Visuals_Implementation_OpenGL4_GLX_hasExtension(thread, display, Arcadia_String_createFromCxxString(thread, u8"GLX_ARB_create_context"))) {
+  if (!Arcadia_Engine_Visuals_Implementation_OpenGL4_GLX_hasExtension(thread, display, Arcadia_String_createFromCxxString(thread, u8"GLX_ARB_create_context"))) {
     return configurations;
   }
 

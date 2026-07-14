@@ -238,7 +238,7 @@ updateVisuals0
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
   // Ensure the "rendering context" node exists.
@@ -248,7 +248,7 @@ updateVisuals0
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
   // Ensure the "viewport" node exists.
@@ -262,7 +262,7 @@ updateVisuals0
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
         );
     Arcadia_Engine_Visuals_ViewportNode_setClearColor(thread, self->viewportNode, Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
     Arcadia_Engine_Visuals_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNode, 0.f, 0.f, 1.f, 1.f);
@@ -276,7 +276,7 @@ updateVisuals0
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
   Arcadia_Math_Matrix4Real32* viewToProjectionMatrix = Arcadia_Math_Matrix4Real32_create(thread);
@@ -305,7 +305,7 @@ updateVisuals0
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext,
           modelDefinition
         );
   }
@@ -333,13 +333,13 @@ updateVisualsFrameBuffer
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
   // Assign the "frame buffer" node to the "rendering context" node.
   Arcadia_Engine_Visuals_EnterPassNode_setFrameBufferNode(thread, self->enterPassNode, self->frameBufferNode);
   // Render the scene.
-  Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 static void
@@ -357,7 +357,7 @@ updateVisualsDefaultFrameBuffer
   // Assign the "frame buffer" node to the "rendering context" node.
   Arcadia_Engine_Visuals_EnterPassNode_setFrameBufferNode(thread, self->enterPassNode, NULL);
   // Render the scene.
-  Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 static void

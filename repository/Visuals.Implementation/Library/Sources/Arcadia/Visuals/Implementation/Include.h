@@ -13,24 +13,17 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/Configure.h"
 
 void
-Arcadia_Visuals_Implementation_registerNodeFactories
+Arcadia_Engine_Visuals_Implementation_registerBackends
   (
     Arcadia_Thread* thread,
     Arcadia_Set* types
   );
 
-void
-Arcadia_Visuals_Implementation_registerBackends
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Set* types
-  );
-
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED

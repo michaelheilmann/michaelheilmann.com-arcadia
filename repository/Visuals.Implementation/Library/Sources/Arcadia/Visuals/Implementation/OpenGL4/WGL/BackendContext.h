@@ -13,14 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Functions.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/Functions.h"
-typedef struct Arcadia_Visuals_Implementation_NodeFactory Arcadia_Visuals_Implementation_NodeFactory;
+typedef struct Arcadia_Engine_Visuals_Implementation_NodeFactory Arcadia_Engine_Visuals_Implementation_NodeFactory;
 
 #if !defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN
@@ -43,15 +43,15 @@ typedef struct Arcadia_Visuals_Implementation_NodeFactory Arcadia_Visuals_Implem
 ///   constructor()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext,
-                          u8"Arcadia.Visuals.Implementation.OpenGL4.BackendContext");
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Implementation.OpenGL4.WGL.BackendContext", Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext,
+                          u8"Arcadia.Engine.Visuals.Implementation.OpenGL4.BackendContext");
 
-struct Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContextDispatch {
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContextDispatch {
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContextDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext {
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext {
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext _parent;
   // The instance handle of the process.
   HINSTANCE instanceHandle;
   // The atom of the window class used for window backends.
@@ -63,28 +63,28 @@ struct Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext {
   // The WGL/OpenGL system-wide pixel format indexused for window backends.
   int pixelFormatIndex;
   // The WGL/OpenGL system-wide window.
-  Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow* systemWindow;
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_SystemWindow* systemWindow;
   // The WGL/OpenGL system-wide resource context handle.
   HGLRC glResourceContextHandle;
   // The WGL/OpenGL driver library handle.That is, the handle to OPENGL32.DLL.
   HANDLE glDriverLibrary;
 
   /// The WGL functions available to us.
-  _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions _functionsWGL;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions _functionsWGL;
   /// The OpenGL functions available to us.
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions _functions;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions _functions;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext*
-Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext_create
   (
     Arcadia_Thread* thread
   );
 
-Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext*
-Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_getOrCreate
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_BackendContext_getOrCreate
   (
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED

@@ -16,28 +16,28 @@
 cmake_minimum_required(VERSION 3.29)
 
 set(MyTestFolder DDLS)
-set(MyTestName ${MyProjectName}.DDLS.Tests.Validation)
+set(this ${MyProjectName}.DDLS.Tests.Validation)
 
-if (NOT TARGET ${MyTestName})
+if (NOT TARGET ${this})
 
-  BeginProduct(${MyTestName} test)
+  BeginProduct(${this} test)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Validation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/Validation/Configure.h @ONLY)
-  list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Validation/Configure.h.i)
-  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/Validation/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/Validation/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Validation/Configure.h.i)
 
-  OnSourceFile(${MyTestName} Arcadia/DDLS/Tests/Validation/Main.c)
+  OnSourceFile(${this} Arcadia/DDLS/Tests/Validation/Main.c)
 
-  OnSourceFile(${MyTestName} Arcadia/DDLS/Tests/Validation/Default.c)
-  OnHeaderFile(${MyTestName} Arcadia/DDLS/Tests/Validation/Default.h)
+  OnSourceFile(${this} Arcadia/DDLS/Tests/Validation/Default.c)
+  OnHeaderFile(${this} Arcadia/DDLS/Tests/Validation/Default.h)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.DDLS ${MyProjectName}.DDL)
+  OnAssetsDirectory(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Assets)
 
-  EndProduct(${MyTestName})
-  target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
-  set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})
+  OnModuleDependency(${this} ${MyProjectName}.DDLS PRIVATE)
+  OnModuleDependency(${this} ${MyProjectName}.DDL PRIVATE)
 
-  CopyProductAssets(${MyTestName}.CopyAssets ${MyTestFolder} ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
-  add_dependencies(${MyTestName} ${MyTestName}.CopyAssets)
+  EndProduct(${this})
+  target_include_directories(${this} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
+  set_target_properties(${this} PROPERTIES FOLDER ${MyTestFolder})
+
+  CopyProductAssets(${this} ${MyTestFolder} ${CMAKE_CURRENT_BINARY_DIR}/Assets)
 
 endif()

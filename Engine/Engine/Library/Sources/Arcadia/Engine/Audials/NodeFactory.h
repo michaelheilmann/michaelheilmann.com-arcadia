@@ -44,6 +44,12 @@ struct Arcadia_Engine_Audials_NodeFactory {
   Arcadia_Engine_NodeFactory parent;
 };
 
+Arcadia_Engine_Audials_NodeFactory*
+Arcadia_Engine_Audials_NodeFactory_create
+  (
+    Arcadia_Thread* thread
+  );
+
 Arcadia_Engine_Audials_SoundSourceNode*
 Arcadia_Engine_Audials_NodeFactory_createSoundSourceNode
   (

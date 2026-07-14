@@ -88,6 +88,7 @@ Arcadia_MILC_Symbol_constructImpl
   self->kind = (Arcadia_MILC_SymbolKind)enumerationValue.value;
   self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   self->enclosing = NULL;
+  self->completer = NULL;
   //
   Arcadia_LeaveConstructor(Arcadia_MILC_Symbol);
 }
@@ -120,6 +121,9 @@ Arcadia_MILC_Symbol_visitImpl
   }
   if (self->enclosing) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->enclosing);
+  }
+  if (self->completer) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->completer);
   }
 }
 

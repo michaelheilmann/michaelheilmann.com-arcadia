@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_SYMBOLS_SYMBOL_H_INCLUDED
 
 #include "Arcadia/MILC/Symbols/SymbolKind.h"
+typedef struct Arcadia_MILC_Completer Arcadia_MILC_Completer;
 
 /// @code
 /// class Arcadia.MILC.Symbol {
@@ -44,6 +45,8 @@ struct Arcadia_MILC_Symbol {
   Arcadia_MILC_SymbolKind kind;
   /// The enclosing symbol.
   Arcadia_MILC_Symbol* enclosing;
+  /// The completer for this symbol or null.
+  Arcadia_MILC_Completer* completer;
 };
 
 Arcadia_MILC_Symbol*

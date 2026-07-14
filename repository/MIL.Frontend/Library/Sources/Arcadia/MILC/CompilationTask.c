@@ -490,6 +490,9 @@ Arcadia_MILC_CompilationTask_run
   // (4) Enter the top-level symbols (classes, enumerations, procedures, modules).
   self->context->enterPhase = self->context->enterPhase ? self->context->enterPhase : Arcadia_MILC_EnterPhase_create(thread, self->context);
   Arcadia_MILC_EnterPhase_run(thread, self->context->enterPhase);
+  // (5) Enter the member-level symbols (constructors, methods, fields, enumeration elements).
+  // This must be deferred because types are resolved.
+  self->context->memberEnterPhase = self->context->memberEnterPhase ? self->context->memberEnterPhase : Arcadia_MILC_MemberEnterPhase_create(thread, self->context);
   // Dump top-level symbols.
 #if defined(Arcadia_MILC_Configuration_ListTopLevelSymbols) && 1 == Arcadia_MILC_Configuration_ListTopLevelSymbols
   Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);

@@ -26,8 +26,17 @@
 #define MinificationFilterDirty (16)
 #define WidthDirty (32)
 
+#define DirtyBitsAll (AddressModeUDirty | AddressModeVDirty | HeightDirty | MagnificationFilterDirty | MinificationFilterDirty | WidthDirty)
+
 static void
 Arcadia_Engine_Visuals_TextureNode_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_TextureNode* self
+  );
+
+static void
+Arcadia_Engine_Visuals_TextureNode_destructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_TextureNode* self
@@ -45,6 +54,22 @@ Arcadia_Engine_Visuals_TextureNode_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_TextureNode* self
+  );
+
+static void
+Arcadia_Engine_Visuals_TextureNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_TextureNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  );
+
+static void
+Arcadia_Engine_Visuals_TextureNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_TextureNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
   );
 
 static Arcadia_Engine_Visuals_TextureAddressMode
@@ -92,6 +117,7 @@ Arcadia_Engine_Visuals_TextureNode_getWidthImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_TextureNode_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_TextureNode_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_TextureNode_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_TextureNode_initializeDispatchImpl,
 };
@@ -135,6 +161,8 @@ Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.TextureNode", Arcadia_Engine_
                          u8"Arcadia.Engine.Visuals.Node", Arcadia_Engine_Visuals_Node,
                          &_typeOperations);
 
+#include <stdio.h>
+
 static void
 Arcadia_Engine_Visuals_TextureNode_constructImpl
   (
@@ -143,7 +171,7 @@ Arcadia_Engine_Visuals_TextureNode_constructImpl
   )
 {
   Arcadia_EnterConstructor(Arcadia_Engine_Visuals_TextureNode);
-  if (1 != _numberOfArguments) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -166,9 +194,35 @@ Arcadia_Engine_Visuals_TextureNode_constructImpl
   self->pixelBuffer = Arcadia_Engine_Visuals_NodeFactory_createPixelBufferNode(thread, (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory, NULL,
                                                                                (Arcadia_ADL_PixelBufferDefinition*)self->source->pixelBuffer->definition);
   //
-  self->dirtyBits = AddressModeUDirty | AddressModeVDirty | HeightDirty | MagnificationFilterDirty | MinificationFilterDirty | WidthDirty;
+  self->textureResource = NULL;
+  self->dirtyBits = DirtyBitsAll;
+  //
+  if (Arcadia_ValueStack_isVoidValue(thread, 2)) {
+    self->backendContext = NULL;
+  } else {
+    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Engine_Visuals_BackendContext_getType(thread));
+    Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
+  }
   //
   Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_TextureNode);
+}
+
+static void
+Arcadia_Engine_Visuals_TextureNode_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_TextureNode* self
+  )
+{
+  if (self->backendContext) {
+    if (self->textureResource) {
+      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->textureResource);
+      self->textureResource = NULL;
+    }
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    self->backendContext = NULL;
+    self->dirtyBits = DirtyBitsAll;
+  }
 }
 
 static void
@@ -178,6 +232,8 @@ Arcadia_Engine_Visuals_TextureNode_initializeDispatchImpl
     Arcadia_Engine_Visuals_TextureNodeDispatch* self
   )
 {
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_TextureNode_renderImpl;
+  ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_TextureNode_setVisualsBackendContextImpl;
   self->getAddressModeU = (Arcadia_Engine_Visuals_TextureAddressMode(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_TextureNode*)) & Arcadia_Engine_Visuals_TextureNode_getAddressModeUImpl;
   self->getAddressModeV = (Arcadia_Engine_Visuals_TextureAddressMode(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_TextureNode*)) & Arcadia_Engine_Visuals_TextureNode_getAddressModeVImpl;
   self->getHeight = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_TextureNode*)) & Arcadia_Engine_Visuals_TextureNode_getHeightImpl;
@@ -200,6 +256,76 @@ Arcadia_Engine_Visuals_TextureNode_visitImpl
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->source);
   }
 }
+
+static void
+Arcadia_Engine_Visuals_TextureNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_TextureNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  )
+{
+  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)((Arcadia_Engine_Visuals_TextureNode*)self)->pixelBuffer, (Arcadia_Engine_Visuals_EnterPassNode*)enterPassNode);
+  Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)enterPassNode->backendContext);
+}
+
+static void
+Arcadia_Engine_Visuals_TextureNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_TextureNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{
+  Arcadia_BooleanValue backendContextChanged = backendContext != self->backendContext;
+  if (backendContextChanged) {
+    if (backendContext) {
+      Arcadia_Object_lock(thread, (Arcadia_Object*)backendContext);
+    }
+    if (self->backendContext) {
+      if (self->textureResource) {
+        Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->textureResource);
+        self->textureResource = NULL;
+      }
+      Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    }
+    self->backendContext = backendContext;
+    self->dirtyBits = DirtyBitsAll;
+  }
+  if (!self->textureResource && self->backendContext) {
+    self->textureResource = Arcadia_Engine_Visuals_BackendContext_createTextureResource(thread, (Arcadia_Engine_Visuals_BackendContext*)self->backendContext);
+    Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->textureResource);
+  }
+  if ((DirtyBitsAll & self->dirtyBits) && self->textureResource) {
+    if (AddressModeUDirty & self->dirtyBits) {
+      Arcadia_Engine_Visuals_Implementation_TextureResource_setAddressModeU(thread, self->textureResource, Arcadia_Engine_Visuals_TextureNode_getAddressModeU(thread, (Arcadia_Engine_Visuals_TextureNode*)self));
+      self->dirtyBits &= ~AddressModeUDirty;
+    }
+    if (AddressModeVDirty & self->dirtyBits) {
+      Arcadia_Engine_Visuals_Implementation_TextureResource_setAddressModeV(thread, self->textureResource, Arcadia_Engine_Visuals_TextureNode_getAddressModeU(thread, (Arcadia_Engine_Visuals_TextureNode*)self));
+      self->dirtyBits &= ~AddressModeVDirty;
+    }
+    if (HeightDirty & self->dirtyBits) {
+      Arcadia_Engine_Visuals_Implementation_TextureResource_setHeight(thread, self->textureResource, Arcadia_Engine_Visuals_TextureNode_getHeight(thread, (Arcadia_Engine_Visuals_TextureNode*)self));
+      self->dirtyBits &= ~HeightDirty;
+    }
+    if (MagnificationFilterDirty & self->dirtyBits) {
+      Arcadia_Engine_Visuals_Implementation_TextureResource_setMagnificationFilter(thread, self->textureResource, Arcadia_Engine_Visuals_TextureNode_getMagnificationFilter(thread, (Arcadia_Engine_Visuals_TextureNode*)self));
+      self->dirtyBits &= ~MagnificationFilterDirty;
+    }
+    if (MinificationFilterDirty & self->dirtyBits) {
+      Arcadia_Engine_Visuals_Implementation_TextureResource_setMinificationFilter(thread, self->textureResource, Arcadia_Engine_Visuals_TextureNode_getMinificationFilter(thread, (Arcadia_Engine_Visuals_TextureNode*)self));
+      self->dirtyBits &= ~MinificationFilterDirty;
+    }
+    if (WidthDirty & self->dirtyBits) {
+      Arcadia_Engine_Visuals_Implementation_TextureResource_setWidth(thread, self->textureResource, Arcadia_Engine_Visuals_TextureNode_getWidth(thread, (Arcadia_Engine_Visuals_TextureNode*)self));
+      self->dirtyBits &= ~WidthDirty;
+    }
+    Arcadia_Engine_Visuals_PixelBufferNode* pixelBuffer = ((Arcadia_Engine_Visuals_TextureNode*)self)->pixelBuffer;
+    Arcadia_Engine_Visuals_Implementation_TextureResource_setPixelBuffer(thread, self->textureResource, pixelBuffer->pixelBuffer);
+  }
+}
+
 
 static Arcadia_Engine_Visuals_TextureAddressMode
 Arcadia_Engine_Visuals_TextureNode_getAddressModeUImpl
@@ -248,6 +374,21 @@ Arcadia_Engine_Visuals_TextureNode_getWidthImpl
     Arcadia_Engine_Visuals_TextureNode* self
   )
 { return self->width; }
+
+Arcadia_Engine_Visuals_TextureNode*
+Arcadia_Engine_Visuals_TextureNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  if (source) Arcadia_ValueStack_pushObjectReferenceValue(thread, source); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_TextureNode);
+}
 
 Arcadia_Engine_Visuals_TextureAddressMode
 Arcadia_Engine_Visuals_TextureNode_getAddressModeU

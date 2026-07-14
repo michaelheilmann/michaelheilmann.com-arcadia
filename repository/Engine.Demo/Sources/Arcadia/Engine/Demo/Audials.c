@@ -73,7 +73,7 @@ Arcadia_Engine_Application_startupAudials
   // (1.1) Register audials backends.
   Arcadia_Engine_Audials_Implementation_registerBackends(thread, engine->audialsBackendTypes);
   // (1.2) Register the audials node factory.
-  Arcadia_Engine_Audials_Implementation_registerNodeFactories(thread, engine->audialsNodeFactoryTypes);
+  Arcadia_Engine_Audials_registerNodeFactories(thread, engine->audialsNodeFactoryTypes);
   // (2) Select audials system.
   {
     char const* path[] = {

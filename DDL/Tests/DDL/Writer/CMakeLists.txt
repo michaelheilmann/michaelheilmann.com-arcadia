@@ -16,25 +16,24 @@
 cmake_minimum_required(VERSION 3.29)
 
 set(MyTestFolder DDL)
-set(MyTestName ${MyProjectName}.DDL.Tests.Writer)
+set(this ${MyProjectName}.DDL.Tests.Writer)
 
-if (NOT TARGET ${MyTestName})
+if (NOT TARGET ${this})
 
-  BeginProduct(${MyTestName} test)
+  BeginProduct(${this} test)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDL/Tests/Writer/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDL/Tests/Writer/Configure.h @ONLY)
-  list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDL/Tests/Writer/Configure.h.i)
-  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDL/Tests/Writer/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDL/Tests/Writer/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDL/Tests/Writer/Configure.h.i)
 
-  OnSourceFile(${MyTestName} Arcadia/DDL/Tests/Writer/Main.c)
+  OnSourceFile(${this} Arcadia/DDL/Tests/Writer/Main.c)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.DDL)
+  OnAssetsDirectory(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Assets)
 
-  EndProduct(${MyTestName})
-  target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
-  set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})
+  OnModuleDependency(${this} ${MyProjectName}.DDL PRIVATE)
 
-  CopyProductAssets(${MyTestName}.CopyAssets ${MyTestFolder} ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
-  add_dependencies(${MyTestName} ${MyTestName}.CopyAssets)
+  EndProduct(${this})
+  target_include_directories(${this} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
+  set_target_properties(${this} PROPERTIES FOLDER ${MyTestFolder})
+
+  CopyProductAssets(${this} ${MyTestFolder} ${CMAKE_CURRENT_BINARY_DIR}/Assets)
 
 endif()

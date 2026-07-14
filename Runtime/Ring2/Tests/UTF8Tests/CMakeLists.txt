@@ -15,17 +15,17 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Ring2.Tests.UTF8)
+set(this ${MyProjectName}.Ring2.Tests.UTF8)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/Main.c)
-OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/readWrite.c)
-OnHeaderFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/readWrite.h)
+OnSourceFile(${this} Arcadia.Ring2.Tests.UTF8/Main.c)
+OnSourceFile(${this} Arcadia.Ring2.Tests.UTF8/readWrite.c)
+OnHeaderFile(${this} Arcadia.Ring2.Tests.UTF8/readWrite.h)
 
-list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Ring2)
+OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring2")
+set_target_properties(${this} PROPERTIES FOLDER "Ring2")

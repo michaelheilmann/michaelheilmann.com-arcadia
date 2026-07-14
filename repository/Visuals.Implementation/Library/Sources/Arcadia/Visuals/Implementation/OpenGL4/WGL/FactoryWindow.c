@@ -30,31 +30,31 @@ WindowProc
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindowDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindowDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -62,7 +62,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.FactoryWindow", Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.FactoryWindow", Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
@@ -77,10 +77,10 @@ WindowProc
 { return DefWindowProc(hWnd, uMsg, wParam, lParam); }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   )
 {
   if (self->deviceContextHandle) {
@@ -98,13 +98,13 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -117,33 +117,33 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl
   self->classAtom = 0;
   self->windowHandle = NULL;
   self->deviceContextHandle = NULL;
-  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow);
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindowDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindowDispatch* self
   )
 {/*Intentionally empty.*/}
 
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow*
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_create
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow);
 }
 
 void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_open
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_open
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   )
 {
   Arcadia_JumpTarget jumpTarget;
@@ -223,10 +223,10 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_open
 }
 
 void
-Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_close
+Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_close
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   )
 {
   if (self->deviceContextHandle) {

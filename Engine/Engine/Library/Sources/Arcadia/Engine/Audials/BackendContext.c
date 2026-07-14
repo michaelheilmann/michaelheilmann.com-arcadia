@@ -87,3 +87,12 @@ Arcadia_Engine_Audials_BackendContext_visitImpl
     Arcadia_Engine_Audials_BackendContext* self
   )
 {/*Intentionally empty.*/}
+
+Arcadia_Engine_Audials_Implementation_SoundSourceResource*
+Arcadia_Engine_Audials_BackendContext_createSoundSourceResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_BackendContext* self,
+    Arcadia_Media_SampleBuffer* sampleBuffer
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_BackendContext, createSoundSourceResource, self, sampleBuffer); }

@@ -20,18 +20,6 @@
   #include "Arcadia/Audials/Implementation/OpenAL/Backend.h"
 #endif
 
-#include "Arcadia/Audials/Implementation/NodeFactory.h"
-
-void
-Arcadia_Engine_Audials_Implementation_registerNodeFactories
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Set* types
-  )
-{
-  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Engine_Audials_Implementation_NodeFactory_getType(thread)), NULL);
-}
-
 void
 Arcadia_Engine_Audials_Implementation_registerBackends
   (

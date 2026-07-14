@@ -44,15 +44,15 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext
+      Arcadia_Engine_Visuals_BackendContext* backendContext
     );
 
-  Arcadia_Visuals_FrameBufferNode*
+  Arcadia_Engine_Visuals_FrameBufferNode*
   (*createFrameBufferNode)
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext
+      Arcadia_Engine_Visuals_BackendContext* backendContext
     );
 
   Arcadia_Engine_Visuals_EnterPassNode*
@@ -60,7 +60,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext
+      Arcadia_Engine_Visuals_BackendContext* backendContext
     );
 
   Arcadia_Engine_Visuals_MaterialNode*
@@ -68,7 +68,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_Engine_Visuals_BackendContext* backendContext,
       Arcadia_ADL_MaterialDefinition* source
     );
 
@@ -77,7 +77,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_Engine_Visuals_BackendContext* backendContext,
       Arcadia_ADL_MeshDefinition* source
     );
 
@@ -86,7 +86,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_Engine_Visuals_BackendContext* backendContext,
       Arcadia_ADL_ModelDefinition* source
     );
 
@@ -95,7 +95,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_Engine_Visuals_BackendContext* backendContext,
       Arcadia_ADL_PixelBufferDefinition* source
     );
 
@@ -105,7 +105,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_Engine_Visuals_BackendContext* backendContext,
       Arcadia_ADL_TextureDefinition* source
     );
 
@@ -114,7 +114,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Visuals_NodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext
+      Arcadia_Engine_Visuals_BackendContext* backendContext
     );
 };
 
@@ -122,20 +122,26 @@ struct Arcadia_Engine_Visuals_NodeFactory {
   Arcadia_Engine_NodeFactory parent;
 };
 
+Arcadia_Engine_Visuals_NodeFactory*
+Arcadia_Engine_Visuals_NodeFactory_create
+  (
+    Arcadia_Thread* thread
+  );
+
 Arcadia_Engine_Visuals_CameraNode*
 Arcadia_Engine_Visuals_NodeFactory_createCameraNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Engine_Visuals_BackendContext* backendContext
   );
 
-Arcadia_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_FrameBufferNode*
 Arcadia_Engine_Visuals_NodeFactory_createFrameBufferNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Engine_Visuals_BackendContext* backendContext
   );
 
 Arcadia_Engine_Visuals_EnterPassNode*
@@ -143,7 +149,7 @@ Arcadia_Engine_Visuals_NodeFactory_createEnterPassNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Engine_Visuals_BackendContext* backendContext
   );
 
 Arcadia_Engine_Visuals_MaterialNode*
@@ -151,7 +157,7 @@ Arcadia_Engine_Visuals_NodeFactory_createMaterialNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
     Arcadia_ADL_MaterialDefinition* source
   );
 
@@ -160,7 +166,7 @@ Arcadia_Engine_Visuals_NodeFactory_createMeshNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
     Arcadia_ADL_MeshDefinition* source
   );
 
@@ -169,7 +175,7 @@ Arcadia_Engine_Visuals_NodeFactory_createModelNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
     Arcadia_ADL_ModelDefinition* source
   );
 
@@ -178,7 +184,7 @@ Arcadia_Engine_Visuals_NodeFactory_createPixelBufferNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
     Arcadia_ADL_PixelBufferDefinition* source
   );
 
@@ -187,7 +193,7 @@ Arcadia_Engine_Visuals_NodeFactory_createTextureNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
     Arcadia_ADL_TextureDefinition* source
   );
 
@@ -196,7 +202,7 @@ Arcadia_Engine_Visuals_NodeFactory_createViewportNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Engine_Visuals_BackendContext* backendContext
   );
 
 #endif // ARCADIA_ENGINE_VISUALS_NODEFACTORY_H_INCLUDED

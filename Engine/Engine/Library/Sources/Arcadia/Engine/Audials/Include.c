@@ -15,3 +15,15 @@
 
 #define ARCADIA_ENGINE_PRIVATE (1)
 #include "Arcadia/Engine/Audials/Include.h"
+
+#include "Arcadia/Engine/Audials/NodeFactory.h"
+
+void
+Arcadia_Engine_Audials_registerNodeFactories
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Set* types
+  )
+{
+  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Engine_Audials_NodeFactory_getType(thread)), NULL);
+}
