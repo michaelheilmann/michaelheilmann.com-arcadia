@@ -15,7 +15,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Context.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 

@@ -44,6 +44,9 @@ if (NOT TARGET ${this})
   OnSourceFile(${this} Arcadia/Languages/mangleName.c)
   OnHeaderFile(${this} Arcadia/Languages/mangleName.h)
 
+  OnModuleDependency(${this} ${MyProjectName}.Collections)
+  OnModuleDependency(${this} ${MyProjectName}.Logging)
+  OnModuleDependency(${this} ${MyProjectName}.FileSystem)
   OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
   if (${${this}_OperatingSystem} STREQUAL ${${this}_OperatingSystem_Linux})

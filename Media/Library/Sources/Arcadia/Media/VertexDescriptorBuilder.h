@@ -21,6 +21,7 @@
 #endif
 #include "Arcadia/Media/VertexElementDescriptor.h"
 #include "Arcadia/Media/VertexDescriptor.h"
+#include "Arcadia/Collections/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Media.VertexDescriptorBuilder", Arcadia_Media_VertexDescriptorBuilder,
                           Arcadia_Object);

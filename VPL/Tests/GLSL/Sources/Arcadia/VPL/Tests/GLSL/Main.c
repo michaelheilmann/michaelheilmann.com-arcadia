@@ -15,6 +15,8 @@
 
 #include "Arcadia/VPL/Include.h"
 
+#include "Arcadia/FileSystem/Include.h"
+
 static void
 test1
   (

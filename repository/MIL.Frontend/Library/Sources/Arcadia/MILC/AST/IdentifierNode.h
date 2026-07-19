@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_AST_IDENTIFIERNODE_H_INCLUDED
 
 #include "Arcadia/MILC/AST/Node.h"
+#include "Arcadia/Collections/Include.h"
 
 /// @code
 /// class Arcadia.MILC.AST.ExpressionNode extends Arcadia.MILC.AST.Node {

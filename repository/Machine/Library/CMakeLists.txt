@@ -56,6 +56,7 @@ if (NOT TARGET ${this})
 
   OnModuleDependency(${this} ${MyProjectName}.MIL.Frontend)
   OnModuleDependency(${this} ${MyProjectName}.Ring2)
+  OnModuleDependency(${this} ${MyProjectName}.Print)
 
   if (${${this}_OperatingSystem} STREQUAL ${${this}_OperatingSystem_Linux})
     list(APPEND ${this}.Libraries m)

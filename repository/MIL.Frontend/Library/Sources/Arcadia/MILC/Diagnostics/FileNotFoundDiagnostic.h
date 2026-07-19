@@ -19,6 +19,7 @@
 #include "Arcadia/Languages/Include.h"
 #include "Arcadia/MILC/WordType.h"
 #include "Arcadia/MILC/FileType.h"
+#include "Arcadia/FileSystem/Include.h"
 
 /// @brief A diagnostic message of the compiler.
 /// This diagnostic, if emitted, yields the following error message

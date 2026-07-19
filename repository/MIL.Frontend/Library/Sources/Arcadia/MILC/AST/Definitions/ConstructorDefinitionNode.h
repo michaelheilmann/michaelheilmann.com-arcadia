@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_AST_DEFINITIONS_CONSTRUCTORDEFINITIONNODE_H_INCLUDED
 
 #include "Arcadia/MILC/AST/DefinitionNode.h"
+#include "Arcadia/Collections/Include.h"
 
 /// @code
 /// class Arcadia.MILC.AST.ConstructorDefinitionNode extends Arcadia.MILC.AST.DefinitionNode

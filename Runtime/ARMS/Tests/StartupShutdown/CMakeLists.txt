@@ -26,4 +26,4 @@ OnModuleDependency(${this} ${MyProjectName}.ARMS)
 
 EndProduct(${this})
 
-set_target_properties(${this} PROPERTIES FOLDER "ARMS")
+set_target_properties(${this} PROPERTIES FOLDER "Runtime/ARMS")

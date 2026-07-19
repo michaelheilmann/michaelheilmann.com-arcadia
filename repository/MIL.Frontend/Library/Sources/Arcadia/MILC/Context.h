@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_CONTEXT_H_INCLUDED
 
 #include "Arcadia/Languages/Include.h"
+#include "Arcadia/FileSystem/Include.h"
 typedef struct Arcadia_MILC_Scanner Arcadia_MILC_Scanner;
 typedef struct Arcadia_MILC_Parser Arcadia_MILC_Parser;
 typedef struct Arcadia_MILC_EnterPhase Arcadia_MILC_EnterPhase;

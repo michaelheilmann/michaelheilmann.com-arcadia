@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/DDLS/Nodes/Include.h` instead")
 #endif
 #include "Arcadia/DDLS/Nodes/Node.h"
+#include "Arcadia/Collections/Include.h"
 
 /// Map type.
 /// A map from names to types.

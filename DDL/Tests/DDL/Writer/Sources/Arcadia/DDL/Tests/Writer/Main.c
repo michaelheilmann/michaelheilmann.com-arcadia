@@ -16,7 +16,9 @@
 #include "Arcadia/DDL/Include.h"
 
 #include <string.h>
+
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Logging/Include.h"
 
 static Arcadia_DDL_Node*
 doRead

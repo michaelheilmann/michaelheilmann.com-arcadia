@@ -19,6 +19,7 @@
 #include "Arcadia/execute.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Print/Include.h"
 #include "Arcadia/MILC/Include.h"
 #include "Arcadia/Interpreter/Procedure.h"
 

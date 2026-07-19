@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_DDLS_SYMBOLS_SCOPE_H_INCLUDED)
 #define ARCADIA_DDLS_SYMBOLS_SCOPE_H_INCLUDED
 
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_DDLS_Symbol Arcadia_DDLS_Symbol;
 
 /* Map from names to symbols. An error symbol e replace conflicting symbols e1 and e2. */

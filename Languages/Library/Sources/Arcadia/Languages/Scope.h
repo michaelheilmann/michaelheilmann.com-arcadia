@@ -2,6 +2,7 @@
 #define ARCADIA_LANGUAGES_SCOPE_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_Languages_StringTable Arcadia_Languages_StringTable;
 
 // Very naive implementation of a scope.

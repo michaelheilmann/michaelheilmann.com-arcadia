@@ -16,6 +16,8 @@
 #include "Arcadia/Engine/Demo/Configuration.h"
 
 #include <string.h>
+#include "Arcadia/FileSystem/Include.h"
+#include "Arcadia/Logging/Include.h"
 
 static Arcadia_BooleanValue
 isBooleanNode

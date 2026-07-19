@@ -191,6 +191,7 @@ if (NOT TARGET ${this})
   OnHeaderFile(${this} Arcadia/MILC/AST/DefinitionStatements/LabelDefinitionStatementNode.h)
 
   OnModuleDependency(${this} ${MyProjectName}.Languages)
+  OnModuleDependency(${this} ${MyProjectName}.Logging)
   OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
   if (${${this}_OperatingSystem} STREQUAL ${${this}_OperatingSystem_Linux})

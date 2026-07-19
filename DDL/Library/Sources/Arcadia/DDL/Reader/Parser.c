@@ -16,6 +16,7 @@
 #define ARCADIA_DDL_MODULE (1)
 #include "Arcadia/DDL/Reader/Parser.h"
 
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/DDL/Include.h"
 
 #include "Arcadia/DDL/Nodes/Include.h"

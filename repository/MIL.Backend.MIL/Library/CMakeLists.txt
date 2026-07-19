@@ -16,28 +16,27 @@
 cmake_minimum_required(VERSION 3.29)
 
 # Create library.
-set(MyLibraryName ${MyProjectName}.MIL.Backend.MIL)
+set(this ${MyProjectName}.MIL.Backend.MIL)
 
-if (NOT TARGET ${MyLibraryName})
-  BeginProduct(${MyLibraryName} library)
+if (NOT TARGET ${this})
+  BeginProduct(${this} library)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Backend/MIL/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Backend/MIL/Configure.h @ONLY)
-  OnConfigurationTemplateFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Backend/MIL/Configure.h.i)
-  OnConfigurationFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Backend/MIL/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Backend/MIL/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Backend/MIL/Configure.h.i)
 
-  OnSourceFile(${MyLibraryName} Arcadia/MIL/Backend/MIL/Include.c)
-  OnHeaderFile(${MyLibraryName} Arcadia/MIL/Backend/MIL/Include.h)
+  OnSourceFile(${this} Arcadia/MIL/Backend/MIL/Include.c)
+  OnHeaderFile(${this} Arcadia/MIL/Backend/MIL/Include.h)
 
-  OnSourceFile(${MyLibraryName} Arcadia/MIL/Backend/MIL/DefaultBackend.c)
-  OnHeaderFile(${MyLibraryName} Arcadia/MIL/Backend/MIL/DefaultBackend.h)
+  OnSourceFile(${this} Arcadia/MIL/Backend/MIL/DefaultBackend.c)
+  OnHeaderFile(${this} Arcadia/MIL/Backend/MIL/DefaultBackend.h)
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.Ring2)
+  OnModuleDependency(${this} ${MyProjectName}.MIL.Frontend)
+  OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
-  if (${${MyLibraryName}_OperatingSystem} STREQUAL ${${MyLibraryName}_OperatingSystem_Linux})
-    list(APPEND ${MyLibraryName}.Libraries m)
+  if (${${this}_OperatingSystem} STREQUAL ${${this}_OperatingSystem_Linux})
+    list(APPEND ${this}.Libraries m)
   endif()
 
-  EndProduct(${MyLibraryName})
-  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "MIL/Backend")
+  EndProduct(${this})
+  set_target_properties(${this} PROPERTIES FOLDER "MIL/Backend")
 
 endif()

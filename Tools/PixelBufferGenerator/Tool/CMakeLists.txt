@@ -30,6 +30,7 @@ if (NOT TARGET ${MyTool})
   OnModuleDependency(${MyTool} ${MyProjectName}.ADL PRIVATE)
   OnModuleDependency(${MyTool} ${MyProjectName}.PixelBufferIO PRIVATE)
   OnModuleDependency(${MyTool} ${MyProjectName}.DDL PRIVATE)
+  OnModuleDependency(${MyTool} ${MyProjectName}.Print PRIVATE)
 
   EndProduct(${MyTool})
 

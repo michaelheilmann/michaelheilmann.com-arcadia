@@ -16,6 +16,7 @@
 #define ARCADIA_ADL_MODULE (1)
 #include "Arcadia/ADL/Definitions/Visuals/MaterialDefinition.h"
 
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/ADL/Context.h"
 #include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Reference.h"

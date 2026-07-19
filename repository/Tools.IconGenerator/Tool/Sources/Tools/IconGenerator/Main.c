@@ -16,7 +16,10 @@
 #include <stdlib.h>
 #include <stdio.h> // @todo Remove references to `stdio.h`.
 #include <string.h>
+#include "Arcadia/Logging/Include.h"
+#if 0
 #include "Arcadia/Include.h"
+#endif
 #include "Arcadia/PixelBufferIO/Include.h"
 
 // @todo Remove references to `stdio.h`.

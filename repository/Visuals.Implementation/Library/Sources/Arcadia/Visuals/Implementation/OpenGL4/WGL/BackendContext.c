@@ -20,6 +20,8 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/WindowBackend.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryContext.h"
+
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/Engine/Include.h"
 
 #include <assert.h>

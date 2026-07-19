@@ -16,6 +16,7 @@
 #define ARCADIA_ENGINE_PRIVATE (1)
 #include "Arcadia/Engine/Visuals/Diagnostics.h"
 
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/Engine/Include.h"
 
 static inline void

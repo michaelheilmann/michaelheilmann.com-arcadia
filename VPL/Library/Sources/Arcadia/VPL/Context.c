@@ -16,6 +16,7 @@
 #define ARCADIA_VPL_PRIVATE (1)
 #include "Arcadia/VPL/Context.h"
 
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/VPL/EnterPhase.h"
 #include "Arcadia/VPL/ResolvePhase.h"
 

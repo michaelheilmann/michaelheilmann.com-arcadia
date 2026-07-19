@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_AST_DEFINITIONS_CLASSDEFINITIONNODE_H_INCLUDED
 
 #include "Arcadia/MILC/AST/DefinitionNode.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_MILC_AST_IdentifierNode Arcadia_MILC_AST_IdentifierNode;
 
 /// @code

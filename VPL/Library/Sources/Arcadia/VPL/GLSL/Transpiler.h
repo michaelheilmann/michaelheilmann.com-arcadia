@@ -17,6 +17,7 @@
 #define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_VPL_GLSL_TRANSPILER_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_VPL_Symbols_Program Arcadia_VPL_Symbols_Program;
 
 typedef enum Context{

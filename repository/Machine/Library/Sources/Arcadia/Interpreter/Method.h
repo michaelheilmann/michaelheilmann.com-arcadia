@@ -17,6 +17,7 @@
 #define R_INTERPRETER_METHOD_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 #include "Arcadia/Interpreter/Code.h"
 
 Arcadia_declareObjectType(u8"R.Interpreter.Method", R_Interpreter_Method, u8"Arcadia.Object");

@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/DDL/Nodes/Include.h` instead")
 #endif
 #include "Arcadia/DDL/Nodes/Node.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_DDL_MapEntryNode Arcadia_DDL_MapEntryNode;
 
 // The map node is a list of map entry nodes.

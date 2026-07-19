@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/DDLS/Nodes/Include.h` instead")
 #endif
 #include "Arcadia/DDLS/Nodes/Node.h"
+#include "Arcadia/Collections/Include.h"
 
 /// "choice" node.
 Arcadia_declareObjectType(u8"Arcadia.DDLS.ChoiceNode", Arcadia_DDLS_ChoiceNode,

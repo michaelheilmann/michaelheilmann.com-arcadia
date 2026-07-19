@@ -16,6 +16,8 @@
 #define ARCADIA_LANGUAGES_MODULE (1)
 #include "Arcadia/Languages/DiagnosticsOld.h"
 
+#include "Arcadia/FileSystem/Include.h"
+
 void
 Arcadia_Languages_DiagnosticsOld_emit
   (

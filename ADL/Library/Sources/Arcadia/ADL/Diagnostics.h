@@ -19,6 +19,7 @@
 #if !defined(ARCADIA_ADL_MODULE)
   #error("do not include directly, include `Arcadia/ADL/Include.h` instead")
 #endif
+#include "Arcadia/FileSystem/Include.h"
 #include "Arcadia/ADL/Definition.h"
 
 Arcadia_NoReturn() static inline void

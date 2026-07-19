@@ -16,6 +16,8 @@
 #define ARCADIA_MILC_PRIVATE (1)
 #include "Arcadia/MILC/Keywords.h"
 
+#include "Arcadia/Collections/Include.h"
+
 struct Arcadia_MILC_KeywordsDispatch {
   Arcadia_ObjectDispatch _parent;
 };

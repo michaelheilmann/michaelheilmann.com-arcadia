@@ -1,0 +1,25 @@
+@{include("header.i")}
+
+  <div class="center-column">
+  <h1>Michael Heilmann's Arcadia Collections</h1>
+  <p>
+  This is the documentation for Michael  Heilmann's Arcadia Collections.
+  Arcadia Collections provides collections like lists, deques, and maps.
+  Arcadia Collections is available at <a href="@{siteAddress}/Arcadia/Ring1">michaelheilmann.com/Arcadia/Ring2</a>.
+  </p>
+
+@{include("1.files.i")}
+@{include("2.further-references.i")}
+@{include("3.documentation.i")}
+@{include("ArrayList/include.content")}
+@{include("Collection/include.content")}
+@{include("HashMap/include.content")}
+@{include("HashSet/include.content")}
+@{include("List/include.content")}
+@{include("Map/include.content")}
+@{include("Set/include.content")}
+@{include("Stack/include.content")}
+
+  </div>
+
+@{include("footer.i")}

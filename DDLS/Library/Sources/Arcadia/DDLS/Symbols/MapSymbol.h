@@ -17,6 +17,7 @@
 #define ARCADIA_DDLS_SYMBOLS_MAPSYMBOL_H_INCLUDED
 
 #include "Arcadia/DDLS/Symbols/Symbol.h"
+#include "Arcadia/Collections/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.DDLS.MapSymbol", Arcadia_DDLS_MapSymbol,
                           u8"Arcadia.DDLS.Symbol");

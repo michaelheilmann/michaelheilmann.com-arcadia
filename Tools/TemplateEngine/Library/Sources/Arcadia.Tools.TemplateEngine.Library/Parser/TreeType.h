@@ -17,6 +17,7 @@
 #define ARCADIA_TEMPLATEENGINE_PARSER_TREETYPE_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 
 Arcadia_declareEnumerationType(u8"Arcadia.TemplateEngine.TreeType", Arcadia_TemplateEngine_TreeType);
 

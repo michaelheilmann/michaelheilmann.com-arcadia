@@ -15,6 +15,7 @@
 
 #include "Arcadia/DDLS/Implementation/Diagnostics.h"
 
+#include "Arcadia/FileSystem/Include.h"
 #include "Arcadia/DDLS/Extensions.h"
 
 static void

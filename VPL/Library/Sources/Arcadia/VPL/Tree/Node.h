@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/VPL/Include.h` instead")
 #endif
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 
 typedef struct Arcadia_VPL_Tree_NameExprNode Arcadia_VPL_Tree_NameExprNode;
 typedef struct Arcadia_VPL_Tree_ProcedureDefnNode Arcadia_VPL_Tree_ProcedureDefnNode;

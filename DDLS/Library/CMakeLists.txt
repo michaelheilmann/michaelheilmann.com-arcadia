@@ -80,6 +80,7 @@ if (NOT TARGET ${this})
 
   OnModuleDependency(${this} ${MyProjectName}.DDL)
   OnModuleDependency(${this} ${MyProjectName}.Languages)
+  OnModuleDependency(${this} ${MyProjectName}.FileSystem)
   OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
   if (${${this}_OperatingSystem} STREQUAL ${${this}_OperatingSystem_Linux})

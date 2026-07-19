@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/DDL/Nodes/Include.h` instead")
 #endif
 #include "Arcadia/DDL/Nodes/Node.h"
+#include "Arcadia/Collections/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.DDL.ListNode", Arcadia_DDL_ListNode,
                           u8"Arcadia.DDL.Node");

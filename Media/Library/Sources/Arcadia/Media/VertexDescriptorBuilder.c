@@ -16,6 +16,7 @@
 #define ARCADIA_MEDIA_MODULE (1)
 #include "Arcadia/Media/VertexDescriptorBuilder.h"
 
+#include "Arcadia/Collections/Include.h"
 #include "Arcadia/Media/VertexDescriptor.module.h"
 
 static void

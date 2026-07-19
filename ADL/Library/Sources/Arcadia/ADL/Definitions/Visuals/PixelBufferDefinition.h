@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/ADL/Include.h` instead")
 #endif
 #include "Arcadia/ADL/Definition.h"
+#include "Arcadia/Collections/Include.h"
 
 // A definition of a pixel buffer.
 //

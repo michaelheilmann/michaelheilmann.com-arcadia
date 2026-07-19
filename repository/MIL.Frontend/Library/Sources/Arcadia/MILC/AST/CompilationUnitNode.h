@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_AST_COMPILATIONUNITNODE_H_INCLUDED
 
 #include "Arcadia/MILC/AST/Node.h"
+#include "Arcadia/FileSystem/Include.h"
 typedef struct Arcadia_MILC_AST_DefinitionNode Arcadia_MILC_AST_DefinitionNode;
 typedef struct Arcadia_MILC_AST_ModuleNode Arcadia_MILC_AST_ModuleNode;
 

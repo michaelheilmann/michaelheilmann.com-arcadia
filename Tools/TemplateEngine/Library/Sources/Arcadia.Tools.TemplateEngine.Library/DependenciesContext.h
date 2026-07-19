@@ -17,6 +17,7 @@
 #define ARCADIA_TEMPLATEENGINE_DEPENDENCIESCONTEXT_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/FileSystem/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.DependenciesContext", DependenciesContext,
                           u8"Arcadia.Object");

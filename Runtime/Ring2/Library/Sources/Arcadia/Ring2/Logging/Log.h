@@ -21,7 +21,6 @@
 #endif
 
 #include "Arcadia/Ring1/Include.h"
-typedef struct Arcadia_FileHandle Arcadia_FileHandle;
 typedef struct Arcadia_String Arcadia_String;
 
 Arcadia_declareObjectType(u8"Arcadia.Log", Arcadia_Log,
@@ -36,7 +35,6 @@ struct Arcadia_LogDispatch {
 
 struct Arcadia_Log {
   Arcadia_Object _parent;
-  Arcadia_FileHandle* fileHandle;
 };
 
 void

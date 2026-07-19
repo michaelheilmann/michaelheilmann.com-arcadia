@@ -17,6 +17,7 @@
 #define ARCADIA_TEMPLATEENGINE_CONTEXT_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/FileSystem/Include.h"
 typedef struct Environment Environment;
 typedef struct DependenciesContext DependenciesContext;
 

@@ -112,8 +112,11 @@ if (NOT TARGET ${this})
   OnHeaderFile(${this} Arcadia/ADL/Definitions/Visuals/TextureReader.module.h)
 
   OnModuleDependency(${this} ${MyProjectName}.DDLS)
-  OnModuleDependency(${this} ${MyProjectName}.DDL)
-  OnModuleDependency(${this} ${MyProjectName}.Ring2)
+  #OnModuleDependency(${this} ${MyProjectName}.DDL)
+  #OnModuleDependency(${this} ${MyProjectName}.Collections)
+  #OnModuleDependency(${this} ${MyProjectName}.Logging)
+  OnModuleDependency(${this} ${MyProjectName}.FileSystem)
+  #OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
   if (${${this}_OperatingSystem} STREQUAL ${${this}_OperatingSystem_Linux})
     list(APPEND ${this}.Libraries m)

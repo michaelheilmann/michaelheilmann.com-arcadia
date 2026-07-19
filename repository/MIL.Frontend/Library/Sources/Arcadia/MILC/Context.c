@@ -16,6 +16,7 @@
 #define ARCADIA_MILC_PRIVATE (1)
 #include "Arcadia/MILC/Context.h"
 
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/MILC/Scanner.h"
 
 static void

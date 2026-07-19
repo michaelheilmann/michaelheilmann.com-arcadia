@@ -16,8 +16,6 @@
 #define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/Logging/Log.h"
 
-#include "Arcadia/Ring2/FileSystem/Include.h"
-
 static void
 Arcadia_Log_constructImpl
   (

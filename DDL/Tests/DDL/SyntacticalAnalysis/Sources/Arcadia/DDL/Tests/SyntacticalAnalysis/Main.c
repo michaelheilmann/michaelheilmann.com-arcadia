@@ -15,6 +15,9 @@
 
 #include "Arcadia/DDL/Include.h"
 
+#include "Arcadia/Logging/Include.h"
+#include <string.h>
+
 static void
 assertText
   (

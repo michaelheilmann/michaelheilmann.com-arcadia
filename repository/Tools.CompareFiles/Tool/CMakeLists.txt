@@ -25,6 +25,7 @@ if (NOT TARGET ${MyTool})
 
   OnSourceFile(${MyTool} Tools/CompareFiles/Main.c)
 
+  OnModuleDependency(${MyTool} ${MyProjectName}.FileSystem PRIVATE)
   OnModuleDependency(${MyTool} ${MyProjectName}.Ring2 PRIVATE)
 
   EndProduct(${MyTool})

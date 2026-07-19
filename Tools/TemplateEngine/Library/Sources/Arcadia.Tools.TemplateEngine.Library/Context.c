@@ -21,11 +21,10 @@
 
 #include "Arcadia.Tools.TemplateEngine.Library/Library.h"
 
+#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/FileSystem/Include.h"
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/DDL/Include.h"
-
-
-#include <stdio.h> // @todo Remove references to `stdio.h`.
-
 
 static void
 Context_constructImpl

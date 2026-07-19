@@ -16,6 +16,7 @@
 #include "Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.h"
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 #include "Arcadia.Tools.GenerateRyuLookupTables/Common.h"
 
 #define POS_TABLE_SIZE 326

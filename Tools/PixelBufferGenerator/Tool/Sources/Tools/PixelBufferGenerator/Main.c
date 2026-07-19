@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include "Arcadia/DDL/Include.h"
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Logging/Include.h"
+#include "Arcadia/Print/Include.h"
 #include "Arcadia/PixelBufferIO/Include.h"
 #include "Arcadia/ADL/Include.h"
 

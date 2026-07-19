@@ -18,11 +18,6 @@
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Strings/Include.h"
-#include "Arcadia/Ring2/FileSystem/FileSystem.h"
-#include "Arcadia/Ring2/FileSystem/FileHandle.h"
-#include "Arcadia/Ring2/FileSystem/FileHandleExtensions.h"
-
-#include <stdio.h>
 
 static Arcadia_BooleanValue
 isEnd
@@ -272,10 +267,7 @@ Arcadia_CommandLine_raiseRequiredArgumentMissingError
   Arcadia_StringBuilder_insertBackString(thread, stringBuffer, key);
   Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` not specified\n");
 
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+  Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer)));
 
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
@@ -295,10 +287,7 @@ Arcadia_CommandLine_raiseUnknownArgumentError
   Arcadia_StringBuilder_insertBackString(thread, stringBuffer, key);
   Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"`\n");
 
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+  Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer)));
 
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
@@ -318,10 +307,7 @@ Arcadia_CommandLine_raiseNoValueError
   Arcadia_StringBuilder_insertBackString(thread, stringBuffer, key);
   Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"`\n");
 
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+  Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer)));
 
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
@@ -342,10 +328,7 @@ Arcadia_CommandLine_raiseValueInvalidError
   Arcadia_StringBuilder_insertBackString(thread, stringBuffer, key);
   Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` is not valid\n");
 
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+  Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer)));
 
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
@@ -365,10 +348,7 @@ Arcadia_CommandLine_raiseAlreadySpecifiedError
   Arcadia_StringBuilder_insertBackString(thread, stringBuffer, key);
   Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"` was already specified\n");
 
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+  Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer)));
 
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
@@ -388,10 +368,7 @@ Arcadia_CommandLine_invalidCommandLineArgumentError
   Arcadia_StringBuilder_insertBackString(thread, stringBuffer, argument);
   Arcadia_StringBuilder_insertBackCxxString(thread, stringBuffer, u8"`\n");
 
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+  Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer)));
 
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);

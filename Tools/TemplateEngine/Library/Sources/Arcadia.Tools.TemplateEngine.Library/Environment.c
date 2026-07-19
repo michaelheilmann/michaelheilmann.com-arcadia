@@ -16,6 +16,7 @@
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
 #include "Arcadia.Tools.TemplateEngine.Library/Parser/Tree.h"
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/DDL/Include.h"
 
 static void

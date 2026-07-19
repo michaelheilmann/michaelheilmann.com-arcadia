@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/Media/Include.h` instead")
 #endif
 #include "Arcadia/Media/VertexElementDescriptor.h"
+#include "Arcadia/Collections/Include.h"
 
 /// @brief Immutable descriptor of a vertex.
 Arcadia_declareObjectType(u8"Arcadia.Media.VertexDescriptor", Arcadia_Media_VertexDescriptor,

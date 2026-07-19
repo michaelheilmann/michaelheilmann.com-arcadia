@@ -16,6 +16,8 @@
 #define ARCADIA_ENGINE_PRIVATE (1)
 #include "Arcadia/Engine/Visuals/DisplayDevice.h"
 
+#include "Arcadia/Collections/Include.h"
+
 static void
 Arcadia_Engine_Visuals_DisplayDevice_constructImpl
   (

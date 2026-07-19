@@ -516,6 +516,6 @@ if (NOT TARGET ${this})
 
   EndProduct(${this})
 
-  set_target_properties(${this} PROPERTIES FOLDER "Ring1")
+  set_target_properties(${this} PROPERTIES FOLDER "Runtime/Ring1")
 
 endif()

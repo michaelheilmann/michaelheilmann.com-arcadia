@@ -15,6 +15,7 @@
 
 #include "Arcadia/DDLS/Syntactical/DefaultReader.h"
 
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/DDLS/Extensions.h"
 #include "Arcadia/DDLS/Symbols/SymbolReader.h"
 

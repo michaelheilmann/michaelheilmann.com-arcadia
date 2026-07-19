@@ -16,6 +16,7 @@
 #define ARCADIA_VPL_PRIVATE (1)
 #include "Arcadia/VPL/GLSL/Transpiler.h"
 
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia/Languages/Include.h"
 #include "Arcadia/VPL/Tree/Include.h"
 #include "Arcadia/VPL/Symbols/Include.h"

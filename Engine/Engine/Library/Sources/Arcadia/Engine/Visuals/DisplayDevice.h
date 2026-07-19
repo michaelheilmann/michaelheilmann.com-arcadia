@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
 #endif
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_Engine_Visuals_DisplayMode Arcadia_Engine_Visuals_DisplayMode;
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.DisplayDevice", Arcadia_Engine_Visuals_DisplayDevice,

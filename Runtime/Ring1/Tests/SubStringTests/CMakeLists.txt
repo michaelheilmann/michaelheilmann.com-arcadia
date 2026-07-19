@@ -32,4 +32,4 @@ OnModuleDependency(${this} ${MyProjectName}.Ring1 PRIVATE)
 
 EndProduct(${this})
 
-set_target_properties(${this} PROPERTIES FOLDER "Ring1")
+set_target_properties(${this} PROPERTIES FOLDER "Runtime/Ring1")

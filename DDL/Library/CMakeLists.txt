@@ -68,6 +68,8 @@ if (NOT TARGET ${this})
   OnHeaderFile(${this} Arcadia/DDL/SemanticalAnalysis.h)
 
   OnModuleDependency(${this} ${MyProjectName}.Languages)
+  OnModuleDependency(${this} ${MyProjectName}.Logging)
+  OnModuleDependency(${this} ${MyProjectName}.Collections)
   OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
   if (${${this}_OperatingSystem} STREQUAL ${${this}_OperatingSystem_Linux})

@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_DIAGNOSTICS_MISSINGMODULEDEFINITION_H_INCLUDED
 
 #include "Arcadia/Languages/Include.h"
+#include "Arcadia/FileSystem/Include.h"
 #include "Arcadia/MILC/WordType.h"
 
 /// @brief A diagnostic message of the compiler.

@@ -19,6 +19,7 @@
 #include "Arcadia.Tools.TemplateEngine.Library/Parser/Parser.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.h"
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/FileSystem/Include.h"
 typedef struct Context Context;
 typedef struct Environment Environment;
 

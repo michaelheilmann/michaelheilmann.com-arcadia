@@ -17,6 +17,7 @@
 #define R_INTERPRETER_CLASS_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct R_Interpreter_Constructor R_Interpreter_Constructor;
 typedef struct R_Interpreter_Method R_Interpreter_Method;
 typedef struct R_Interpreter_ProcessState R_Interpreter_ProcessState;

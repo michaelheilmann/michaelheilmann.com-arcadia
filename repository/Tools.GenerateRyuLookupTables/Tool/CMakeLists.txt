@@ -34,6 +34,7 @@ if (NOT TARGET ${this})
   OnSourceFile(${this} Arcadia.Tools.GenerateRyuLookupTables/Common.c)
   OnHeaderFile(${this} Arcadia.Tools.GenerateRyuLookupTables/Common.h)
 
+  OnModuleDependency(${this} ${MyProjectName}.Logging PRIVATE)
   OnModuleDependency(${this} ${MyProjectName}.Ring2 PRIVATE)
   OnModuleDependency(${this} ${MyProjectName}.Ring1 PRIVATE)
 

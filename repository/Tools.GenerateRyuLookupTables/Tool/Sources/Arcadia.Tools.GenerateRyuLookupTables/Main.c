@@ -16,8 +16,10 @@
 #include <stdio.h> // @todo Remove references to `stdio.h`.
 #include <stdlib.h>
 #include <string.h>
+
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Logging/Include.h"
 #include "Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.h"
 #include "Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.h"
 #include "Arcadia.Tools.GenerateRyuLookupTables/Configure.h"

@@ -15,6 +15,8 @@
 
 #include "Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.h"
 
+#include "Arcadia/Logging/Include.h"
+
 static void
 Arcadia_TemplateEngine_Scanner_destruct
   (

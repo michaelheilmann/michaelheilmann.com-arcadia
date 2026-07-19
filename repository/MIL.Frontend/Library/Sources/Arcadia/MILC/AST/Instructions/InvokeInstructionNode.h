@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_AST_INVOKEINSTRUCTIONNODE_H_INCLUDED
 
 #include "Arcadia/MILC/AST/InstructionNode.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_MILC_AST_VariableOperandNode Arcadia_MILC_AST_VariableOperandNode;
 
 /// @code

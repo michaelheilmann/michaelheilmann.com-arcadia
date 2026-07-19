@@ -16,7 +16,7 @@
 cmake_minimum_required(VERSION 3.29)
 
 # Build the documentation.
-BeginTemplateEngine(${MyProjectName}.ARMS.BuildDocs "ARMS")
+BeginTemplateEngine(${MyProjectName}.ARMS.BuildDocs "Runtime/ARMS")
 
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/ARMS/index.html"

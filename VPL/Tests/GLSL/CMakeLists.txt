@@ -27,6 +27,7 @@ if (NOT TARGET ${this})
   OnSourceFile(${this} Arcadia/VPL/Tests/GLSL/Main.c)
 
   OnModuleDependency(${this} ${MyProjectName}.VPL PRIVATE)
+  OnModuleDependency(${this} ${MyProjectName}.FileSystem PRIVATE)
   OnModuleDependency(${this} ${MyProjectName}.DDL PRIVATE)
 
   EndProduct(${this})

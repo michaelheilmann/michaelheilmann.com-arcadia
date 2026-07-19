@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
 #endif
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Collections/Include.h"
 typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 typedef struct Arcadia_Engine_NodeFactory Arcadia_Engine_NodeFactory;
 typedef struct Arcadia_Engine_BackendContext Arcadia_Engine_BackendContext;
