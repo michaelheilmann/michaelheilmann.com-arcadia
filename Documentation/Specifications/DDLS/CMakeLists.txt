@@ -22,4 +22,7 @@ BeginTemplateEngine(Website.Specifications.DDLS "DDLS")
                    "${REPOSITORY_SOURCE_DIR}/../.build/specifications/data-definition-language-schema/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/../../website.env")
 
+  MyCopyFile(Website.Specifications.DDLS "${CMAKE_CURRENT_SOURCE_DIR}/diagram-1.png"
+                                         "${REPOSITORY_SOURCE_DIR}/../.build/specifications/data-definition-language-schema/diagram-1.png")
+
 EndTemplateEngine()

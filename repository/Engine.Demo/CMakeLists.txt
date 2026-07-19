@@ -70,6 +70,7 @@ if (NOT TARGET ${this})
 
   OnAssetsDirectory(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Assets)
 
+  OnModuleDependency(${this} ${MyProjectName}.Engine.UI PRIVATE)
   OnModuleDependency(${this} ${MyProjectName}.Application PRIVATE)
   OnModuleDependency(${this} ${MyProjectName}.ADL PRIVATE)
   OnModuleDependency(${this} ${MyProjectName}.DDL PRIVATE)

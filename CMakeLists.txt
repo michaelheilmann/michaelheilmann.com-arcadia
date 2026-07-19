@@ -24,6 +24,26 @@ if (NOT MyProjectIsDefined)
   include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/all.cmake)
 endif()
 
+set(CPACK_PACKAGE_NAME "Arcadia")
+
+set(CPACK_PACKAGE_VENDOR "Michael Heilmann")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Arcadia executable files")
+set(CPACK_PACKAGE_CONTACT "contact@michaelheilmann.com")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://michaelheilmann.com/")
+
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(CPACK_INSTRUCTIONSETARCHITECTURE "x64")
+elseif (CMAKE_SIZEOF_VOID_P EQUAL 4)
+  set(CPACK_INSTRUCTIONSETARCHITECTURE "x86")
+endif()
+
+set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${CPACK_INSTRUCTIONSETARCHITECTURE})
+
 # Prepend custom modules directory to module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/")
 
@@ -56,6 +76,7 @@ add_subdirectory(PixelBufferIO)
 add_subdirectory(SampleBufferIO)
 
 add_subdirectory(Engine/Engine)
+add_subdirectory(Engine/UI)
 add_subdirectory(Engine/Application)
 add_subdirectory(Engine/Audials.Implementation)
 
@@ -64,3 +85,26 @@ add_subdirectory(Tools/TemplateEngine)
 add_subdirectory(Tools/PixelBufferGenerator)
 
 add_subdirectory(repository)
+
+include(CMakePackageConfigHelpers)
+
+
+# Generate a configuration file from the template.
+configure_package_config_file(
+  "CMake/ArcadiaConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/ArcadiaConfig.cmake"
+  INSTALL_DESTINATION
+  "."
+)
+
+# Install generated configuration file.
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/ArcadiaConfig.cmake"
+  DESTINATION "."
+)
+
+# Export the targets.
+install(EXPORT ArcadiaTargets FILE ArcadiaTargets.cmake
+        DESTINATION "CMake" NAMESPACE Arcadia::)
+
+include(CPack)

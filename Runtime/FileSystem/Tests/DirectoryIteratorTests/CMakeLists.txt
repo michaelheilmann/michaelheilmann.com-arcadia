@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(this ${MyProjectName}.Ring2.Tests.DirectoryIteratorTests)
+set(this ${MyProjectName}.FileSystem.Tests.DirectoryIteratorTests)
 
 # Create test executable.
 BeginProduct(${this} test)
@@ -29,11 +29,11 @@ OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
 EndProduct(${this})
 
-set_target_properties(${this} PROPERTIES FOLDER "Runtime/Ring2")
+set_target_properties(${this} PROPERTIES FOLDER "Runtime/FileSystem")
 
 # Adjust working directory.
 set(${this}.WorkingDirectory $<TARGET_FILE_DIR:${this}>)
 
 # Copy assets.
-CopyProductAssets(${this} "Runtime/Ring2" ${CMAKE_CURRENT_BINARY_DIR}/Assets)
+CopyProductAssets(${this} "Runtime/FileSystem" ${CMAKE_CURRENT_BINARY_DIR}/Assets)
 
