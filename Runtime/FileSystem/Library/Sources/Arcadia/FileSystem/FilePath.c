@@ -451,14 +451,14 @@ Arcadia_FilePath_initializeDispatchImpl
   );
 
 static void
-Arcadia_FilePath_destruct
+Arcadia_FilePath_destructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_FilePath* self
   );
 
 static void
-Arcadia_FilePath_visit
+Arcadia_FilePath_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_FilePath* self
@@ -467,8 +467,8 @@ Arcadia_FilePath_visit
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_FilePath_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_FilePath_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FilePath_visit,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_FilePath_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FilePath_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_FilePath_initializeDispatchImpl,
 };
 
@@ -529,7 +529,7 @@ Arcadia_FilePath_initializeDispatchImpl
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_FilePath_destruct
+Arcadia_FilePath_destructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_FilePath* self
@@ -537,7 +537,7 @@ Arcadia_FilePath_destruct
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_FilePath_visit
+Arcadia_FilePath_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_FilePath* self
@@ -557,9 +557,9 @@ Arcadia_FilePath_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_FilePath);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_FilePath);
+  _Arcadia_EndCreate(Arcadia_FilePath);
 }
 
 Arcadia_FilePath*

@@ -46,10 +46,30 @@ Arcadia_Math_QuaternionReal32_create
     Arcadia_Real32Value w
   );
 
-// @brief Create a quaternion representing the specified axis-angle rotation.
-// @param axis A pointer to the axis vector.
-// @param angle The angle of rotation in degrees.
-// @error Arcadia_Status_ArgumentValueInvalid axis is a null pointer or is a zero vector
+/// @brief Compute the product of this quaternion and another quaternion and store the result in this quaternion.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this quaternion.
+/// @param other A pointer to the other quaternion.
+/// @remarks
+/// The product of two quaternions \(p\) and \(q\) is defined asctime
+/// \[
+/// \quat{p}\quat{q}=(&p_w\cdot q_w -p_x\cdot q_x  -p_y\cdot q_y -p_z\cdot q_z,\\
+///                   &p_w\cdot q_x +p_x\cdot q_w  +p_y\cdot q_z -p_z\cdot q_y,\\
+///                   &p_w\cdot q_y -p_x\cdot q_z  +p_y\cdot q_w +p_z\cdot q_x,\\
+///                   &p_w\cdot q_z +p_x\cdot q_y  -p_y\cdot q_x +p_z\cdot q_w)
+/// \]
+void
+Arcadia_Math_QuaternionReal32_multiply
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_QuaternionReal32* self,
+    Arcadia_Math_QuaternionReal32* other
+  );
+
+/// @brief Create a quaternion representing the specified axis-angle rotation.
+/// @param axis A pointer to the axis vector.
+/// @param angle The angle of rotation in degrees.
+/// @error Arcadia_Status_ArgumentValueInvalid axis is a null pointer or is a zero vector
 void
 Arcadia_Math_QuaternionReal32_setFromAxisAngle
   (
@@ -57,6 +77,16 @@ Arcadia_Math_QuaternionReal32_setFromAxisAngle
     Arcadia_Math_QuaternionReal32* self,
     Arcadia_Math_Vector3Real32* axis,
     Arcadia_Real32Value angle
+  );
+
+/// @error Arcadia_Status_ArgumentValueInvalid self is a null pointer or is a zero quaternion
+void
+Arcadia_Math_QuaternionReal32_toAxisAngle
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_QuaternionReal32* self,
+    Arcadia_Math_Vector3Real32* axis,
+    Arcadia_Real32Value* angle
   );
 
 /// @brief Normalize this quaterion.
@@ -104,6 +134,10 @@ Arcadia_Math_QuaternionReal32_assign
     Arcadia_Math_QuaternionReal32* other
   );
 
+/// @brief Convert this quaternion to a rotation matrix.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this quaternion.
+/// @param target A pointer to the matrix to assign the component values to.
 void
 Arcadia_Math_QuaternionReal32_toRotationMatrix
   (
@@ -122,6 +156,16 @@ Arcadia_Math_QuaternionReal32_transformVector
     Arcadia_Thread* thread,
     Arcadia_Math_QuaternionReal32* self,
     Arcadia_Math_Vector3Real32* v
+  );
+  
+/// @brief Compute the conjugate quaternion of this quaternion. Store the result in this quaternion.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this quaternion.
+void
+Arcadia_Math_QuaternionReal32_conjugate
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_QuaternionReal32* self
   );
 
 #endif // ARCADIA_MATH_QUATERNIONREAL32_H_INCLUDED

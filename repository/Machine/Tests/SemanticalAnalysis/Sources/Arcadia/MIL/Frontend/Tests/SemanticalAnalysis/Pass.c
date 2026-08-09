@@ -15,7 +15,7 @@
 
 #include "Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.h"
 
-#include "Arcadia/Include.h"
+#include "Arcadia/MILC/Include.h"
 
 static void
 Arcadia_MIL_Pass_constructImpl

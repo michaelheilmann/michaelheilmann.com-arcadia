@@ -21,14 +21,14 @@ typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext Arca
 typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.EnterPassResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource,
-                          u8"Arcadia.Visuals.Implementation.EnterPassResource");
+                          u8"Arcadia.Visuals.EnterPassResource");
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResourceDispatch {
-  Arcadia_Engine_Visuals_Implementation_EnterPassResourceDispatch _parent;
+  Arcadia_Engine_Visuals_EnterPassResourceDispatch _parent;
 };
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource {
-  Arcadia_Engine_Visuals_Implementation_EnterPassResource _parent;
+  Arcadia_Engine_Visuals_EnterPassResource _parent;
 };
 
 Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource*

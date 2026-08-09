@@ -200,12 +200,12 @@ Arcadia_Media_SampleBuffer_create
     Arcadia_Media_SampleFormat sampleFormat
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_SampleBuffer);
   Arcadia_ValueStack_pushInteger32Value(thread, length);
   Arcadia_ValueStack_pushInteger32Value(thread, sampleRate);
   Arcadia_ValueStack_pushEnumerationValue(thread, Arcadia_EnumerationValue_make(_Arcadia_Media_SampleFormat_getType(thread), sampleFormat));
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_SampleBuffer);
+  _Arcadia_EndCreate(Arcadia_Media_SampleBuffer);
 }
 
 Arcadia_Media_SampleBuffer*
@@ -215,14 +215,14 @@ Arcadia_Media_SampleBuffer_createClone
     Arcadia_Media_SampleBuffer* other
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_SampleBuffer);
   if (other) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, other);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_SampleBuffer);
+  _Arcadia_EndCreate(Arcadia_Media_SampleBuffer);
 }
 
 void

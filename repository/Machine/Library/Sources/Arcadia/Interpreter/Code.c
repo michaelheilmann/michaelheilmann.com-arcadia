@@ -188,9 +188,9 @@ R_Interpreter_Code_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(R_Interpreter_Code);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(R_Interpreter_Code);
+  _Arcadia_EndCreate(R_Interpreter_Code);
 }
 
 void

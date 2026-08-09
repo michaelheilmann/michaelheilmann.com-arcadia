@@ -109,7 +109,7 @@ Arcadia_DDL_MapEntryNode_create
     Arcadia_DDL_Node* value
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDL_MapEntryNode);
   if (key) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, key);
   } else {
@@ -121,5 +121,5 @@ Arcadia_DDL_MapEntryNode_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_MapEntryNode);
+  _Arcadia_EndCreate(Arcadia_DDL_MapEntryNode);
 }

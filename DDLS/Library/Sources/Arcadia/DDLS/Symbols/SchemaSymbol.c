@@ -109,12 +109,12 @@ Arcadia_DDLS_SchemaSymbol_create
     Arcadia_String* name
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDLS_SchemaSymbol);
   if (name) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDLS_SchemaSymbol);
+  _Arcadia_EndCreate(Arcadia_DDLS_SchemaSymbol);
 }

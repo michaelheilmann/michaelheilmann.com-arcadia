@@ -104,8 +104,8 @@ Arcadia_DDLS_ListNode_create
     Arcadia_DDLS_Node* ddlsNode
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDLS_ListNode);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)ddlsNode);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDLS_ListNode);
+  _Arcadia_EndCreate(Arcadia_DDLS_ListNode);
 }

@@ -119,10 +119,10 @@ Arcadia_Languages_Diagnostic_create
     Arcadia_String* string
   )
 { 
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Languages_Diagnostic);
   Arcadia_ValueStack_pushEnumerationValue(thread, Arcadia_EnumerationValue_make(_Arcadia_Languages_DiagnosticType_getType(thread), type));
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Languages_Diagnostic);
+  _Arcadia_EndCreate(Arcadia_Languages_Diagnostic);
 }
 
 Arcadia_Languages_DiagnosticType

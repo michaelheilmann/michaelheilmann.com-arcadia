@@ -136,7 +136,7 @@ Arcadia_Engine_Visuals_MaterialNode_destructImpl
 {
   if (self->backendContext) {
     if (self->materialResource) {
-      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->materialResource);
+      Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->materialResource);
       self->materialResource = NULL;
     }
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
@@ -187,23 +187,23 @@ Arcadia_Engine_Visuals_MaterialNode_renderImpl
     if (!self->materialResource) {
       Arcadia_Engine_Visuals_BackendContext* backendContext = self->backendContext;
       //
-      Arcadia_Engine_Visuals_Implementation_ProgramResource* programResource =
+      Arcadia_Engine_Visuals_ProgramResource* programResource =
         Arcadia_Engine_Visuals_BackendContext_createProgramResource(thread, backendContext,
                                                                             ((Arcadia_Engine_Visuals_MaterialNode*)self)->program);
       //
-      Arcadia_Engine_Visuals_Implementation_TextureResource* textureResource =
+      Arcadia_Engine_Visuals_TextureResource* textureResource =
         ((Arcadia_Engine_Visuals_TextureNode*)((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture)->textureResource;
 
-      Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Mesh;
+      Arcadia_Engine_Visuals_MaterialResource_AmbientColorSource ambientColorSource = Arcadia_Engine_Visuals_MaterialResource_AmbientColorSource_Mesh;
       switch (((Arcadia_Engine_Visuals_MaterialNode*)self)->source->ambientColorSource) {
         case Arcadia_ADL_AmbientColorSource_Mesh: {
-          ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Mesh;
+          ambientColorSource = Arcadia_Engine_Visuals_MaterialResource_AmbientColorSource_Mesh;
         } break;
         case Arcadia_ADL_AmbientColorSource_Vertex: {
-          ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Vertex;
+          ambientColorSource = Arcadia_Engine_Visuals_MaterialResource_AmbientColorSource_Vertex;
         } break;
         case Arcadia_ADL_AmbientColorSource_Texture: {
-          ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Texture;
+          ambientColorSource = Arcadia_Engine_Visuals_MaterialResource_AmbientColorSource_Texture;
         } break;
         default: {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -212,7 +212,7 @@ Arcadia_Engine_Visuals_MaterialNode_renderImpl
       };
 
       self->materialResource = Arcadia_Engine_Visuals_BackendContext_createMaterialResource(thread, (Arcadia_Engine_Visuals_BackendContext*)backendContext, ambientColorSource, textureResource, programResource);
-      Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->materialResource);
+      Arcadia_Engine_Visuals_Resource_ref(thread, (Arcadia_Engine_Visuals_Resource*)self->materialResource);
     }
   }
 }
@@ -239,7 +239,7 @@ Arcadia_Engine_Visuals_MaterialNode_setVisualsBackendContextImpl
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->materialResource) {
-    Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->materialResource);
+    Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->materialResource);
     self->materialResource = NULL;
   }
   self->backendContext = backendContext;
@@ -253,9 +253,9 @@ Arcadia_Engine_Visuals_MaterialNode_create
     Arcadia_ADL_MaterialDefinition* source
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_MaterialNode);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (source) Arcadia_ValueStack_pushObjectReferenceValue(thread, source); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_MaterialNode);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_MaterialNode);
 }

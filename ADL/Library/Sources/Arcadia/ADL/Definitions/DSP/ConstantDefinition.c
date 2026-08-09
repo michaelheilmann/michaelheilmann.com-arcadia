@@ -125,10 +125,10 @@ Arcadia_ADL_ConstantDefinition_create
     Arcadia_Real32Value value
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_ConstantDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushReal32Value(thread, value);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_ConstantDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_ConstantDefinition);
 }

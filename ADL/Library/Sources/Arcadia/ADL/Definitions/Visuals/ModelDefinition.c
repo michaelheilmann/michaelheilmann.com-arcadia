@@ -148,11 +148,11 @@ Arcadia_ADL_ModelDefinition_create
     Arcadia_String* materialName
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_ModelDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)meshName);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)materialName);
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_ModelDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_ModelDefinition);
 }

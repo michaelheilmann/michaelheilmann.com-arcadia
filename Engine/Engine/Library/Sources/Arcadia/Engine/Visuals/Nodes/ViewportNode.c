@@ -322,7 +322,7 @@ Arcadia_Engine_Visuals_ViewportNode_setVisualsBackendContextImpl
   if (self->backendContext) {
 #if 0
     if (self->viewportResource) {
-      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->viewportResource);
+      Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->viewportResource);
       self->viewportResource = NULL;
     }
 #endif
@@ -486,10 +486,10 @@ Arcadia_Engine_Visuals_ViewportNode_create
     Arcadia_Engine_Visuals_BackendContext* backendContext
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_ViewportNode);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_ViewportNode);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_ViewportNode);
 }
 
 Arcadia_BooleanValue

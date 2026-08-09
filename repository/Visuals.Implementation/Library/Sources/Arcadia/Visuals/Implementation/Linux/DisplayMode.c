@@ -288,7 +288,7 @@ Arcadia_Visuals_Linux_DisplayMode_create
     Arcadia_Integer32Value frequency
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Visuals_Linux_DisplayMode);
   if (device) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, device);
   } else {
@@ -299,5 +299,5 @@ Arcadia_Visuals_Linux_DisplayMode_create
   Arcadia_ValueStack_pushInteger32Value(thread, colorDepth),
   Arcadia_ValueStack_pushInteger32Value(thread, frequency),
   Arcadia_ValueStack_pushNatural8Value(thread, 5);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Linux_DisplayMode);
+  _Arcadia_EndCreate(Arcadia_Visuals_Linux_DisplayMode);
 }

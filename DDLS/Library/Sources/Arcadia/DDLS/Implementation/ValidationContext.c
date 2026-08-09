@@ -312,9 +312,9 @@ Arcadia_DDLS_ValidationContext_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDLS_ValidationContext);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_DDLS_ValidationContext);
+  _Arcadia_EndCreate(Arcadia_DDLS_ValidationContext);
 }
 
 void

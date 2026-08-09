@@ -145,7 +145,7 @@ Arcadia_Media_DSP_WhiteNoise_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_DSP_WhiteNoise);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_DSP_WhiteNoise);
+  _Arcadia_EndCreate(Arcadia_Media_DSP_WhiteNoise);
 }

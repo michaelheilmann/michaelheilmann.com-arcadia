@@ -20,39 +20,39 @@
 #include <assert.h>
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_constructImpl
+Arcadia_Engine_Visuals_ProgramResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResource* self
+    Arcadia_Engine_Visuals_ProgramResource* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_ProgramResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResourceDispatch* self
+    Arcadia_Engine_Visuals_ProgramResourceDispatch* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_destructImpl
+Arcadia_Engine_Visuals_ProgramResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResource* self
+    Arcadia_Engine_Visuals_ProgramResource* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_visitImpl
+Arcadia_Engine_Visuals_ProgramResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResource* self
+    Arcadia_Engine_Visuals_ProgramResource* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_ProgramResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_ProgramResource_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_ProgramResource_visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_ProgramResource_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_ProgramResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_ProgramResource_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_ProgramResource_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_ProgramResource_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -60,18 +60,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.ProgramResource", Arcadia_Engine_Visuals_Implementation_ProgramResource,
-                         u8"Arcadia.Visuals.Implementation.Resource", Arcadia_Engine_Visuals_Implementation_Resource,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.ProgramResource", Arcadia_Engine_Visuals_ProgramResource,
+                         u8"Arcadia.Visuals.Resource", Arcadia_Engine_Visuals_Resource,
                          &_typeOperations);
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_constructImpl
+Arcadia_Engine_Visuals_ProgramResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResource* self
+    Arcadia_Engine_Visuals_ProgramResource* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_ProgramResource);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_ProgramResource);
   if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -83,29 +83,29 @@ Arcadia_Engine_Visuals_Implementation_ProgramResource_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_ProgramResource);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_ProgramResource);
 }
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_ProgramResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResourceDispatch* self
+    Arcadia_Engine_Visuals_ProgramResourceDispatch* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_destructImpl
+Arcadia_Engine_Visuals_ProgramResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResource* self
+    Arcadia_Engine_Visuals_ProgramResource* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Engine_Visuals_Implementation_ProgramResource_visitImpl
+Arcadia_Engine_Visuals_ProgramResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ProgramResource* self
+    Arcadia_Engine_Visuals_ProgramResource* self
   )
 {/*Intentionally empty.*/}

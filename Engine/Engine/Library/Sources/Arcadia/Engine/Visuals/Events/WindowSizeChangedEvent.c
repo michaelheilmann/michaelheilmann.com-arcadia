@@ -110,7 +110,7 @@ Arcadia_Engine_Visuals_WindowSizeChangedEvent_create
     Arcadia_Integer32Value verticalSize
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_WindowSizeChangedEvent);
   Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
   if  (window) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, window);
@@ -120,5 +120,5 @@ Arcadia_Engine_Visuals_WindowSizeChangedEvent_create
   Arcadia_ValueStack_pushInteger32Value(thread, horizontalSize);
   Arcadia_ValueStack_pushInteger32Value(thread, verticalSize);
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_WindowSizeChangedEvent);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_WindowSizeChangedEvent);
 }

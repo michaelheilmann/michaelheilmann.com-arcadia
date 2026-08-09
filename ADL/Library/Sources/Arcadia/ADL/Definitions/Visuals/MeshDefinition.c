@@ -150,7 +150,7 @@ Arcadia_ADL_MeshDefinition_create
     Arcadia_String* ambientColorName
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_MeshDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushSizeValue(thread, numberOfVertices);
@@ -159,7 +159,7 @@ Arcadia_ADL_MeshDefinition_create
   Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, vertexAmbientTextureCoordinates);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)ambientColorName);
   Arcadia_ValueStack_pushNatural8Value(thread, 7);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_MeshDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_MeshDefinition);
 }
 
 Arcadia_SizeValue

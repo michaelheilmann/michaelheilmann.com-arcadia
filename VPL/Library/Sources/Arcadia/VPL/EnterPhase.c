@@ -154,9 +154,9 @@ Arcadia_VPL_EnterPhase_create
     Arcadia_Languages_Diagnostics* diagnostics
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_EnterPhase);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_EnterPhase);
+  _Arcadia_EndCreate(Arcadia_VPL_EnterPhase);
 }
 
 static void

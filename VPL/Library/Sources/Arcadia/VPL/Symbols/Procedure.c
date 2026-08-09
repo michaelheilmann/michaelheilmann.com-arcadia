@@ -126,7 +126,7 @@ Arcadia_VPL_Symbols_Procedure_create
     Arcadia_VPL_Tree_Node* node
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Symbols_Procedure);
   if (name) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   } else {
@@ -143,5 +143,5 @@ Arcadia_VPL_Symbols_Procedure_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_Procedure);
+  _Arcadia_EndCreate(Arcadia_VPL_Symbols_Procedure);
 }

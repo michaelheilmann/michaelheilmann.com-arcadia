@@ -179,8 +179,8 @@ Arcadia_StringBuilder_ByteReader_create
     Arcadia_StringBuilder* source
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_StringBuilder_ByteReader);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)source);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_StringBuilder_ByteReader); 
+  _Arcadia_EndCreate(Arcadia_StringBuilder_ByteReader); 
 }

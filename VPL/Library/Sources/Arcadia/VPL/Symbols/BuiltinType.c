@@ -123,12 +123,12 @@ Arcadia_VPL_Symbols_BuiltinType_create
     Arcadia_String* name
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Symbols_BuiltinType);
   if (name) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_BuiltinType);
+  _Arcadia_EndCreate(Arcadia_VPL_Symbols_BuiltinType);
 }

@@ -544,21 +544,21 @@ onProcedureDefinition
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
-  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(definitionAst->procedureName);
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(definitionAst->name);
   Arcadia_Value v = Arcadia_Map_get(thread, symbolTable, k);
   if (!Arcadia_Value_isVoidValue(&v)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->procedureParameters); i < n; ++i) {
-    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->procedureParameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->parameters); i < n; ++i) {
+    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->parameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
                                                               variable->name,
                                                               (Arcadia_MILC_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
-    if (definitionAst->procedureBody) {
+    if (definitionAst->body) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
@@ -568,14 +568,14 @@ onProcedureDefinition
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_createForeign(thread, makeIdentifier(thread, definitionAst->procedureName), Arcadia_Value_getForeignProcedureValue(&v));
+    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_createForeign(thread, makeIdentifier(thread, definitionAst->name), Arcadia_Value_getForeignProcedureValue(&v));
     R_Interpreter_ProcessState_defineGlobalProcedure(process, interpreterProcessState, procedure);
   } else {
-    if (!definitionAst->procedureBody) {
+    if (!definitionAst->body) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_create(thread, makeIdentifier(thread, definitionAst->procedureName), onProcedureBody(thread, interpreterProcessState, context, definitionAst->procedureBody));
+    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_create(thread, makeIdentifier(thread, definitionAst->name), onProcedureBody(thread, interpreterProcessState, context, definitionAst->body));
     R_Interpreter_ProcessState_defineGlobalProcedure(process, interpreterProcessState, procedure);
   }
 }
@@ -641,21 +641,21 @@ onMethodDefinition
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
-  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(definitionAst->methodName);
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(definitionAst->name);
   Arcadia_Value v = Arcadia_Map_get(thread, symbolTable, k);
   if (!Arcadia_Value_isVoidValue(&v)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->methodParameters); i < n; ++i) {
-    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->methodParameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->parameters); i < n; ++i) {
+    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->parameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
                                                               variable->name,
                                                               (Arcadia_MILC_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
-    if (definitionAst->methodBody) {
+    if (definitionAst->body) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
@@ -665,14 +665,14 @@ onMethodDefinition
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    R_Interpreter_Method* method = R_Interpreter_Method_createForeign(thread, definitionAst->methodName, Arcadia_Value_getForeignProcedureValue(&v));
+    R_Interpreter_Method* method = R_Interpreter_Method_createForeign(thread, definitionAst->name, Arcadia_Value_getForeignProcedureValue(&v));
     R_Interpreter_Class_addMethod(process, enclosing, method);
   } else {
-    if (!definitionAst->methodBody) {
+    if (!definitionAst->body) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    R_Interpreter_Method* method = R_Interpreter_Method_create(thread, definitionAst->methodName, onMethodBody(thread, interpreterProcessState, context, definitionAst->methodBody));
+    R_Interpreter_Method* method = R_Interpreter_Method_create(thread, definitionAst->name, onMethodBody(thread, interpreterProcessState, context, definitionAst->body));
     R_Interpreter_Class_addMethod(process, enclosing, method);
   }
 }
@@ -896,7 +896,7 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_MIL_SemanticalAnalysis_EnterPass);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_MIL_SemanticalAnalysis_EnterPass);
+  _Arcadia_EndCreate(Arcadia_MIL_SemanticalAnalysis_EnterPass);
 }

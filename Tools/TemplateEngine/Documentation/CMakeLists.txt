@@ -16,7 +16,7 @@
 cmake_minimum_required(VERSION 3.29)
 
 # Build the documentation.
-BeginTemplateEngine(${MyProjectName}.Tools.TemplateEngine.BuildDocs "Tools/TemplateEngine")
+BeginTemplateEngine(${MyProjectName}.TemplateEngine.BuildDocs "TemplateEngine")
 
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/TemplateEngine/index.html"

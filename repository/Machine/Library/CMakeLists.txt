@@ -54,7 +54,7 @@ if (NOT TARGET ${this})
   OnSourceFile(${this} Arcadia/Include.c)
   OnHeaderFile(${this} Arcadia/Include.h)
 
-  OnModuleDependency(${this} ${MyProjectName}.MIL.Frontend)
+  OnModuleDependency(${this} ${MyProjectName}.MILC)
   OnModuleDependency(${this} ${MyProjectName}.Ring2)
   OnModuleDependency(${this} ${MyProjectName}.Print)
 

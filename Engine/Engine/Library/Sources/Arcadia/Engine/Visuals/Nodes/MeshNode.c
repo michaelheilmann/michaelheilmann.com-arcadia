@@ -215,11 +215,11 @@ Arcadia_Engine_Visuals_MeshNode_destructImpl
 #endif
   if (self->backendContext) {
     if (self->vertexBufferResource) {
-      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->vertexBufferResource);
+      Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->vertexBufferResource);
       self->vertexBufferResource = NULL;
     }
     if (self->constantBufferResource) {
-      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->constantBufferResource);
+      Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->constantBufferResource);
       self->constantBufferResource = NULL;
     }
 
@@ -278,10 +278,10 @@ Arcadia_Engine_Visuals_MeshNode_renderImpl
       Arcadia_Engine_Visuals_BackendContext* backendContext = self->backendContext;
       // (2.1) Create the vertex buffer resource.
       self->vertexBufferResource = Arcadia_Engine_Visuals_BackendContext_createVertexBufferResource(thread, backendContext);
-      Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->vertexBufferResource);
+      Arcadia_Engine_Visuals_Resource_ref(thread, (Arcadia_Engine_Visuals_Resource*)self->vertexBufferResource);
     }
     if (self->dirtyFlags & VerticesDirty) {
-      Arcadia_Engine_Visuals_Implementation_VertexBufferResource_setData
+      Arcadia_Engine_Visuals_VertexBufferResource_setData
         (
           thread,
           self->vertexBufferResource,
@@ -296,12 +296,12 @@ Arcadia_Engine_Visuals_MeshNode_renderImpl
       Arcadia_Engine_Visuals_BackendContext* backendContext = self->backendContext;
       // (2.2) Create the constant buffer resource.
       self->constantBufferResource = Arcadia_Engine_Visuals_BackendContext_createConstantBufferResource(thread, backendContext);
-      Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->constantBufferResource);
+      Arcadia_Engine_Visuals_Resource_ref(thread, (Arcadia_Engine_Visuals_Resource*)self->constantBufferResource);
     }
     if (self->dirtyFlags & MeshAmbientColorDirty) {
-      Arcadia_Engine_Visuals_Implementation_ConstantBufferResource_clear(thread, self->constantBufferResource);
+      Arcadia_Engine_Visuals_ConstantBufferResource_clear(thread, self->constantBufferResource);
       // @todo We need to ability to do sub-range updates: There is no need to rewrite every value if only one value is dirty.
-      Arcadia_Engine_Visuals_Implementation_ConstantBufferResource_writeColor4Real32(thread, self->constantBufferResource, self->ambientColor);
+      Arcadia_Engine_Visuals_ConstantBufferResource_writeColor4Real32(thread, self->constantBufferResource, self->ambientColor);
       self->dirtyFlags &= ~MeshAmbientColorDirty;
     }
   }
@@ -326,11 +326,11 @@ Arcadia_Engine_Visuals_MeshNode_setVisualsBackendContextImpl
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->constantBufferResource) {
-    Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->constantBufferResource);
+    Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->constantBufferResource);
     self->constantBufferResource = NULL;
   }
   if (self->vertexBufferResource) {
-    Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->vertexBufferResource);
+    Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->vertexBufferResource);
     self->vertexBufferResource = NULL;
   }
   self->backendContext = backendContext;
@@ -344,11 +344,11 @@ Arcadia_Engine_Visuals_MeshNode_create
     Arcadia_ADL_MeshDefinition* source
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_MeshNode);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (source) Arcadia_ValueStack_pushObjectReferenceValue(thread, source); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_MeshNode);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_MeshNode);
 }
 
 void

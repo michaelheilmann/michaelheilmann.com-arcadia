@@ -73,7 +73,7 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
-    Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource
+    Arcadia_Engine_Visuals_EnterPassResource* enterPassResource
   );
 
 static void
@@ -123,7 +123,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ConstantBufferResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource,
-                         u8"Arcadia.Visuals.Implementation.ConstantBufferResource", Arcadia_Engine_Visuals_Implementation_ConstantBufferResource,
+                         u8"Arcadia.Visuals.ConstantBufferResource", Arcadia_Engine_Visuals_ConstantBufferResource,
                          &_typeOperations);
 
 static void
@@ -158,15 +158,15 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_initializeD
     Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResourceDispatch* self
   )
 {
-  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl;
-  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_unloadImpl;
-  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_unlinkImpl;
-  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*, Arcadia_Engine_Visuals_Implementation_EnterPassResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl;
+  ((Arcadia_Engine_Visuals_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl;
+  ((Arcadia_Engine_Visuals_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_unloadImpl;
+  ((Arcadia_Engine_Visuals_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_unlinkImpl;
+  ((Arcadia_Engine_Visuals_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Resource*, Arcadia_Engine_Visuals_EnterPassResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl;
 
-  ((Arcadia_Engine_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_ConstantBufferResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl;
-  ((Arcadia_Engine_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->writeColor4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_ConstantBufferResource*, Arcadia_Math_Color4Real32 const*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32Impl;
-  ((Arcadia_Engine_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->writeMatrix4x4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_ConstantBufferResource*, Arcadia_BooleanValue, Arcadia_Math_Matrix4Real32 const*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl;
-  ((Arcadia_Engine_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->setData = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_ConstantBufferResource*, const void*, Arcadia_SizeValue)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl;
+  ((Arcadia_Engine_Visuals_ConstantBufferResourceDispatch*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ConstantBufferResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl;
+  ((Arcadia_Engine_Visuals_ConstantBufferResourceDispatch*)self)->writeColor4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ConstantBufferResource*, Arcadia_Math_Color4Real32 const*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32Impl;
+  ((Arcadia_Engine_Visuals_ConstantBufferResourceDispatch*)self)->writeMatrix4x4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ConstantBufferResource*, Arcadia_BooleanValue, Arcadia_Math_Matrix4Real32 const*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl;
+  ((Arcadia_Engine_Visuals_ConstantBufferResourceDispatch*)self)->setData = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ConstantBufferResource*, const void*, Arcadia_SizeValue)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl;
 }
 
 static void
@@ -198,7 +198,7 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl
     Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
   )
 {
-  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Resource*)self)->context;
   _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
 
   if (0 == self->bufferID) {
@@ -222,7 +222,7 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_unloadImpl
   )
 {
   if (self->bufferID) {
-    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Resource*)self)->context;
     _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
     gl->glDeleteBuffers(1, &self->bufferID);
     self->bufferID = 0;
@@ -237,7 +237,7 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_unlinkImpl
   )
 {
   assert(0 == self->bufferID);
-  ((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context = NULL;
+  ((Arcadia_Engine_Visuals_Resource*)self)->context = NULL;
 }
 
 static void
@@ -245,10 +245,10 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
-    Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource
+    Arcadia_Engine_Visuals_EnterPassResource* enterPassResource
   )
 {
-  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Resource*)self)->context;
   _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
 
   if (0 == self->bufferID) {
@@ -329,8 +329,8 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_create
     Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource);
 }

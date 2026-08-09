@@ -26,15 +26,15 @@ typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource Arc
 typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.MaterialResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource,
-                          u8"Arcadia.Visuals.Implementation.MaterialResource");
+                          u8"Arcadia.Visuals.MaterialResource");
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResourceDispatch {
-  Arcadia_Engine_Visuals_Implementation_MaterialResourceDispatch _parent;
+  Arcadia_Engine_Visuals_MaterialResourceDispatch _parent;
 };
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource {
-  Arcadia_Engine_Visuals_Implementation_MaterialResource _parent;
-  Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource;
+  Arcadia_Engine_Visuals_MaterialResource _parent;
+  Arcadia_Engine_Visuals_MaterialResource_AmbientColorSource ambientColorSource;
   Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* ambientColorTexture;
   Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* program;
 };
@@ -44,7 +44,7 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
-    Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
+    Arcadia_Engine_Visuals_MaterialResource_AmbientColorSource ambientColorSource,
     Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* ambientColorTexture,
     Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* program
   );

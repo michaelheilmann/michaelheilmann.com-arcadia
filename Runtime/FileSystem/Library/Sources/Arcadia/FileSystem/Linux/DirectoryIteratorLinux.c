@@ -163,10 +163,10 @@ Arcadia_DirectoryIteratorLinux_create
     Arcadia_FilePath* path
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DirectoryIteratorLinux);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)path);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DirectoryIteratorLinux);
+  _Arcadia_EndCreate(Arcadia_DirectoryIteratorLinux);
 }
 
 static void

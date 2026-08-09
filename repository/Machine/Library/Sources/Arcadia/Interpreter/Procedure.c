@@ -114,7 +114,7 @@ R_Interpreter_Procedure_createForeign
     Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(R_Interpreter_Procedure);
   if (name) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, name);
   } else {
@@ -126,7 +126,7 @@ R_Interpreter_Procedure_createForeign
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(R_Interpreter_Procedure);
+  _Arcadia_EndCreate(R_Interpreter_Procedure);
 }
 
 R_Interpreter_Procedure*
@@ -137,7 +137,7 @@ R_Interpreter_Procedure_create
     R_Interpreter_Code* code
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(R_Interpreter_Procedure);
   if (name) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, name);
   } else {
@@ -149,7 +149,7 @@ R_Interpreter_Procedure_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(R_Interpreter_Procedure);
+  _Arcadia_EndCreate(R_Interpreter_Procedure);
 }
 
 R_Interpreter_Code*

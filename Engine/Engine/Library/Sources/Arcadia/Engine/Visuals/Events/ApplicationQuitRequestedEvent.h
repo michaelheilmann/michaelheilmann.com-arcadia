@@ -13,28 +13,28 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_EVENTS_APPLICATIONQUITREQUESTEDEVENT_H_INCLUDED)
-#define ARCADIA_VISUALS_EVENTS_APPLICATIONQUITREQUESTEDEVENT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_APPLICATIONQUITREQUESTEDEVENT_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_APPLICATIONQUITREQUESTEDEVENT_H_INCLUDED
 
 #include "Arcadia/Engine/Visuals/Events/ApplicationEvent.h"
 
 // The opaque type of an "application" message.
-Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.ApplicationQuitRequestedEvent", Arcadia_Visuals_ApplicationQuitRequestedEvent,
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.ApplicationQuitRequestedEvent", Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent,
                           u8"Arcadia.Engine.Visuals.ApplicationEvent");
 
-struct Arcadia_Visuals_ApplicationQuitRequestedEventDispatch {
-  Arcadia_Visuals_ApplicationEventDispatch parent;
+struct Arcadia_Engine_Visuals_ApplicationQuitRequestedEventDispatch {
+  Arcadia_Engine_Visuals_ApplicationEventDispatch parent;
 };
 
-struct Arcadia_Visuals_ApplicationQuitRequestedEvent {
-  Arcadia_Visuals_ApplicationEvent _parent;
+struct Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent {
+  Arcadia_Engine_Visuals_ApplicationEvent _parent;
 };
 
-Arcadia_Visuals_ApplicationQuitRequestedEvent*
-Arcadia_Visuals_ApplicationQuitRequestedEvent_create
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent*
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value timestamp
   );
 
-#endif // ARCADIA_VISUALS_EVENTS_APPLICATIONQUITREQUESTEDEVENT_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_APPLICATIONQUITREQUESTEDEVENT_H_INCLUDED

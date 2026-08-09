@@ -217,10 +217,10 @@ Arcadia_WeakReference_create
     Arcadia_Value value
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_WeakReference);
   Arcadia_ValueStack_pushValue(thread, &value);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_WeakReference);
+  _Arcadia_EndCreate(Arcadia_WeakReference);
 }
 
 Arcadia_Value

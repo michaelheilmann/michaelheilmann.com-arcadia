@@ -15,8 +15,8 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestFolder MIL/Frontend)
-set(this ${MyProjectName}.MIL.Frontend.Tests.SemanticalAnalysis)
+set(MyTestFolder Machine)
+set(this ${MyProjectName}.Machine.Tests.SemanticalAnalysis)
 
 if (NOT TARGET ${this})
   BeginProduct(${this} test)

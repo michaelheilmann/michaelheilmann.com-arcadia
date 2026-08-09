@@ -332,7 +332,7 @@ Arcadia_ADL_MaterialReader_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_MaterialReader);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_MaterialReader);
+  _Arcadia_EndCreate(Arcadia_ADL_MaterialReader);
 }

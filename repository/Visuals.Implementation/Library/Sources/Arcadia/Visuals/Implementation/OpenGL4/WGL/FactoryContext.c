@@ -166,9 +166,9 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryContext_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryContext);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryContext);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_FactoryContext);
 }
 
 void

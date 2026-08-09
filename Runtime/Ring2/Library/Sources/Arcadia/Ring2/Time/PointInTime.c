@@ -94,10 +94,10 @@ Arcadia_PointInTime_create
     Arcadia_Integer64Value timeStamp
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_PointInTime);
   Arcadia_ValueStack_pushInteger64Value(thread, timeStamp);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_PointInTime);
+  _Arcadia_EndCreate(Arcadia_PointInTime);
 }
 
 Arcadia_Integer8Value

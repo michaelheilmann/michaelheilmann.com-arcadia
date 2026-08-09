@@ -139,9 +139,9 @@ Arcadia_VPL_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
     Arcadia_String* name
   )
 { 
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate();
   Arcadia_ValueStack_pushEnumerationValue(thread, Arcadia_EnumerationValue_make(_Arcadia_Languages_DiagnosticType_getType(thread), type));
   Arcadia_ValueStack_pushObjectReferenceValue(thread, name);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Diagnostics_SymbolAlreadyDefinedDiagnostic);
+  _Arcadia_EndCreate(Arcadia_VPL_Diagnostics_SymbolAlreadyDefinedDiagnostic);
 }

@@ -18,18 +18,18 @@
 
 #include "Arcadia/Engine/Visuals/Resource.h"
 
-typedef struct Arcadia_Engine_Visuals_Implementation_VertexProgramResource Arcadia_Engine_Visuals_Implementation_VertexProgramResource;
-typedef struct Arcadia_Engine_Visuals_Implementation_FragmentProgramResource Arcadia_Engine_Visuals_Implementation_FragmentProgramResource;
+typedef struct Arcadia_Engine_Visuals_VertexProgramResource Arcadia_Engine_Visuals_VertexProgramResource;
+typedef struct Arcadia_Engine_Visuals_FragmentProgramResource Arcadia_Engine_Visuals_FragmentProgramResource;
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.ProgramResource", Arcadia_Engine_Visuals_Implementation_ProgramResource,
-                          u8"Arcadia.Visuals.Implementation.Resource");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.ProgramResource", Arcadia_Engine_Visuals_ProgramResource,
+                          u8"Arcadia.Visuals.Resource");
 
-struct Arcadia_Engine_Visuals_Implementation_ProgramResourceDispatch {
-  Arcadia_Engine_Visuals_Implementation_ResourceDispatch _parent;
+struct Arcadia_Engine_Visuals_ProgramResourceDispatch {
+  Arcadia_Engine_Visuals_ResourceDispatch _parent;
 };
 
-struct Arcadia_Engine_Visuals_Implementation_ProgramResource {
-  Arcadia_Engine_Visuals_Implementation_Resource _parent;
+struct Arcadia_Engine_Visuals_ProgramResource {
+  Arcadia_Engine_Visuals_Resource _parent;
 };
 
 #endif // ARCADIA_ENGINE_VISUALS_RESOURCES_PROGRAMRESOURCE_H_INCLUDED

@@ -17,23 +17,23 @@
 #include "Arcadia/Engine/Visuals/Events/ApplicationQuitRequestedEvent.h"
 
 static void
-Arcadia_Visuals_ApplicationQuitRequestedEvent_constructImpl
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationQuitRequestedEvent* self
+    Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent* self
   );
 
 static void
-Arcadia_Visuals_ApplicationQuitRequestedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationQuitRequestedEventDispatch* self
+    Arcadia_Engine_Visuals_ApplicationQuitRequestedEventDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Visuals_ApplicationQuitRequestedEvent_constructImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_ApplicationQuitRequestedEvent_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -41,18 +41,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.ApplicationQuitRequestedEvent", Arcadia_Visuals_ApplicationQuitRequestedEvent,
-                         u8"Arcadia.Engine.Visuals.ApplicationEvent", Arcadia_Visuals_ApplicationEvent,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.ApplicationQuitRequestedEvent", Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent,
+                         u8"Arcadia.Engine.Visuals.ApplicationEvent", Arcadia_Engine_Visuals_ApplicationEvent,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_ApplicationQuitRequestedEvent_constructImpl
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationQuitRequestedEvent* self
+    Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_ApplicationQuitRequestedEvent);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent);
   if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -62,26 +62,26 @@ Arcadia_Visuals_ApplicationQuitRequestedEvent_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_LeaveConstructor(Arcadia_Visuals_ApplicationQuitRequestedEvent);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent);
 }
 
 static void
-Arcadia_Visuals_ApplicationQuitRequestedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationQuitRequestedEventDispatch* self
+    Arcadia_Engine_Visuals_ApplicationQuitRequestedEventDispatch* self
   )
 {/*Intentionally empty.*/}
 
-Arcadia_Visuals_ApplicationQuitRequestedEvent*
-Arcadia_Visuals_ApplicationQuitRequestedEvent_create
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent*
+Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value timestamp
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent);
   Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_ApplicationQuitRequestedEvent);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent);
 }

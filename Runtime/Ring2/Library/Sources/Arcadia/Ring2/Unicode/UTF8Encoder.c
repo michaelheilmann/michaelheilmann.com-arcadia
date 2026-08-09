@@ -166,7 +166,7 @@ Arcadia_Unicode_UTF8Encoder_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Unicode_UTF8Encoder);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Unicode_UTF8Encoder);
+  _Arcadia_EndCreate(Arcadia_Unicode_UTF8Encoder);
 }

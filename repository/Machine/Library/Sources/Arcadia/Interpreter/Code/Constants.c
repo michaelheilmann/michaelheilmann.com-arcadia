@@ -132,9 +132,9 @@ R_Interpreter_Code_Constants_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(R_Interpreter_Code_Constants);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(R_Interpreter_Code_Constants);
+  _Arcadia_EndCreate(R_Interpreter_Code_Constants);
 }
 
 static Arcadia_Natural32Value

@@ -302,10 +302,10 @@ Arcadia_Engine_Visuals_CameraNode_create
     Arcadia_Engine_Visuals_BackendContext* backendContext
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_CameraNode);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_CameraNode);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_CameraNode);
 }
 
 

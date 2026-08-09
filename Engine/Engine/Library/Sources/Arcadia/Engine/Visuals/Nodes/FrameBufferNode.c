@@ -147,7 +147,7 @@ Arcadia_Engine_Visuals_FrameBufferNode_destructImpl
 {
   if (self->backendContext) {
     if (self->frameBufferResource) {
-      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->frameBufferResource);
+      Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->frameBufferResource);
       self->frameBufferResource = NULL;
     }
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
@@ -181,10 +181,10 @@ Arcadia_Engine_Visuals_FrameBufferNode_renderImpl
           thread,
           (Arcadia_Engine_Visuals_BackendContext*)backendContext
         );
-      Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->frameBufferResource);
+      Arcadia_Engine_Visuals_Resource_ref(thread, (Arcadia_Engine_Visuals_Resource*)self->frameBufferResource);
     }
-    Arcadia_Engine_Visuals_Implementation_Resource_load(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->frameBufferResource);
-    Arcadia_Engine_Visuals_Implementation_FrameBufferResource_setSize(thread, self->frameBufferResource, self->width, self->height);
+    Arcadia_Engine_Visuals_Resource_load(thread, (Arcadia_Engine_Visuals_Resource*)self->frameBufferResource);
+    Arcadia_Engine_Visuals_FrameBufferResource_setSize(thread, self->frameBufferResource, self->width, self->height);
   }
 }
 
@@ -208,7 +208,7 @@ Arcadia_Engine_Visuals_FrameBufferNode_setVisualsBackendContextImpl
   }
   if (self->backendContext) {
     if (self->frameBufferResource) {
-      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->frameBufferResource);
+      Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->frameBufferResource);
       self->frameBufferResource = NULL;
     }
   }
@@ -248,10 +248,10 @@ Arcadia_Engine_Visuals_FrameBufferNode_create
     Arcadia_Engine_Visuals_BackendContext* backendContext
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_FrameBufferNode);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_FrameBufferNode);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_FrameBufferNode);
 }
 
 

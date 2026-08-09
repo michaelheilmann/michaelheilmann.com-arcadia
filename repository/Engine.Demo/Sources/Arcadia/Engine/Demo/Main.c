@@ -43,7 +43,7 @@ onQuitRequested
   Arcadia_Engine_Demo_Application* application =
     (Arcadia_Engine_Demo_Application*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Engine_Demo_Application_getType(thread));
   // Argument.
-  Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_ApplicationQuitRequestedEvent_getType(thread));
+  Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Visuals_ApplicationQuitRequestedEvent_getType(thread));
   // The sender is at index 1.
   Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)application, Arcadia_BooleanValue_True);
 }
@@ -161,18 +161,18 @@ main1
           Arcadia_Engine_Visuals_WindowClosedEvent* windowClosedEvent = (Arcadia_Engine_Visuals_WindowClosedEvent*)event;
           Arcadia_Engine_Demo_Application_onWindowClosedEvent(thread, application, windowClosedEvent);
         }
-        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_MouseButtonEvent_getType(thread))) {
-          Arcadia_Visuals_MouseButtonEvent* e = (Arcadia_Visuals_MouseButtonEvent*)event;
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Engine_Input_MouseButtonEvent_getType(thread))) {
+          Arcadia_Engine_Input_MouseButtonEvent* e = (Arcadia_Engine_Input_MouseButtonEvent*)event;
           Arcadia_Engine_Demo_Scene* scene = Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager);
           Arcadia_Engine_Demo_Scene_handleMouseButtonEvent(thread, scene, e);
         }
-        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_MousePointerEvent_getType(thread))) {
-          Arcadia_Visuals_MousePointerEvent* e = (Arcadia_Visuals_MousePointerEvent*)event;
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Engine_Input_MousePointerEvent_getType(thread))) {
+          Arcadia_Engine_Input_MousePointerEvent* e = (Arcadia_Engine_Input_MousePointerEvent*)event;
           Arcadia_Engine_Demo_Scene* scene = Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager);
           Arcadia_Engine_Demo_Scene_handleMousePointerEvent(thread, scene, e);
         }
-        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_KeyboardKeyEvent_getType(thread))) {
-          Arcadia_Visuals_KeyboardKeyEvent* e = (Arcadia_Visuals_KeyboardKeyEvent*)event;
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Engine_Input_KeyboardKeyEvent_getType(thread))) {
+          Arcadia_Engine_Input_KeyboardKeyEvent* e = (Arcadia_Engine_Input_KeyboardKeyEvent*)event;
           Arcadia_Engine_Demo_Scene* scene = Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager);
           Arcadia_Engine_Demo_Scene_handleKeyboardKeyEvent(thread, scene, e);
         }

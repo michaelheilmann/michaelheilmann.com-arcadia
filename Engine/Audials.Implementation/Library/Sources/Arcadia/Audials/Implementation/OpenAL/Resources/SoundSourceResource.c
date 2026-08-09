@@ -490,9 +490,9 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_create
     Arcadia_Media_SampleBuffer* sampleBuffer
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (sampleBuffer) Arcadia_ValueStack_pushObjectReferenceValue(thread, sampleBuffer); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
+  _Arcadia_EndCreate(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
 }

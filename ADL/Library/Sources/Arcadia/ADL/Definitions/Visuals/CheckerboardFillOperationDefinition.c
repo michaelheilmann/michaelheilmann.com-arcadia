@@ -154,7 +154,7 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_create
     Arcadia_String* secondColorName
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushInteger32Value(thread, checkerWidth);
@@ -162,5 +162,5 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_create
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)firstColorName);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)secondColorName);
   Arcadia_ValueStack_pushNatural8Value(thread, 6);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition);
 }

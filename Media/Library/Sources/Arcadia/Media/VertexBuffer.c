@@ -129,11 +129,11 @@ Arcadia_Media_VertexBuffer_create
     Arcadia_SizeValue numberOfVertices
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_VertexBuffer);
   if (vertexDescriptor) Arcadia_ValueStack_pushObjectReferenceValue(thread, vertexDescriptor); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushSizeValue(thread, numberOfVertices);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_VertexBuffer);
+  _Arcadia_EndCreate(Arcadia_Media_VertexBuffer);
 }
 
 Arcadia_SizeValue

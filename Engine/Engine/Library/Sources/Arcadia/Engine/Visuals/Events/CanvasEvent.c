@@ -17,23 +17,23 @@
 #include "Arcadia/Engine/Visuals/Events/CanvasEvent.h"
 
 static void
-Arcadia_Visuals_CanvasEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasEvent* self
+    Arcadia_Engine_Visuals_CanvasEvent* self
   );
 
 static void
-Arcadia_Visuals_CanvasEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasEventDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_CanvasEvent_constructImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_CanvasEvent_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_CanvasEvent_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_CanvasEvent_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -41,18 +41,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Engine_Visuals_CanvasEvent,
                          u8"Arcadia.Engine.Event", Arcadia_Engine_Event,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_CanvasEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasEvent* self
+    Arcadia_Engine_Visuals_CanvasEvent* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_CanvasEvent);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_CanvasEvent);
   if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -63,13 +63,13 @@ Arcadia_Visuals_CanvasEvent_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  Arcadia_LeaveConstructor(Arcadia_Visuals_CanvasEvent);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_CanvasEvent);
 }
 
 static void
-Arcadia_Visuals_CanvasEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasEventDispatch* self
   )
 {/*Intentionally empty.*/}

@@ -134,11 +134,11 @@ Arcadia_ADL_SampleBufferDefinition_create
     Arcadia_ADL_Reference* dsp
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_SampleBufferDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushNatural32Value(thread, duration);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)dsp);
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_SampleBufferDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_SampleBufferDefinition);
 }

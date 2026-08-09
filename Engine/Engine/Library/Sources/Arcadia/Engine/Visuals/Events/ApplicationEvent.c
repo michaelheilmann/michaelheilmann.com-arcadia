@@ -19,31 +19,31 @@
 #include "Arcadia/Engine/Visuals/BackendContext.h"
 
 static void
-Arcadia_Visuals_ApplicationEvent_constructImpl
+Arcadia_Engine_Visuals_ApplicationEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationEvent* self
+    Arcadia_Engine_Visuals_ApplicationEvent* self
   );
 
 static void
-Arcadia_Visuals_ApplicationEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_ApplicationEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationEventDispatch* self
+    Arcadia_Engine_Visuals_ApplicationEventDispatch* self
   );
 
 static void
-Arcadia_Visuals_ApplicationEvent_visit
+Arcadia_Engine_Visuals_ApplicationEvent_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationEvent* self
+    Arcadia_Engine_Visuals_ApplicationEvent* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_ApplicationEvent_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_ApplicationEvent_visit,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_ApplicationEvent_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_ApplicationEvent_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_ApplicationEvent_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_ApplicationEvent_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -51,18 +51,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.ApplicationEvent", Arcadia_Visuals_ApplicationEvent,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.ApplicationEvent", Arcadia_Engine_Visuals_ApplicationEvent,
                          u8"Arcadia.Engine.Event", Arcadia_Engine_Event,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_ApplicationEvent_constructImpl
+Arcadia_Engine_Visuals_ApplicationEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationEvent* self
+    Arcadia_Engine_Visuals_ApplicationEvent* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_ApplicationEvent);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_ApplicationEvent);
   if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -72,21 +72,21 @@ Arcadia_Visuals_ApplicationEvent_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_LeaveConstructor(Arcadia_Visuals_ApplicationEvent);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_ApplicationEvent);
 }
 
 static void
-Arcadia_Visuals_ApplicationEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_ApplicationEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationEventDispatch* self
+    Arcadia_Engine_Visuals_ApplicationEventDispatch* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Visuals_ApplicationEvent_visit
+Arcadia_Engine_Visuals_ApplicationEvent_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ApplicationEvent* self
+    Arcadia_Engine_Visuals_ApplicationEvent* self
   )
 {/*Intentionally empty.*/}

@@ -27,6 +27,7 @@ typedef struct Arcadia_ObjectDispatch {
 
   Arcadia_ForeignProcedure* add;
   Arcadia_ForeignProcedure* and;
+  Arcadia_ForeignProcedure* clone;
   Arcadia_ForeignProcedure* concatenate;
   Arcadia_ForeignProcedure* divide;
   Arcadia_ForeignProcedure* getHash;
@@ -39,7 +40,6 @@ typedef struct Arcadia_ObjectDispatch {
   Arcadia_ForeignProcedure* multiply;
   Arcadia_ForeignProcedure* negate;
   Arcadia_ForeignProcedure* not;
-  Arcadia_ForeignProcedure* isNotEqualTo;
   Arcadia_ForeignProcedure* or;
   Arcadia_ForeignProcedure* subtract;
   Arcadia_ForeignProcedure* toString;
@@ -133,16 +133,22 @@ struct Arcadia_Object {
 ///
 /// e) Assert the stack is not corrupted if a) - c) are successfull. Otherwise raise Arcadia.Status.StackCorruption.
 void*
-ARCADIA_CREATEOBJECT0
+_Arcadia_EndCreate0
   (
     Arcadia_Thread* thread,
     Arcadia_Type* type,
     Arcadia_SizeValue oldValueStackSize
   );
 
-/// @transitional
-#define ARCADIA_CREATEOBJECT(type) \
-  return ARCADIA_CREATEOBJECT0(thread, _##type##_getType(thread), oldValueStackSize);
+/// @deprecated
+#define _Arcadia_EndCreate(type) \
+  return _Arcadia_EndCreate0(thread, _##type##_getType(thread), oldValueStackSize);
+
+#define _Arcadia_BeginCreate(type) \
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+
+#define _Arcadia_EndCreate(type) \
+  return _Arcadia_EndCreate0(thread, _##type##_getType(thread), oldValueStackSize);
 
 void
 Arcadia_Object_setType
@@ -244,18 +250,17 @@ Arcadia_Object_isInstanceOf
   )
 { return Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, object), type); }
 
+// "clone"
+Arcadia_Object*
+Arcadia_Object_clone
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self
+  );
+
 /// "isEqualTo"
 Arcadia_BooleanValue
 Arcadia_Object_isEqualTo
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Object* self,
-    Arcadia_Value const* other
-  );
-
-/// "isNotEqualTo"
-Arcadia_BooleanValue
-Arcadia_Object_isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Object* self,

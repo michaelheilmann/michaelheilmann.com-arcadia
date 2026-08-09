@@ -194,13 +194,13 @@ Arcadia_registerEnumerationType
   );
 
 /* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
+// Interfaces cannot have type operations.
 Arcadia_TypeValue
 Arcadia_registerInterfaceType
   (
     Arcadia_Thread* thread,
     Arcadia_Name* name,
     size_t dispatchSize,
-    Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 

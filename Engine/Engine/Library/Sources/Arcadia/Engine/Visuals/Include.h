@@ -66,9 +66,9 @@
 #include "Arcadia/Engine/Visuals/Events/WindowPositionChangedEvent.h"
 #include "Arcadia/Engine/Visuals/Events/WindowSizeChangedEvent.h"
 
-#include "Arcadia/Engine/Visuals/Events/KeyboardKeyEvent.h"
-#include "Arcadia/Engine/Visuals/Events/MouseButtonEvent.h"
-#include "Arcadia/Engine/Visuals/Events/MousePointerEvent.h"
+#include "Arcadia/Engine/Input/KeyboardKeyEvent.h"
+#include "Arcadia/Engine/Input/MouseButtonEvent.h"
+#include "Arcadia/Engine/Input/MousePointerEvent.h"
 
 #include "Arcadia/Engine/Visuals/DisplayDevice.h"
 #include "Arcadia/Engine/Visuals/DisplayMode.h"

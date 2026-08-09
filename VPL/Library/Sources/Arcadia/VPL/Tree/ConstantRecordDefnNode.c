@@ -105,8 +105,8 @@ Arcadia_VPL_Tree_ConstantRecordDefnNode_create
     Arcadia_String* name
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Tree_ConstantRecordDefnNode);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, name);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Tree_ConstantRecordDefnNode);
+  _Arcadia_EndCreate(Arcadia_VPL_Tree_ConstantRecordDefnNode);
 }

@@ -171,12 +171,12 @@ Arcadia_ByteArraySliceImpl_create
     Arcadia_SizeValue size
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ByteArraySliceImpl);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)byteArray);
   Arcadia_ValueStack_pushSizeValue(thread, start);
   Arcadia_ValueStack_pushSizeValue(thread, size);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_ByteArraySliceImpl);
+  _Arcadia_EndCreate(Arcadia_ByteArraySliceImpl);
 }
 
 static Arcadia_Natural8Value

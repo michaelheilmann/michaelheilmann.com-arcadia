@@ -224,10 +224,10 @@ Arcadia_DDL_Parser_create
     Arcadia_DDL_Scanner* scanner
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDL_Parser);
   if (scanner) Arcadia_ValueStack_pushObjectReferenceValue(thread, scanner); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_Parser);
+  _Arcadia_EndCreate(Arcadia_DDL_Parser);
 }
 
 static Arcadia_String*

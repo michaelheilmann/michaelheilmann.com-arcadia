@@ -182,11 +182,11 @@ Arcadia_Engine_Visuals_Windows_Bitmap_create
     Arcadia_Integer32Value height
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_Windows_Bitmap);
   Arcadia_ValueStack_pushInteger32Value(thread, width);
   Arcadia_ValueStack_pushInteger32Value(thread, height);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Windows_Bitmap);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_Windows_Bitmap);
 }
 
 void

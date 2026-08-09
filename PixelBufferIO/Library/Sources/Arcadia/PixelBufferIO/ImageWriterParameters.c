@@ -139,7 +139,7 @@ Arcadia_Imaging_ImageWriterParameters_createFile
     Arcadia_String* format
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Imaging_ImageWriterParameters);
   if (path) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, path);
   } else {
@@ -151,7 +151,7 @@ Arcadia_Imaging_ImageWriterParameters_createFile
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Imaging_ImageWriterParameters);
+  _Arcadia_EndCreate(Arcadia_Imaging_ImageWriterParameters);
 }
 
 Arcadia_Imaging_ImageWriterParameters*
@@ -162,7 +162,7 @@ Arcadia_Imaging_ImageWriterParameters_createByteBuffer
     Arcadia_String* format
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Imaging_ImageWriterParameters);
   if (byteBuffer) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, byteBuffer);
   } else {
@@ -174,7 +174,7 @@ Arcadia_Imaging_ImageWriterParameters_createByteBuffer
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Imaging_ImageWriterParameters);
+  _Arcadia_EndCreate(Arcadia_Imaging_ImageWriterParameters);
 }
 
 Arcadia_BooleanValue

@@ -162,10 +162,10 @@ Arcadia_ByteArrayDefaultImpl_create
     Arcadia_RuntimeByteArray* runtimeByteArray
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ByteArrayDefaultImpl);
   Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, runtimeByteArray);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_ByteArrayDefaultImpl);
+  _Arcadia_EndCreate(Arcadia_ByteArrayDefaultImpl);
 }
 
 static Arcadia_Natural8Value

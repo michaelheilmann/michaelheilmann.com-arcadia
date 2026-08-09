@@ -104,8 +104,8 @@ Arcadia_DDLS_SchemaReferenceNode_create
     Arcadia_String* name
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDLS_SchemaReferenceNode);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDLS_SchemaReferenceNode);
+  _Arcadia_EndCreate(Arcadia_DDLS_SchemaReferenceNode);
 }

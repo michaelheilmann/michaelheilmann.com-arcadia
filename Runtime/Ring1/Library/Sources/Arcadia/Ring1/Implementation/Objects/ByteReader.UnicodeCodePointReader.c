@@ -331,8 +331,8 @@ Arcadia_ByteReader_UnicodeCodePointReader_create
     Arcadia_ByteReader* source
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ByteReader_UnicodeCodePointReader);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)source);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_ByteReader_UnicodeCodePointReader);
+  _Arcadia_EndCreate(Arcadia_ByteReader_UnicodeCodePointReader);
 }

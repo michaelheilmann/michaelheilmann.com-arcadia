@@ -101,8 +101,8 @@ Arcadia_VPL_Tree_NumberExprNode_create
     Arcadia_String* literal
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Tree_NumberExprNode);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, literal);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Tree_NumberExprNode);
+  _Arcadia_EndCreate(Arcadia_VPL_Tree_NumberExprNode);
 }

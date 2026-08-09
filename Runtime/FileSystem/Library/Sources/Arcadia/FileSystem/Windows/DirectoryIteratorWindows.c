@@ -201,8 +201,8 @@ Arcadia_DirectoryIteratorWindows_create
     Arcadia_FilePath* path
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DirectoryIteratorWindows);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)path);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DirectoryIteratorWindows);
+  _Arcadia_EndCreate(Arcadia_DirectoryIteratorWindows);
 }

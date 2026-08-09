@@ -261,12 +261,12 @@ Arcadia_Engine_Visuals_Windows_DisplayMode_create
     Arcadia_Integer32Value frequency
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_Windows_DisplayMode);
   if (device) { Arcadia_ValueStack_pushObjectReferenceValue(thread, device); } else { Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void); }
   Arcadia_ValueStack_pushInteger32Value(thread, horizontalResolution);
   Arcadia_ValueStack_pushInteger32Value(thread, verticalResolution);
   Arcadia_ValueStack_pushInteger32Value(thread, colorDepth);
   Arcadia_ValueStack_pushInteger32Value(thread, frequency);
   Arcadia_ValueStack_pushNatural8Value(thread, 5);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Windows_DisplayMode);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_Windows_DisplayMode);
 }

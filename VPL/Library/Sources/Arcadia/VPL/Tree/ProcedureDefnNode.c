@@ -133,14 +133,14 @@ Arcadia_VPL_Tree_ProcedureDefnNode_create
     Arcadia_List* body
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Tree_ProcedureDefnNode);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)modifiers);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)returnValueType);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)parameters);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)body);
   Arcadia_ValueStack_pushNatural8Value(thread, 5);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Tree_ProcedureDefnNode);
+  _Arcadia_EndCreate(Arcadia_VPL_Tree_ProcedureDefnNode);
 }
 
 Arcadia_BooleanValue

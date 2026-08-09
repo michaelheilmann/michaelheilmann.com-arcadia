@@ -17,39 +17,39 @@
 #include "Arcadia/Engine/Visuals/Resources/MaterialResource.h"
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_constructImpl
+Arcadia_Engine_Visuals_MaterialResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResource* self
+    Arcadia_Engine_Visuals_MaterialResource* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_MaterialResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResourceDispatch* self
+    Arcadia_Engine_Visuals_MaterialResourceDispatch* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_destructImpl
+Arcadia_Engine_Visuals_MaterialResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResource* self
+    Arcadia_Engine_Visuals_MaterialResource* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_visitImpl
+Arcadia_Engine_Visuals_MaterialResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResource* self
+    Arcadia_Engine_Visuals_MaterialResource* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_MaterialResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_MaterialResource_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_MaterialResource_visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_MaterialResource_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_MaterialResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_MaterialResource_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_MaterialResource_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_MaterialResource_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -57,18 +57,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.MaterialResource", Arcadia_Engine_Visuals_Implementation_MaterialResource,
-                         u8"Arcadia.Visuals.Implementation.Resource", Arcadia_Engine_Visuals_Implementation_Resource,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.MaterialResource", Arcadia_Engine_Visuals_MaterialResource,
+                         u8"Arcadia.Visuals.Resource", Arcadia_Engine_Visuals_Resource,
                          &_typeOperations);
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_constructImpl
+Arcadia_Engine_Visuals_MaterialResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResource* self
+    Arcadia_Engine_Visuals_MaterialResource* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_MaterialResource);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_MaterialResource);
   if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -82,29 +82,29 @@ Arcadia_Engine_Visuals_Implementation_MaterialResource_constructImpl
   }
   //
   //
-  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_MaterialResource);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_MaterialResource);
 }
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_MaterialResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResourceDispatch* self
+    Arcadia_Engine_Visuals_MaterialResourceDispatch* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_destructImpl
+Arcadia_Engine_Visuals_MaterialResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResource* self
+    Arcadia_Engine_Visuals_MaterialResource* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Engine_Visuals_Implementation_MaterialResource_visitImpl
+Arcadia_Engine_Visuals_MaterialResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_MaterialResource* self
+    Arcadia_Engine_Visuals_MaterialResource* self
   )
 { }

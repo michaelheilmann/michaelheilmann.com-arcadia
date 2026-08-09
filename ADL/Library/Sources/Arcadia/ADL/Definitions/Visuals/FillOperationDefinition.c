@@ -137,10 +137,10 @@ Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_create
     Arcadia_String* colorName
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_PixelBufferOperations_FillOperationDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)colorName);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_PixelBufferOperations_FillOperationDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_PixelBufferOperations_FillOperationDefinition);
 }

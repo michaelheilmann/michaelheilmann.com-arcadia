@@ -52,10 +52,10 @@ struct Arcadia_Engine_Visuals_MeshNode {
   Arcadia_Engine_Visuals_BackendContext* backendContext;
   /// The constant buffer of this mesh.
   /// This contains the mesh ambient color.
-  Arcadia_Engine_Visuals_Implementation_ConstantBufferResource* constantBufferResource;
+  Arcadia_Engine_Visuals_ConstantBufferResource* constantBufferResource;
   /// The vertex buffer of this mesh.
   /// This contains the vertices of the mesh.
-  Arcadia_Engine_Visuals_Implementation_VertexBufferResource* vertexBufferResource;
+  Arcadia_Engine_Visuals_VertexBufferResource* vertexBufferResource;
 };
 
 /// @brief Create a mesh node.

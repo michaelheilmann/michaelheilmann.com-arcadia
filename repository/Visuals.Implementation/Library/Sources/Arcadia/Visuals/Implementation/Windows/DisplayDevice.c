@@ -307,11 +307,11 @@ Arcadia_Engine_Visuals_Windows_DisplayDevice_create
     Arcadia_String* monitor
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_Windows_DisplayDevice);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, id);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, adapter);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, monitor);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Windows_DisplayDevice);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_Windows_DisplayDevice);
 }
 

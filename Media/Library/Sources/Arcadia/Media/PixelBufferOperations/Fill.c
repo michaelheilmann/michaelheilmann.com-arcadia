@@ -129,12 +129,12 @@ Arcadia_Media_PixelBufferOperations_Fill_create
     Arcadia_ADL_PixelBufferOperations_FillOperationDefinition* definition
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_PixelBufferOperations_Fill);
   if (definition) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definition);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_PixelBufferOperations_Fill);
+  _Arcadia_EndCreate(Arcadia_Media_PixelBufferOperations_Fill);
 }

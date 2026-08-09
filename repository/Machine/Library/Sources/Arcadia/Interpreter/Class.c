@@ -126,7 +126,7 @@ R_Interpreter_Class_create
     Arcadia_String* extendedClassName
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(R_Interpreter_Class);
   if (className) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, className);
   } else {
@@ -138,7 +138,7 @@ R_Interpreter_Class_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(R_Interpreter_Class);
+  _Arcadia_EndCreate(R_Interpreter_Class);
 }
 
 Arcadia_String*

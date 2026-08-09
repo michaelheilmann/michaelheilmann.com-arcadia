@@ -134,11 +134,11 @@ Arcadia_VPL_Symbols_Variable_create
     Arcadia_VPL_Tree_Node* node
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Symbols_Variable);
   if (name) Arcadia_ValueStack_pushObjectReferenceValue(thread, name); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (type) Arcadia_ValueStack_pushObjectReferenceValue(thread, type); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (enclosing) Arcadia_ValueStack_pushObjectReferenceValue(thread, enclosing); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (node) Arcadia_ValueStack_pushObjectReferenceValue(thread, node); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_Variable);
+  _Arcadia_EndCreate(Arcadia_VPL_Symbols_Variable);
 }

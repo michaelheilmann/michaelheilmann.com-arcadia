@@ -21,14 +21,30 @@ set(this ${MyProjectName}.Math)
 if (NOT TARGET ${this})
   BeginProduct(${this} library)
 
-  OnTemplateFile(${this} Arcadia/Math/Implementation/Matrix.c.te)
-  OnTemplateFile(${this} Arcadia/Math/Implementation/Matrix.h.te)
-  OnTemplateFile(${this} Arcadia/Math/Implementation/Color.c.te)
-  OnTemplateFile(${this} Arcadia/Math/Implementation/Color.h.te)
-  OnTemplateFile(${this} Arcadia/Math/Implementation/Vector.c.te)
-  OnTemplateFile(${this} Arcadia/Math/Implementation/Vector.h.te)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle.c.te PRIVATE)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle.h.te PRIVATE)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.c.te PRIVATE)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.h.te PRIVATE)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.c.te PRIVATE)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.h.te PRIVATE)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te PRIVATE)
+  OnTemplateEngineTemplateFile(${this} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te PRIVATE)
 
   BeginTemplateEngine(${this}.GenerateFiles "Math")
+
+    OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle.c.te"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real32.c"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real32.env")
+    OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle.h.te"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real32.h"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real32.env")
+
+    OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle.c.te"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real64.c"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real64.env")
+    OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle.h.te"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real64.h"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/AxisAngle3Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
                      "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.c"

@@ -147,12 +147,12 @@ Arcadia_DDL_NameNode_create
     Arcadia_String* string
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDL_NameNode);
   if (string) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, string);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_NameNode);
+  _Arcadia_EndCreate(Arcadia_DDL_NameNode);
 }

@@ -95,10 +95,10 @@ Arcadia_VPL_Tree_Node_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Tree_Node);
   Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_VPL_Tree_NodeFlags_Empty);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Tree_Node);
+  _Arcadia_EndCreate(Arcadia_VPL_Tree_Node);
 }
 
 void

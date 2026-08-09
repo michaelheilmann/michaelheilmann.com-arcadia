@@ -224,8 +224,8 @@ Arcadia_Engine_Visuals_Implementation_Windows_Icon_create
     Arcadia_Media_PixelBuffer* pixelBuffer
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_Implementation_Windows_Icon);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, pixelBuffer);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_Windows_Icon);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_Implementation_Windows_Icon);
 }

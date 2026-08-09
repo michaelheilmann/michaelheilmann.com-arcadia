@@ -135,8 +135,8 @@ Arcadia_Visuals_Linux_Icon_create
     Arcadia_Media_PixelBuffer* pixelBuffer
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Visuals_Linux_Icon);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, pixelBuffer);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Linux_Icon);
+  _Arcadia_EndCreate(Arcadia_Visuals_Linux_Icon);
 }

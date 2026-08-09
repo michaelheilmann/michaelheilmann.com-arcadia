@@ -115,7 +115,7 @@ Arcadia_Visuals_Configuration_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Visuals_Configuration);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Configuration);
+  _Arcadia_EndCreate(Arcadia_Visuals_Configuration);
 }

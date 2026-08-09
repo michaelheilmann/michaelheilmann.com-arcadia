@@ -17,22 +17,22 @@
 #define ARCADIA_ENGINE_VISUALS_RESOURCES_MODELRESOURCE_H_INCLUDED
 
 #include "Arcadia/Engine/Visuals/Resource.h"
-typedef struct Arcadia_Engine_Visuals_Implementation_ConstantBufferResource Arcadia_Engine_Visuals_Implementation_ConstantBufferResource;
-typedef struct Arcadia_Engine_Visuals_Implementation_MaterialResource Arcadia_Engine_Visuals_Implementation_MaterialResource;
-typedef struct Arcadia_Engine_Visuals_Implementation_VertexBufferResource Arcadia_Engine_Visuals_Implementation_VertexBufferResource;
+typedef struct Arcadia_Engine_Visuals_ConstantBufferResource Arcadia_Engine_Visuals_ConstantBufferResource;
+typedef struct Arcadia_Engine_Visuals_MaterialResource Arcadia_Engine_Visuals_MaterialResource;
+typedef struct Arcadia_Engine_Visuals_VertexBufferResource Arcadia_Engine_Visuals_VertexBufferResource;
 
-#define Arcadia_Engine_Visuals_Implementation_ModelResource_LocalToWorldMatrixDirty (1)
+#define Arcadia_Engine_Visuals_ModelResource_LocalToWorldMatrixDirty (1)
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Resources.ModelResource", Arcadia_Engine_Visuals_Implementation_ModelResource,
-                          u8"Arcadia.Visuals.Implementation.Resource");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Resources.ModelResource", Arcadia_Engine_Visuals_ModelResource,
+                          u8"Arcadia.Visuals.Resource");
 
-struct Arcadia_Engine_Visuals_Implementation_ModelResourceDispatch {
-  Arcadia_Engine_Visuals_Implementation_ResourceDispatch _parent;
-  void (*setLocalToWorldMatrix)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_ModelResource*, Arcadia_Math_Matrix4Real32*);
+struct Arcadia_Engine_Visuals_ModelResourceDispatch {
+  Arcadia_Engine_Visuals_ResourceDispatch _parent;
+  void (*setLocalToWorldMatrix)(Arcadia_Thread*, Arcadia_Engine_Visuals_ModelResource*, Arcadia_Math_Matrix4Real32*);
 };
 
-struct Arcadia_Engine_Visuals_Implementation_ModelResource {
-  Arcadia_Engine_Visuals_Implementation_Resource _parent;
+struct Arcadia_Engine_Visuals_ModelResource {
+  Arcadia_Engine_Visuals_Resource _parent;
   // The dirty flags.
   Arcadia_Natural8Value dirty;
   // The local to world matrix of the model.
@@ -41,25 +41,25 @@ struct Arcadia_Engine_Visuals_Implementation_ModelResource {
 
   /// Constant buffer with model-specific information.
   /// This is currently only the model to world matrix.
-  Arcadia_Engine_Visuals_Implementation_ConstantBufferResource* constantBuffer;
+  Arcadia_Engine_Visuals_ConstantBufferResource* constantBuffer;
 
   /// Constant buffer with mesh-specific information.
   /// This is currently only the mesh color.
-  Arcadia_Engine_Visuals_Implementation_ConstantBufferResource* meshConstantBuffer;
+  Arcadia_Engine_Visuals_ConstantBufferResource* meshConstantBuffer;
 
   /// The vertices of the mesh.
-  Arcadia_Engine_Visuals_Implementation_VertexBufferResource* meshVertexBuffer;
+  Arcadia_Engine_Visuals_VertexBufferResource* meshVertexBuffer;
 
   /// The material of the model.
-  Arcadia_Engine_Visuals_Implementation_MaterialResource* material;
+  Arcadia_Engine_Visuals_MaterialResource* material;
 
 };
 
 void
-Arcadia_Engine_Visuals_Implementation_ModelResource_setLocalToWorldMatrix
+Arcadia_Engine_Visuals_ModelResource_setLocalToWorldMatrix
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ModelResource* self,
+    Arcadia_Engine_Visuals_ModelResource* self,
     Arcadia_Math_Matrix4Real32* localToWorldMatrix
   );
 

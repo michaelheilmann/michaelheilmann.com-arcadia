@@ -261,7 +261,7 @@ Arcadia_ADL_PixelBufferReader_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_PixelBufferReader);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_PixelBufferReader);
+  _Arcadia_EndCreate(Arcadia_ADL_PixelBufferReader);
 }

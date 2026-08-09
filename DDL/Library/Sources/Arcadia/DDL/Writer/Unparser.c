@@ -449,10 +449,10 @@ Arcadia_DataDefinitionLanguage_Unparser_create
     Arcadia_Unicode_Encoder* encoder
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DataDefinitionLanguage_Unparser);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)encoder);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_Unparser);
+  _Arcadia_EndCreate(Arcadia_DataDefinitionLanguage_Unparser);
 }
 
 void

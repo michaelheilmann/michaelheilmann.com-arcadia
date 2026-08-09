@@ -74,7 +74,7 @@ macro(CopyProductAssets target folder targetDirectory)
 
  # If a folder was specified.
  if (NOT "${folder}" STREQUAL "")
-   set_target_properties(${target} PROPERTIES FOLDER ${folder})
+   set_target_properties(${target}.CopyAssets PROPERTIES FOLDER ${folder})
  endif()
 
 endmacro()
@@ -106,14 +106,23 @@ macro(BeginProduct target type)
   set(${target}.SourceFiles "")
   set(${target}.HeaderFiles "")
   set(${target}.InlayFiles "")
+  
   set(${target}.ConfigurationTemplateFiles "")
   set(${target}.ConfigurationFiles "")
+  
   set(${target}.Assets.Files "")
   set(${target}.Assets.Directories "")
+  
   set(${target}.AssemblerFiles "")
+  
   set(${target}.Libraries "")
   set(${target}.PrivateLibraries "")
+  
   set(${target}.IncludeDirectories "")
+  
+  set(${target}.TemplateEngine.TemplateFiles)
+  set(${target}.TemplateEngine.EnvironmentFiles)
+  
   set(${target}.Enabled TRUE)
   DetectCompilerC(${target})
   DetectCompilerASM(${target})
@@ -201,6 +210,12 @@ macro(EndProduct target)
     foreach (e ${${target}.AssemblerFiles})
       list(APPEND allFiles ${e})
     endforeach()
+    foreach (e ${${target}.TemplateEngine.TemplateFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
+    foreach (e ${${target}.TemplateEngine.EnvironmentFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
 
     # Support for resource files under windows.
     if (${${target}.OperatingSystem} STREQUAL ${${target}.OperatingSystem.Windows} AND ${target}.Windows.ResourceFile)
@@ -228,6 +243,14 @@ macro(EndProduct target)
       endif()
     endforeach()
     foreach (file ${${target}.ConfigurationFiles})
+      get_source_file_property(_isPrivate ${file} PRIVATE)
+      if (NOT _isPrivate)
+        list(APPEND ${target}.PublicFiles ${file})
+      else()
+        list(APPEND ${target}.PrivateFiles ${file})
+      endif()
+    endforeach()
+    foreach (file ${${target}.TemplateEngine.TemplateFiles})
       get_source_file_property(_isPrivate ${file} PRIVATE)
       if (NOT _isPrivate)
         list(APPEND ${target}.PublicFiles ${file})
@@ -343,16 +366,6 @@ macro(EndProduct target)
 
 endmacro()
 
-macro(FetchProduct target directory help)
-  if (NOT TARGET ${target})
-    set(__${target}.SourceDir "${directory}" CACHE STRING ${help})
-    get_filename_component(__${target}.SourceDir "${__${target}.SourceDir}"
-                           REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-    #message(STATUS "fetching ${__${target}.SourceDir}")
-    FetchContent_Declare(__${target} SOURCE_DIR ${__${target}.SourceDir})
-    FetchContent_MakeAvailable(__${target})
-  endif()
-endmacro()
 
 # @param target the target to which targetFile becomes a dependency to
 # @param sourceFile the source file.
@@ -373,12 +386,12 @@ macro(OnAssetsDirectory target directory)
  endforeach()
 endmacro()
 
-# Define a template file.
+# Define a template engine template file.
 # The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
 # If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
 # @remark Can only be used between `BeginProduct` and `EndProduct`.
 # @todo Raise an error if the file does not exist.
-macro(OnTemplateFile target file)
+macro(OnTemplateEngineTemplateFile target file)
   set (extra_args ${ARGN})
   list(LENGTH extra_args extra_args_count)
   if (${extra_args_count} GREATER 0)
@@ -393,7 +406,7 @@ macro(OnTemplateFile target file)
     #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
   endif()
 
-  list(APPEND ${target}.TemplateFiles ${file})
+  list(APPEND ${target}.TemplateEngine.TemplateFiles ${file})
 
   unset(optional_arg)
 endmacro()

@@ -100,12 +100,12 @@ macro(EndTemplateEngine)
       
       # Add custom command and custom target.
       add_custom_command(OUTPUT ${targetFile}
-                         COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}" --dependencies="${dependenciesFile}"
+                         COMMAND $<TARGET_FILE:${MyProjectName}.TemplateEngine.CLI> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}" --dependencies="${dependenciesFile}"
                          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                          VERBATIM
                          DEPFILE "${dependenciesFile}"
                          COMMENT "${sourceFile} / ${environmentFile} => ${targetFile} / ${dependenciesFile}"
-                         DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
+                         DEPENDS ${MyProjectName}.TemplateEngine.CLI ${sourceFile} ${environmentFile})
       set_source_files_properties(${targetFile} PROPERTIES GENERATED 1)
       string(RANDOM LENGTH 64 randomLength)
       string(UUID generatedTarget NAMESPACE "15340915-a7be-4950-9d26-b789c0eaf106" NAME ${randomLength} TYPE SHA1)

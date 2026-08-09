@@ -123,10 +123,10 @@ Arcadia_DDL_BooleanNode_createBoolean
     Arcadia_BooleanValue booleanValue
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDL_BooleanNode);
   Arcadia_ValueStack_pushBooleanValue(thread, booleanValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_BooleanNode);
+  _Arcadia_EndCreate(Arcadia_DDL_BooleanNode);
 }
 
 Arcadia_DDL_BooleanNode*
@@ -136,12 +136,12 @@ Arcadia_DDL_BooleanNode_createString
     Arcadia_String* stringValue
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate();
   if (stringValue) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, stringValue);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_BooleanNode);
+  _Arcadia_EndCreate(Arcadia_DDL_BooleanNode);
 }

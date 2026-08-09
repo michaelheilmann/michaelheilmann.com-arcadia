@@ -17,8 +17,8 @@ cmake_minimum_required(VERSION 3.29)
 
 add_subdirectory(Machine)
 
-add_subdirectory(MIL.Frontend)
-add_subdirectory(MIL.Compiler)
+add_subdirectory(MILC)
+add_subdirectory(MILC.CIL)
 
 add_subdirectory(Integrations)
 

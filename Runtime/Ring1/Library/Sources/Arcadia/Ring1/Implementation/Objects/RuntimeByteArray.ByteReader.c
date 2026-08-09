@@ -178,8 +178,8 @@ Arcadia_RuntimeByteArray_ByteReader_create
     Arcadia_RuntimeByteArray* source
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_RuntimeByteArray_ByteReader);
   Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, source);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_RuntimeByteArray_ByteReader); 
+  _Arcadia_EndCreate(Arcadia_RuntimeByteArray_ByteReader); 
 }

@@ -134,7 +134,7 @@ Arcadia_Engine_Visuals_ModelNode_destructImpl
 {
   if (self->backendContext) {
     if (self->modelResource) {
-      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->modelResource);
+      Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->modelResource);
       self->modelResource = NULL;
     }
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
@@ -192,14 +192,14 @@ Arcadia_Engine_Visuals_ModelNode_renderImpl
                                                                                               meshNode->constantBufferResource,
                                                                                               meshNode->vertexBufferResource,
                                                                                               materialNode->materialResource);
-      Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->modelResource);
+      Arcadia_Engine_Visuals_Resource_ref(thread, (Arcadia_Engine_Visuals_Resource*)self->modelResource);
     }
   }
   // (4) Perform actual render to frame buffer.
   if (self->backendContext) {
     // (4.2) Render the mesh resource.
-    Arcadia_Engine_Visuals_Implementation_Resource_render(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->modelResource,
-                                                           ((Arcadia_Engine_Visuals_EnterPassNode*)enterPassNode)->enterPassResource);
+    Arcadia_Engine_Visuals_Resource_render(thread, (Arcadia_Engine_Visuals_Resource*)self->modelResource,
+                                                   ((Arcadia_Engine_Visuals_EnterPassNode*)enterPassNode)->enterPassResource);
   }
 }
 
@@ -222,7 +222,7 @@ Arcadia_Engine_Visuals_ModelNode_setVisualsBackendContextImpl
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->modelResource) {
-    Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->modelResource);
+    Arcadia_Engine_Visuals_Resource_unref(thread, (Arcadia_Engine_Visuals_Resource*)self->modelResource);
     self->modelResource = NULL;
   }
   self->backendContext = backendContext;
@@ -236,9 +236,9 @@ Arcadia_Engine_Visuals_ModelNode_create
     Arcadia_ADL_ModelDefinition* source
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_ModelNode);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (source) Arcadia_ValueStack_pushObjectReferenceValue(thread, source); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_ModelNode);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_ModelNode);
 }

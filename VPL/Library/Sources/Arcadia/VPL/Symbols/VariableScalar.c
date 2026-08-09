@@ -111,7 +111,7 @@ Arcadia_VPL_Symbols_VariableScalar_create
     Arcadia_VPL_Symbols_Symbol* type
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Symbols_VariableScalar);
   Arcadia_ValueStack_pushInteger32Value(thread, location);
   Arcadia_ValueStack_pushNatural8Value(thread, flags);
   if (name) {
@@ -125,5 +125,5 @@ Arcadia_VPL_Symbols_VariableScalar_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_VariableScalar);
+  _Arcadia_EndCreate(Arcadia_VPL_Symbols_VariableScalar);
 }

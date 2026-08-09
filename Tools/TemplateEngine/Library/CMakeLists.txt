@@ -15,42 +15,52 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(this ${MyProjectName}.Tools.TemplateEngine.Library)
+set(this ${MyProjectName}.TemplateEngine)
 
 if (NOT TARGET ${this})
 
   BeginProduct(${this} library)
 
-  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Configure.h.i)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.TemplateEngine/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.TemplateEngine/Configure.h.i)
 
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/Scanner.h)
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/WordType.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Scanner/WordType.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Diagnostics/UnexpectedSymbolDiagnostic.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Diagnostics/UnexpectedSymbolDiagnostic.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Diagnostics/UnexpectedWordDiagnostic.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Diagnostics/UnexpectedWordDiagnostic.h)
 
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Parser.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Parser.h)
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Tree.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/Tree.h)
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/TreeType.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Parser/TreeType.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Diagnostics/UnclosedStringLiteralDiagnostic.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Diagnostics/UnclosedStringLiteralDiagnostic.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Diagnostics/UnclosedStringLiteralDiagnosticContext.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Diagnostics/UnclosedStringLiteralDiagnosticContext.h)
 
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Context.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Context.h)
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Environment.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Environment.h)
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/FileContext.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/FileContext.h)
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/Library.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/Library.h)
-  OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Library/DependenciesContext.c)
-  OnHeaderFile(${this} Arcadia.Tools.TemplateEngine.Library/DependenciesContext.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Scanner/Scanner.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Scanner/Scanner.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Scanner/WordType.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Scanner/WordType.h)
+
+  OnSourceFile(${this} Arcadia.TemplateEngine/Parser/Parser.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Parser/Parser.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Parser/Tree.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Parser/Tree.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Parser/TreeType.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Parser/TreeType.h)
+
+  OnSourceFile(${this} Arcadia.TemplateEngine/Context.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Context.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Environment.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Environment.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/FileContext.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/FileContext.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/Library.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/Library.h)
+  OnSourceFile(${this} Arcadia.TemplateEngine/DependenciesContext.c)
+  OnHeaderFile(${this} Arcadia.TemplateEngine/DependenciesContext.h)
 
   OnModuleDependency(${this} ${MyProjectName}.DDL)
   OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
   EndProduct(${this})
 
-  set_target_properties(${this} PROPERTIES FOLDER "Tools/TemplateEngine")
+  set_target_properties(${this} PROPERTIES FOLDER "TemplateEngine")
 
 endif()

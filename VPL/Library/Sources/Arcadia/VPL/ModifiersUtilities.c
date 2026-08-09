@@ -149,9 +149,9 @@ Arcadia_VPL_ModifiersUtilities_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_ModifiersUtilities);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_ModifiersUtilities);
+  _Arcadia_EndCreate(Arcadia_VPL_ModifiersUtilities);
 }
 
 Arcadia_Natural8Value

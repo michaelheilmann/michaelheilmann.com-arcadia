@@ -125,11 +125,11 @@ Arcadia_VPL_Tree_VariableDefnNode_create
     Arcadia_String* type
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Tree_VariableDefnNode);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)type);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Tree_VariableDefnNode);
+  _Arcadia_EndCreate(Arcadia_VPL_Tree_VariableDefnNode);
 }
 
 Arcadia_BooleanValue

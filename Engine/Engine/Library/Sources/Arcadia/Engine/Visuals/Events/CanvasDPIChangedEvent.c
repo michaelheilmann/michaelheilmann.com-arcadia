@@ -17,23 +17,23 @@
 #include "Arcadia/Engine/Visuals/Events/CanvasDPIChangedEvent.h"
 
 static void
-Arcadia_Visuals_CanvasDPIChangedEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasDPIChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasDPIChangedEvent* self
+    Arcadia_Engine_Visuals_CanvasDPIChangedEvent* self
   );
 
 static void
-Arcadia_Visuals_CanvasDPIChangedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasDPIChangedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasDPIChangedEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasDPIChangedEventDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_CanvasDPIChangedEvent_constructImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_CanvasDPIChangedEvent_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_CanvasDPIChangedEvent_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_CanvasDPIChangedEvent_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -41,18 +41,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasDPIChangedEvent", Arcadia_Visuals_CanvasDPIChangedEvent,
-                         u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasDPIChangedEvent", Arcadia_Engine_Visuals_CanvasDPIChangedEvent,
+                         u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Engine_Visuals_CanvasEvent,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_CanvasDPIChangedEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasDPIChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasDPIChangedEvent* self
+    Arcadia_Engine_Visuals_CanvasDPIChangedEvent* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_CanvasDPIChangedEvent);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_CanvasDPIChangedEvent);
   if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -66,19 +66,19 @@ Arcadia_Visuals_CanvasDPIChangedEvent_constructImpl
   self->horizontalDpi = Arcadia_ValueStack_getInteger32Value(thread, 1);
   self->verticalDpi = Arcadia_ValueStack_getInteger32Value(thread, 0);
   //
-  Arcadia_LeaveConstructor(Arcadia_Visuals_CanvasDPIChangedEvent);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_CanvasDPIChangedEvent);
 }
 
 static void
-Arcadia_Visuals_CanvasDPIChangedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasDPIChangedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasDPIChangedEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasDPIChangedEventDispatch* self
   )
 {/*Intentionally empty.*/}
 
-Arcadia_Visuals_CanvasDPIChangedEvent*
-Arcadia_Visuals_CanvasDPIChangedEvent_create
+Arcadia_Engine_Visuals_CanvasDPIChangedEvent*
+Arcadia_Engine_Visuals_CanvasDPIChangedEvent_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value timestamp,
@@ -86,10 +86,10 @@ Arcadia_Visuals_CanvasDPIChangedEvent_create
     Arcadia_Integer32Value verticalDpi
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_CanvasDPIChangedEvent);
   Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
   Arcadia_ValueStack_pushInteger32Value(thread, horizontalDpi);
   Arcadia_ValueStack_pushInteger32Value(thread, verticalDpi);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_CanvasDPIChangedEvent);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_CanvasDPIChangedEvent);
 }

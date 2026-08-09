@@ -77,7 +77,7 @@ struct Arcadia_Engine_Visuals_TextureNode {
   // The backend context.
   Arcadia_Engine_Visuals_BackendContext* backendContext;
   // The texture resource.
-  Arcadia_Engine_Visuals_Implementation_TextureResource* textureResource;
+  Arcadia_Engine_Visuals_TextureResource* textureResource;
 };
 
 /// @brief Create a texture node.

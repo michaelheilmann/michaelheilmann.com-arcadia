@@ -316,7 +316,7 @@ Arcadia_Visuals_Linux_DisplayDevice_create
     Arcadia_String* name
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Visuals_Linux_DisplayDevice);
   if (backendContext) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext);
   } else {
@@ -333,7 +333,7 @@ Arcadia_Visuals_Linux_DisplayDevice_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Linux_DisplayDevice);
+  _Arcadia_EndCreate(Arcadia_Visuals_Linux_DisplayDevice);
 }
 
 /// @brief Update the device bounds from the backend.

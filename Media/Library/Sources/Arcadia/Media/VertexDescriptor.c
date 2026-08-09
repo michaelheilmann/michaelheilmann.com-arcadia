@@ -132,11 +132,11 @@ Arcadia_Media_VertexDescriptor_create
     Arcadia_ImmutableList* vertexElementDescriptors
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_VertexDescriptor);
   Arcadia_ValueStack_pushSizeValue(thread, stride);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)vertexElementDescriptors);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_VertexDescriptor);
+  _Arcadia_EndCreate(Arcadia_Media_VertexDescriptor);
 }
 
 Arcadia_Natural32Value

@@ -25,14 +25,14 @@ typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResourc
 typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ModelResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResource,
-                          u8"Arcadia.Visuals.Implementation.ModelResource");
+                          u8"Arcadia.Visuals.ModelResource");
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResourceDispatch {
-  Arcadia_Engine_Visuals_Implementation_ModelResourceDispatch _parent;
+  Arcadia_Engine_Visuals_ModelResourceDispatch _parent;
 };
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResource {
-  Arcadia_Engine_Visuals_Implementation_ModelResource _parent;
+  Arcadia_Engine_Visuals_ModelResource _parent;
 };
 
 Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResource*

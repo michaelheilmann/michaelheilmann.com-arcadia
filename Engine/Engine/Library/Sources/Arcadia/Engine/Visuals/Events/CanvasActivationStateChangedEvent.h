@@ -19,16 +19,16 @@
 #include "Arcadia/Engine/Visuals/Events/CanvasEvent.h"
 typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Visuals_CanvasActivationStateChangedEvent
-Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasActivationStateChangedEvent", Arcadia_Visuals_CanvasActivationStateChangedEvent,
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasActivationStateChangedEvent", Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent,
                           u8"Arcadia.Engine.Visuals.CanvasEvent");
 
-struct Arcadia_Visuals_CanvasActivationStateChangedEventDispatch {
-  Arcadia_Visuals_CanvasEventDispatch parent;
+struct Arcadia_Engine_Visuals_CanvasActivationStateChangedEventDispatch {
+  Arcadia_Engine_Visuals_CanvasEventDispatch parent;
 };
 
-struct Arcadia_Visuals_CanvasActivationStateChangedEvent {
-  Arcadia_Visuals_CanvasEvent _parent;
+struct Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent {
+  Arcadia_Engine_Visuals_CanvasEvent _parent;
   Arcadia_BooleanValue active;
 };
 

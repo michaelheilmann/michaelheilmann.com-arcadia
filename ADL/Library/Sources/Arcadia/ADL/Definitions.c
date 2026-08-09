@@ -101,9 +101,9 @@ Arcadia_ADL_Definitions_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate();
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_Definitions);
+  _Arcadia_EndCreate(Arcadia_ADL_Definitions);
 }
 
 Arcadia_ADL_Definition*

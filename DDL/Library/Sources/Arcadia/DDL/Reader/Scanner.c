@@ -450,11 +450,11 @@ Arcadia_DDL_Scanner_create
     Arcadia_Languages_Diagnostics* diagnostics
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDL_Scanner);
   if (stringTable) Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)stringTable); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (diagnostics) Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)diagnostics); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_Scanner);
+  _Arcadia_EndCreate(Arcadia_DDL_Scanner);
 }
 
 static Arcadia_UnicodeCodePointReader*

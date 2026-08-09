@@ -13,24 +13,24 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_EVENTS_CANVASDPICHANGEDMESSAGE_H_INCLUDED)
-#define ARCADIA_VISUALS_EVENTS_CANVASDPICHANGEDMESSAGE_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_CANVASDPICHANGEDMESSAGE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_CANVASDPICHANGEDMESSAGE_H_INCLUDED
 
 #include "Arcadia/Engine/Visuals/Events/CanvasEvent.h"
 typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Visuals_CanvasDPIChangedEvent
-Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasDPIChangedEvent", Arcadia_Visuals_CanvasDPIChangedEvent,
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_CanvasDPIChangedEvent
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasDPIChangedEvent", Arcadia_Engine_Visuals_CanvasDPIChangedEvent,
                           u8"Arcadia.Engine.Visuals.CanvasEvent");
 
-struct Arcadia_Visuals_CanvasDPIChangedEventDispatch {
-  Arcadia_Visuals_CanvasEventDispatch parent;
+struct Arcadia_Engine_Visuals_CanvasDPIChangedEventDispatch {
+  Arcadia_Engine_Visuals_CanvasEventDispatch parent;
 };
 
-struct Arcadia_Visuals_CanvasDPIChangedEvent {
-  Arcadia_Visuals_CanvasEvent _parent;
+struct Arcadia_Engine_Visuals_CanvasDPIChangedEvent {
+  Arcadia_Engine_Visuals_CanvasEvent _parent;
   Arcadia_Integer32Value horizontalDpi;
   Arcadia_Integer32Value verticalDpi;
 };
 
-#endif // ARCADIA_VISUALS_EVENTS_CANVASDPICHANGEDMESSAGE_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_CANVASDPICHANGEDMESSAGE_H_INCLUDED

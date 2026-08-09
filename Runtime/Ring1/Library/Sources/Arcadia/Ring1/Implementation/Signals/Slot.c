@@ -131,12 +131,12 @@ Arcadia_Slot_create
     Arcadia_ForeignProcedure* procedure
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Slot);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)signal);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, receiver);
   Arcadia_ValueStack_pushForeignProcedureValue(thread, procedure);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Slot);
+  _Arcadia_EndCreate(Arcadia_Slot);
 }
 
 void

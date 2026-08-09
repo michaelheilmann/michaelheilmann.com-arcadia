@@ -125,6 +125,7 @@ Arcadia_Unicode_UTF8_mapASCIIToASCII
       // mask the Byte with 1000 0000 / 0x80. If the result is 0,
       // then the first Byte is in the range 0xxx xxxx.
       (*callback)(thread, *current, current);
+      current += 1;
     } else if ((*current & 0xE0) == 0xC0) {
       // To determine if the first Byte is in the range 110x xxxx,
       // mask the Byte with 11100000 / 0xE0. If the result is 1100 0000 / 0xC0,

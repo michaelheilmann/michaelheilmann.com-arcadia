@@ -417,14 +417,14 @@ Arcadia_ImmutableHashMap_create
     Arcadia_Value value
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_HashMap);
   if (Arcadia_Value_isVoidValue(&value)) {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
   } else {
     Arcadia_ValueStack_pushValue(thread, &value);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
   }
-  ARCADIA_CREATEOBJECT(Arcadia_HashMap);
+  _Arcadia_EndCreate(Arcadia_HashMap);
 }
 
 static Arcadia_List*

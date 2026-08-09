@@ -13,24 +13,24 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_EVENTS_CANVASSIZECHANGEDEVENT_H_INCLUDED)
-#define ARCADIA_VISUALS_EVENTS_CANVASSIZECHANGEDEVENT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_EVENTS_CANVASSIZECHANGEDEVENT_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_EVENTS_CANVASSIZECHANGEDEVENT_H_INCLUDED
 
 #include "Arcadia/Engine/Visuals/Events/CanvasEvent.h"
 typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Visuals_CanvasSizeChangedEvent
-Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasSizeChangedEvent", Arcadia_Visuals_CanvasSizeChangedEvent,
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_CanvasSizeChangedEvent
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasSizeChangedEvent", Arcadia_Engine_Visuals_CanvasSizeChangedEvent,
                           u8"Arcadia.Engine.Visuals.CanvasEvent");
 
-struct Arcadia_Visuals_CanvasSizeChangedEventDispatch {
-  Arcadia_Visuals_CanvasEventDispatch parent;
+struct Arcadia_Engine_Visuals_CanvasSizeChangedEventDispatch {
+  Arcadia_Engine_Visuals_CanvasEventDispatch parent;
 };
 
-struct Arcadia_Visuals_CanvasSizeChangedEvent {
-  Arcadia_Visuals_CanvasEvent _parent;
+struct Arcadia_Engine_Visuals_CanvasSizeChangedEvent {
+  Arcadia_Engine_Visuals_CanvasEvent _parent;
   Arcadia_Integer32Value horizontalSize;
   Arcadia_Integer32Value verticalSize;
 };
 
-#endif // ARCADIA_VISUALS_EVENTS_CANVASSIZECHANGEDEVENT_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_EVENTS_CANVASSIZECHANGEDEVENT_H_INCLUDED

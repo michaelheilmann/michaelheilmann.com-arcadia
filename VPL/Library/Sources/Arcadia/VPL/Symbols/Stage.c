@@ -112,9 +112,9 @@ Arcadia_VPL_Symbols_Stage_create
     Arcadia_Natural8Value flags
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Symbols_Stage);
   if (program) Arcadia_ValueStack_pushObjectReferenceValue(thread, program); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, flags);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_Stage);
+  _Arcadia_EndCreate(Arcadia_VPL_Symbols_Stage);
 }

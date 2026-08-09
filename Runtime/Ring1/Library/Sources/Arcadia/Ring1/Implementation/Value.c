@@ -259,51 +259,7 @@ Arcadia_Value_isNotEqualTo
     Arcadia_Value const* self,
     Arcadia_Value const* other
   )
-{
-  switch (self->tag) {
-    case Arcadia_ValueTag_Atom: {
-      // TODO: Add and use notEqualTo similar to BigInteger, RuntimeByteArray, RuntimeUTF8String, etc.
-      if (!Arcadia_Value_isAtomValue(other)) {
-        return Arcadia_BooleanValue_True;
-      }
-      return self->atomValue != other->atomValue;
-    } break;
-    OnRelational(BigInteger, isNotEqualTo);
-    OnRelational(Boolean, isNotEqualTo);
-    OnRelational(ForeignProcedure, isNotEqualTo);
-    OnRelational(RuntimeByteArray, isNotEqualTo);
-    OnRelational(RuntimeUTF8String, isNotEqualTo);
-    OnRelational(Integer16, isNotEqualTo);
-    OnRelational(Integer32, isNotEqualTo);
-    OnRelational(Integer64, isNotEqualTo);
-    OnRelational(Integer8, isNotEqualTo);
-    OnRelational(Natural16, isNotEqualTo);
-    OnRelational(Natural32, isNotEqualTo);
-    OnRelational(Natural64, isNotEqualTo);
-    OnRelational(Natural8, isNotEqualTo);
-    OnRelational(Real32, isNotEqualTo);
-    OnRelational(Real64, isNotEqualTo);
-    OnRelational(Size, isNotEqualTo);
-    OnRelational(Void, isNotEqualTo);
-    case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_isNotEqualTo(thread, self->objectReferenceValue, other);
-    } break;
-    case Arcadia_ValueTag_Type: {
-      if (!Arcadia_Value_isTypeValue(other)) {
-        return Arcadia_BooleanValue_True;
-      }
-      return self->typeValue != other->typeValue;
-    } break;
-    case Arcadia_ValueTag_Enumeration: {
-      return self->enumerationValue.type != other->enumerationValue.type
-          || self->enumerationValue.value != other->enumerationValue.value;
-    } break;
-    default: {
-      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
-      exit(EXIT_FAILURE);
-    } break;
-  };
-}
+{ return !Arcadia_Value_isEqualTo(thread, self, other); }
 
 Arcadia_BooleanValue
 Arcadia_Value_isLowerThan

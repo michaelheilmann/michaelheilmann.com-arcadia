@@ -24,6 +24,8 @@
 #pragma push_macro("ARCADIA_MATH_EXPORT")
 #define ARCADIA_MATH_EXPORT (1)
 
+#include "Arcadia/Math/Implementation/AxisAngle3Real32.h"
+#include "Arcadia/Math/Implementation/AxisAngle3Real64.h"
 #include "Arcadia/Math/Implementation/crossProduct.h"
 #include "Arcadia/Math/Implementation/Configure.h"
 #include "Arcadia/Math/Implementation/Color4Real32.h"

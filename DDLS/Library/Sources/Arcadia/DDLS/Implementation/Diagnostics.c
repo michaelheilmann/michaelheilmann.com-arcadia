@@ -215,10 +215,10 @@ Arcadia_DDLS_Diagnostics_create
     Arcadia_Languages_StringTable* stringTable
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDLS_Diagnostics);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)stringTable);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDLS_Diagnostics);
+  _Arcadia_EndCreate(Arcadia_DDLS_Diagnostics);
 }
 
 void

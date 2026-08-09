@@ -208,7 +208,6 @@ Arcadia_registerInterfaceType
     Arcadia_Thread* thread,
     Arcadia_Name* name,
     size_t dispatchSize,
-    Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -224,7 +223,7 @@ Arcadia_registerInterfaceType
   TypeNode* typeNode = (TypeNode*)InterfaceTypeNode_allocate(thread);
   typeNode->kind = Arcadia_TypeKind_Interface;
   typeNode->name = name;
-  typeNode->typeOperations = typeOperations;
+  typeNode->typeOperations = NULL;
   typeNode->typeDestructing = typeDestructing;
 
   typeNode->next = g_typeNodes->buckets[index];

@@ -23,17 +23,23 @@ test1
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Math_Vector3Real32* u = Arcadia_Math_Vector3Real32_create(thread);
-  Arcadia_Math_Vector3Real32* v = Arcadia_Math_Vector3Real32_create(thread);
+  Arcadia_Math_Vector3Real32 *u, *v, *w;
   Arcadia_Value t;
+
+  // u must be equal to itself.
+  u = Arcadia_Math_Vector3Real32_create(thread);
+  t = Arcadia_Value_makeObjectReferenceValue(u);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)u, &t));
+
+  // u and v are created with the same component values => u and v must be equal..
+  v = Arcadia_Math_Vector3Real32_create(thread);
   t = Arcadia_Value_makeObjectReferenceValue(v);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)u, &t));
 
-if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)u, &t)) {
-
-  }
-  if (Arcadia_Object_isNotEqualTo(thread, (Arcadia_Object*)u, &t)) {
-
-  }
+  // w is clone of u => w and u must be equal.
+  w = (Arcadia_Math_Vector3Real32*)Arcadia_Object_clone(thread, (Arcadia_Object*)u);
+  t = Arcadia_Value_makeObjectReferenceValue(w);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)u, &t));
 }
 
 int

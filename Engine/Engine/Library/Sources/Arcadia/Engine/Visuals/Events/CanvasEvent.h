@@ -13,21 +13,21 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_EVENTS_CANVASEVENT_H_INCLUDED)
-#define ARCADIA_VISUALS_EVENTS_CANVASEVENT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_CANVASEVENT_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_CANVASEVENT_H_INCLUDED
 
 #include "Arcadia/Engine/Event.h"
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Visuals_CanvasEvent
-Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent,
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_CanvasEvent
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Engine_Visuals_CanvasEvent,
                           u8"Arcadia.Engine.Event");
 
-struct Arcadia_Visuals_CanvasEventDispatch {
+struct Arcadia_Engine_Visuals_CanvasEventDispatch {
   Arcadia_Engine_EventDispatch parent;
 };
 
-struct Arcadia_Visuals_CanvasEvent {
+struct Arcadia_Engine_Visuals_CanvasEvent {
   Arcadia_Engine_Event _parent;
 };
 
-#endif // ARCADIA_VISUALS_EVENTS_CANVASEVENT_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_CANVASEVENT_H_INCLUDED

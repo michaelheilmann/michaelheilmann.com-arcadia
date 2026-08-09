@@ -71,7 +71,7 @@ Arcadia_Engine_Demo_Scene_handleKeyboardKeyEventImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_KeyboardKeyEvent* event
+    Arcadia_Engine_Input_KeyboardKeyEvent* event
   );
 
 static void
@@ -79,7 +79,7 @@ Arcadia_Engine_Demo_Scene_handleMouseButtonEventImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_MouseButtonEvent* event
+    Arcadia_Engine_Input_MouseButtonEvent* event
   );
 
 static void
@@ -87,7 +87,7 @@ Arcadia_Engine_Demo_Scene_handleMousePointerEventImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_MousePointerEvent* event
+    Arcadia_Engine_Input_MousePointerEvent* event
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Demo_Scene_objectTypeOperations = {
@@ -198,7 +198,7 @@ Arcadia_Engine_Demo_Scene_handleKeyboardKeyEventImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_KeyboardKeyEvent* event
+    Arcadia_Engine_Input_KeyboardKeyEvent* event
   )
 {/*Intentionally empty.*/}
 
@@ -207,7 +207,7 @@ Arcadia_Engine_Demo_Scene_handleMouseButtonEventImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_MouseButtonEvent* event
+    Arcadia_Engine_Input_MouseButtonEvent* event
   )
 {/*Intentionally empty.*/}
 
@@ -216,7 +216,7 @@ Arcadia_Engine_Demo_Scene_handleMousePointerEventImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_MousePointerEvent* event
+    Arcadia_Engine_Input_MousePointerEvent* event
   )
 {/*Intentionally enoty.*/}
 
@@ -256,7 +256,7 @@ Arcadia_Engine_Demo_Scene_handleKeyboardKeyEvent
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_KeyboardKeyEvent* event
+    Arcadia_Engine_Input_KeyboardKeyEvent* event
   )
 { Arcadia_VirtualCall(Arcadia_Engine_Demo_Scene, handleKeyboardKeyEvent, self, event); }
 
@@ -265,7 +265,7 @@ Arcadia_Engine_Demo_Scene_handleMouseButtonEvent
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_MouseButtonEvent* event
+    Arcadia_Engine_Input_MouseButtonEvent* event
   )
 { Arcadia_VirtualCall(Arcadia_Engine_Demo_Scene, handleMouseButtonEvent, self, event); }
 
@@ -274,6 +274,6 @@ Arcadia_Engine_Demo_Scene_handleMousePointerEvent
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Scene* self,
-    Arcadia_Visuals_MousePointerEvent* event
+    Arcadia_Engine_Input_MousePointerEvent* event
   )
 { Arcadia_VirtualCall(Arcadia_Engine_Demo_Scene, handleMousePointerEvent, self, event); }

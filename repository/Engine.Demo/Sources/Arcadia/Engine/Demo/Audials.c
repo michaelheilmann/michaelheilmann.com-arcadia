@@ -96,7 +96,7 @@ Arcadia_Engine_Application_startupAudials
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Engine_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
+      backend = (Arcadia_Engine_Backend*)_Arcadia_EndCreate0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
@@ -113,7 +113,7 @@ Arcadia_Engine_Application_startupAudials
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Engine_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
+      backend = (Arcadia_Engine_Backend*)_Arcadia_EndCreate0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
     }
     Arcadia_Engine_Audials_BackendContext* temporary = (Arcadia_Engine_Audials_BackendContext*)Arcadia_Engine_Backend_createBackendContext(thread, backend);
     Arcadia_Object_lock(thread, (Arcadia_Object*)temporary);
@@ -155,7 +155,7 @@ Arcadia_Engine_Application_startupAudials
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      nodeFactory = (Arcadia_Engine_NodeFactory*)ARCADIA_CREATEOBJECT0(thread, scneNodeFactoryType, Arcadia_ValueStack_getSize(thread) - 1);
+      nodeFactory = (Arcadia_Engine_NodeFactory*)_Arcadia_EndCreate0(thread, scneNodeFactoryType, Arcadia_ValueStack_getSize(thread) - 1);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);

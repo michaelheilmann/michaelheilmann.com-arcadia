@@ -455,7 +455,7 @@ Arcadia_Imaging_Linux_PNGImageWriter_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Imaging_Linux_PNGImageWriter);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Imaging_Linux_PNGImageWriter);
+  _Arcadia_EndCreate(Arcadia_Imaging_Linux_PNGImageWriter);
 }

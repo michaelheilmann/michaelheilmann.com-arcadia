@@ -21,50 +21,50 @@
 // A "frame buffer resource" must be created and activated before rendering of a scene may occur.
 // The "default" render target writes to the "default" frame buffer.
 // A "texture" render target creates a framebuffer and writes to that frame buffer.
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.FrameBufferResource", Arcadia_Engine_Visuals_Implementation_FrameBufferResource,
-                          u8"Arcadia.Visuals.Implementation.Resource");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.FrameBufferResource", Arcadia_Engine_Visuals_FrameBufferResource,
+                          u8"Arcadia.Visuals.Resource");
 
-struct Arcadia_Engine_Visuals_Implementation_FrameBufferResourceDispatch {
-  Arcadia_Engine_Visuals_Implementation_ResourceDispatch _parent;
+struct Arcadia_Engine_Visuals_FrameBufferResourceDispatch {
+  Arcadia_Engine_Visuals_ResourceDispatch _parent;
 
-  void (*activate)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_FrameBufferResource*);
-  void (*deactivate)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_FrameBufferResource*);
-  void (*setSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_FrameBufferResource*, Arcadia_Integer32Value, Arcadia_Integer32Value);
-  void (*getSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_FrameBufferResource*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*activate)(Arcadia_Thread*, Arcadia_Engine_Visuals_FrameBufferResource*);
+  void (*deactivate)(Arcadia_Thread*, Arcadia_Engine_Visuals_FrameBufferResource*);
+  void (*setSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_FrameBufferResource*, Arcadia_Integer32Value, Arcadia_Integer32Value);
+  void (*getSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_FrameBufferResource*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 };
 
-struct Arcadia_Engine_Visuals_Implementation_FrameBufferResource {
-  Arcadia_Engine_Visuals_Implementation_Resource _parent;
+struct Arcadia_Engine_Visuals_FrameBufferResource {
+  Arcadia_Engine_Visuals_Resource _parent;
 };
 
 void
-Arcadia_Engine_Visuals_Implementation_FrameBufferResource_activate
+Arcadia_Engine_Visuals_FrameBufferResource_activate
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_FrameBufferResource* self
+    Arcadia_Engine_Visuals_FrameBufferResource* self
   );
 
 void
-Arcadia_Engine_Visuals_Implementation_FrameBufferResource_deactivate
+Arcadia_Engine_Visuals_FrameBufferResource_deactivate
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_FrameBufferResource* self
+    Arcadia_Engine_Visuals_FrameBufferResource* self
   );
 
 void
-Arcadia_Engine_Visuals_Implementation_FrameBufferResource_setSize
+Arcadia_Engine_Visuals_FrameBufferResource_setSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_FrameBufferResource* self,
+    Arcadia_Engine_Visuals_FrameBufferResource* self,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   );
 
 void
-Arcadia_Engine_Visuals_Implementation_FrameBufferResource_getSize
+Arcadia_Engine_Visuals_FrameBufferResource_getSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_FrameBufferResource* self,
+    Arcadia_Engine_Visuals_FrameBufferResource* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );

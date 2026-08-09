@@ -46,6 +46,13 @@ if (NOT TARGET ${this})
   OnSourceFile(${this} Arcadia/Engine/Demo/Visuals.c)
   OnHeaderFile(${this} Arcadia/Engine/Demo/Visuals.h)
 
+  OnSourceFile(${this} Arcadia/Starship/Viewer3D.c)
+  OnHeaderFile(${this} Arcadia/Starship/Viewer3D.h)
+  OnSourceFile(${this} Arcadia/Starship/OrientationChangeInputEvent.c)
+  OnHeaderFile(${this} Arcadia/Starship/OrientationChangeInputEvent.h)
+  OnSourceFile(${this} Arcadia/Starship/PositionChangeInputEvent.c)
+  OnHeaderFile(${this} Arcadia/Starship/PositionChangeInputEvent.h)
+
   OnSourceFile(${this} Arcadia/Engine/Demo/Configuration.c)
   OnHeaderFile(${this} Arcadia/Engine/Demo/Configuration.h)
 

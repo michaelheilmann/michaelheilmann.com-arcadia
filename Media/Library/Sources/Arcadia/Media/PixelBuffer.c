@@ -981,13 +981,13 @@ Arcadia_Media_PixelBuffer_create
     Arcadia_Natural8Value pixelFormat
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_PixelBuffer);
   Arcadia_ValueStack_pushInteger32Value(thread, linePadding);
   Arcadia_ValueStack_pushInteger32Value(thread, width);
   Arcadia_ValueStack_pushInteger32Value(thread, height);
   Arcadia_ValueStack_pushNatural32Value(thread, pixelFormat);
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_PixelBuffer);
+  _Arcadia_EndCreate(Arcadia_Media_PixelBuffer);
 }
 
 Arcadia_Media_PixelBuffer*
@@ -997,14 +997,14 @@ Arcadia_Media_PixelBuffer_createClone
     Arcadia_Media_PixelBuffer* other
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_PixelBuffer);
   if (other) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, other);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_PixelBuffer);
+  _Arcadia_EndCreate(Arcadia_Media_PixelBuffer);
 }
 
 Arcadia_Integer32Value

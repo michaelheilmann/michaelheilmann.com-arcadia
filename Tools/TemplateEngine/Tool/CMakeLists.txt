@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyToolName ${MyProjectName}.Tools.TemplateEngine)
+set(MyToolName ${MyProjectName}.TemplateEngine.CLI)
 
 if (NOT TARGET ${MyToolName})
 
@@ -23,16 +23,16 @@ if (NOT TARGET ${MyToolName})
 
   set(${MyToolName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
 
-  OnConfigurationFile(${MyToolName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
+  OnConfigurationFile(${MyToolName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.TemplateEngine.CLI/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.TemplateEngine.CLI/Configure.h.i)
 
-  OnSourceFile(${MyToolName} Arcadia.Tools.TemplateEngine/Main.c)
+  OnSourceFile(${MyToolName} Arcadia.TemplateEngine.CLI/Main.c)
 
-  OnModuleDependency(${MyToolName} ${MyProjectName}.Tools.TemplateEngine.Library PRIVATE)
+  OnModuleDependency(${MyToolName} ${MyProjectName}.TemplateEngine PRIVATE)
 
   set(${MyToolName}.Install TRUE)
 
   EndProduct(${MyToolName})
 
-  set_target_properties(${MyToolName} PROPERTIES FOLDER "Tools/TemplateEngine")
+  set_target_properties(${MyToolName} PROPERTIES FOLDER "TemplateEngine")
 
 endif()

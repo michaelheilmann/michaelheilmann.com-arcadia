@@ -46,12 +46,6 @@ getHashImpl
   );
 
 static void
-isNotEqualToImpl
-  (
-    Arcadia_Thread* thread
-  );
-
-static void
 Arcadia_String_visit
   (
     Arcadia_Thread* thread,
@@ -231,7 +225,6 @@ Arcadia_String_initializeDispatchImpl
 {
   ((Arcadia_ObjectDispatch*)self)->isEqualTo = &isEqualToImpl;
   ((Arcadia_ObjectDispatch*)self)->getHash = &getHashImpl;
-  ((Arcadia_ObjectDispatch*)self)->isNotEqualTo = &isNotEqualToImpl;
 }
 
 static void
@@ -291,49 +284,6 @@ getHashImpl
 }
 
 static void
-isNotEqualToImpl
-  (
-    Arcadia_Thread* thread
-  )
-{
-  BINARY_OPERATION();
-  Arcadia_Object* a0 = Arcadia_Value_getObjectReferenceValue(&x);
-  if (!Arcadia_Value_isObjectReferenceValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
-    return;
-  }
-  Arcadia_Object* b0 = Arcadia_Value_getObjectReferenceValue(&y);
-  if (a0 == b0) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
-    return;
-  }
-  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, b0), _Arcadia_String_getType(thread))) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
-    return;
-  }
-  Arcadia_String* a1 = (Arcadia_String*)a0;
-  Arcadia_String* b1 = (Arcadia_String*)b0;
-  if (Arcadia_RuntimeUTF8String_getNumberOfBytes(thread, a1->immutableUTF8String) !=
-      Arcadia_RuntimeUTF8String_getNumberOfBytes(thread, b1->immutableUTF8String) ||
-      Arcadia_RuntimeUTF8String_getHash(thread, a1->immutableUTF8String) !=
-      Arcadia_RuntimeUTF8String_getHash(thread, b1->immutableUTF8String)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
-    return;
-  }
-  Arcadia_ValueStack_pushBooleanValue
-    (
-      thread,
-      Arcadia_Memory_compare
-        (
-          thread,
-          Arcadia_RuntimeUTF8String_getBytes(thread, a1->immutableUTF8String),
-          Arcadia_RuntimeUTF8String_getBytes(thread, b1->immutableUTF8String),
-          Arcadia_RuntimeUTF8String_getNumberOfBytes(thread, a1->immutableUTF8String)
-        )
-    );
-}
-
-static void
 Arcadia_String_visit
   (
     Arcadia_Thread* thread,
@@ -350,10 +300,10 @@ Arcadia_String_create_pn
     Arcadia_RuntimeByteArray* runtimeByteArray
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_String);
   Arcadia_ValueStack_pushRuntimeByteArrayValue(thread, runtimeByteArray);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_String);
+  _Arcadia_EndCreate(Arcadia_String);
 }
 
 Arcadia_String*
@@ -363,10 +313,10 @@ Arcadia_String_create
     Arcadia_Value value
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_String);
   Arcadia_ValueStack_pushValue(thread, &value);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_String);
+  _Arcadia_EndCreate(Arcadia_String);
 }
 
 Arcadia_BooleanValue

@@ -109,10 +109,10 @@ Arcadia_VPL_Tree_BinaryExprNode_create
     Arcadia_VPL_Tree_Node* rhs
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Tree_BinaryExprNode);
   Arcadia_ValueStack_pushInteger32Value(thread, kind);
   if (lhs) Arcadia_ValueStack_pushObjectReferenceValue(thread, lhs); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (rhs) Arcadia_ValueStack_pushObjectReferenceValue(thread, rhs); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Tree_BinaryExprNode);
+  _Arcadia_EndCreate(Arcadia_VPL_Tree_BinaryExprNode);
 }

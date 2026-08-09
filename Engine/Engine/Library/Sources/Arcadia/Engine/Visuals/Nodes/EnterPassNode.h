@@ -100,7 +100,7 @@ struct Arcadia_Engine_Visuals_EnterPassNode {
   Arcadia_Engine_Visuals_BackendContext* backendContext;
 
   // Theenter pass resource.
-  Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource;
+  Arcadia_Engine_Visuals_EnterPassResource* enterPassResource;
 };
 
 /// @brief Create an enter pass mode.

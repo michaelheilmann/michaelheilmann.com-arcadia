@@ -132,8 +132,8 @@ Arcadia_Media_DSP_SineWave_create
     Arcadia_Integer32Value frequency
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_DSP_SineWave);
   Arcadia_ValueStack_pushInteger32Value(thread, frequency);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_DSP_SineWave);
+  _Arcadia_EndCreate(Arcadia_Media_DSP_SineWave);
 }

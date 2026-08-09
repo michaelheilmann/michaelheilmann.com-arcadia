@@ -15,19 +15,19 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(this ${MyProjectName}.Tools.TemplateEngine.Tests.HelloWorld)
+set(this ${MyProjectName}.TemplateEngine.Tests.HelloWorld)
 
 # Create test executable.
 BeginProduct(${this} test)
 
 # Configuration files.
-OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.HelloWorld/Configure.h  ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.HelloWorld/Configure.h.i)
+OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.TemplateEngine.Tests.HelloWorld/Configure.h  ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.TemplateEngine.Tests.HelloWorld/Configure.h.i)
 
 # Source and header files.
-OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Tests.HelloWorld/Main.c)
+OnSourceFile(${this} Arcadia.TemplateEngine.Tests.HelloWorld/Main.c)
 
 # Module dependencies.
-OnModuleDependency(${this} ${MyProjectName}.Tools.TemplateEngine.Library PRIVATE)
+OnModuleDependency(${this} ${MyProjectName}.TemplateEngine PRIVATE)
 
 EndProduct(${this})
 # Copy assets.
@@ -35,4 +35,4 @@ add_custom_command(TARGET ${this} POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${this}.WorkingDirectory})
 # Adjust working directory.
 set(${this}.WorkingDirectory $<TARGET_FILE_DIR:${this}>)
-set_target_properties(${this} PROPERTIES FOLDER "Tools/TemplateEngine")
+set_target_properties(${this} PROPERTIES FOLDER "TemplateEngine")

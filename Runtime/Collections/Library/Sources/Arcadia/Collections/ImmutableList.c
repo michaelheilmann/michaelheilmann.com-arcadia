@@ -292,8 +292,8 @@ Arcadia_ImmutableList_create
     Arcadia_Value argument
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ImmutableList);
   Arcadia_ValueStack_pushValue(thread, &argument);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_ImmutableList);
+  _Arcadia_EndCreate(Arcadia_ImmutableList);
 }

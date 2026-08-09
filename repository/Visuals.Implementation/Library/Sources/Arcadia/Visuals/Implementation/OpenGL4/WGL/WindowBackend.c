@@ -780,9 +780,9 @@ Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend_create
     Arcadia_Engine_Visuals_Windows_DisplayDevice* displayDevice
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend);
   if (backendContext) { Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); } else { Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);  }
   if (displayDevice) { Arcadia_ValueStack_pushObjectReferenceValue(thread, displayDevice); } else { Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void); }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_WindowBackend);
 }

@@ -13,22 +13,22 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_EVENTS_APPLICATIONEVENT_H_INCLUDED)
-#define ARCADIA_VISUALS_EVENTS_APPLICATIONEVENT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_APPLICATIONEVENT_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_APPLICATIONEVENT_H_INCLUDED
 
 #include "Arcadia/Engine/Event.h"
 typedef struct Arcadia_Engine_Visuals_BackendContext Arcadia_Engine_Visuals_BackendContext;
 
 // The opaque type of an "application" message.
-Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.ApplicationEvent", Arcadia_Visuals_ApplicationEvent,
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.ApplicationEvent", Arcadia_Engine_Visuals_ApplicationEvent,
                           u8"Arcadia.Engine.Event");
 
-struct Arcadia_Visuals_ApplicationEventDispatch {
+struct Arcadia_Engine_Visuals_ApplicationEventDispatch {
   Arcadia_Engine_EventDispatch parent;
 };
 
-struct Arcadia_Visuals_ApplicationEvent {
+struct Arcadia_Engine_Visuals_ApplicationEvent {
   Arcadia_Engine_Event _parent;
 };
 
-#endif // ARCADIA_VISUALS_EVENTS_APPLICATIONEVENT_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_APPLICATIONEVENT_H_INCLUDED

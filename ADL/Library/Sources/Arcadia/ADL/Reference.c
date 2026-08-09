@@ -114,7 +114,7 @@ Arcadia_ADL_Reference_create
     Arcadia_String* definitionName
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_Reference);
   if (definitions) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   } else {
@@ -126,7 +126,7 @@ Arcadia_ADL_Reference_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_Reference);
+  _Arcadia_EndCreate(Arcadia_ADL_Reference);
 }
 
 Arcadia_ADL_Definitions*

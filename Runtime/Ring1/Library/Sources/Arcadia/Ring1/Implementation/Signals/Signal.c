@@ -146,9 +146,9 @@ Arcadia_Signal_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Signal);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Signal);
+  _Arcadia_EndCreate(Arcadia_Signal);
 }
 
 Arcadia_Slot*

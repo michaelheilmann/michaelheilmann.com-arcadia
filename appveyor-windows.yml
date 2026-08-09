@@ -110,8 +110,8 @@ build:
 after_build:
     - ps: New-Item ${env:BUILD_DIRECTORY}\.keepme -type file
     - ps: 7z a .\..\Package\${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\.keepme
-    - ps: 7z a .\..\Package\${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\Tools\TemplateEngine\Tool\${env:CONFIGURATION}\Arcadia.Tools.TemplateEngine.exe
-    - ps: 7z rn .\..\Package\${env:ARCHIVE_FILENAME} Arcadia.Tools.TemplateEngine.exe TemplateEngine\Binaries\Arcadia.Tools.TemplateEngine.exe
+    - ps: 7z a .\..\Package\${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\Tools\TemplateEngine\Tool\${env:CONFIGURATION}\Arcadia.TemplateEngine.CLI.exe
+    - ps: 7z rn .\..\Package\${env:ARCHIVE_FILENAME} Arcadia.TemplateEngine.CLI.exe TemplateEngine\Binaries\Arcadia.TemplateEngine.CLI.exe
     - ps: Push-AppveyorArtifact .\..\Package\${env:ARCHIVE_FILENAME} -FileName ${env:ARCHIVE_FILENAME} -DeploymentName ${env:ARCHIVE_FILENAME}
 
 test_script:
@@ -138,7 +138,7 @@ deploy:
     description: 'michaelheilmann.com $(APPVEYOR_REPO_BRANCH) branch v$(APPVEYOR_BUILD_VERSION)'
     provider: GitHub
     auth_token:
-        secure: iTg7jon0UCvoGT5y2flVxPISxfLS3oU+/gtUJ4KpwKU+PGCN0rLFQDJUFEMGsY9kTpCd/smtYBT4BxClRpkc0VYZPPlyYQWnN6iSDzJOd8gp7pY1OPbzPGBS/OZiuNZa # encrypted token from GitHub
+        secure: iTg7jon0UCvoGT5y2flVxDW14DCQJRgGtMSXdNtJizAVogGVSUgJait43zT81QWPaBKoXxhI/Zx53BONCRZ4M/5haQnuMmJSZHeh31w1AT4P0YGg89R+NpQ+/AQnDvOW # encrypted token from GitHub
         artifact: $(ARCHIVE_FILENAME) # name (not path) of the artifact
     draft: true
     prerelease: false

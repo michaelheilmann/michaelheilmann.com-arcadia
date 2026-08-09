@@ -17,23 +17,23 @@
 #include "Arcadia/Engine/Visuals/Events/CanvasActivationStateChangedEvent.h"
 
 static void
-Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasActivationStateChangedEvent* self
+    Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent* self
   );
 
 static void
-Arcadia_Visuals_CanvasActivationStateChangedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasActivationStateChangedEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasActivationStateChangedEventDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_CanvasActivationStateChangedEvent_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -41,18 +41,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasActivationStateChangedEvent", Arcadia_Visuals_CanvasActivationStateChangedEvent,
-                         u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasActivationStateChangedEvent", Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent,
+                         u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Engine_Visuals_CanvasEvent,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasActivationStateChangedEvent* self
+    Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_CanvasActivationStateChangedEvent);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent);
   if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -65,28 +65,28 @@ Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
   //
   self->active = Arcadia_ValueStack_getBooleanValue(thread, 1);
   //
-  Arcadia_LeaveConstructor(Arcadia_Visuals_CanvasActivationStateChangedEvent);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent);
 }
 
 static void
-Arcadia_Visuals_CanvasActivationStateChangedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasActivationStateChangedEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasActivationStateChangedEventDispatch* self
   )
 {/*Intentionally empty.*/}
 
-Arcadia_Visuals_CanvasActivationStateChangedEvent*
-Arcadia_Visuals_CanvasActivationStateChangedEvent_create
+Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent*
+Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value timestamp,
     Arcadia_BooleanValue active
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent);
   Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
   Arcadia_ValueStack_pushBooleanValue(thread, active);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_CanvasActivationStateChangedEvent);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_CanvasActivationStateChangedEvent);
 }

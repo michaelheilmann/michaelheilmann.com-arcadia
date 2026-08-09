@@ -155,12 +155,12 @@ Arcadia_ADL_MaterialDefinition_create
     Arcadia_String* ambientColorTextureName
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_MaterialDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushEnumerationValue(thread, Arcadia_EnumerationValue_make(_Arcadia_ADL_MaterialType_getType(thread), materialType));
   Arcadia_ValueStack_pushEnumerationValue(thread, Arcadia_EnumerationValue_make(_Arcadia_ADL_AmbientColorSource_getType(thread), ambientColorSource));
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)ambientColorTextureName);
   Arcadia_ValueStack_pushNatural8Value(thread, 5);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_MaterialDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_MaterialDefinition);
 }

@@ -129,12 +129,12 @@ Arcadia_ADL_ColorDefinition_create
     Arcadia_Natural8Value blue
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_ADL_ColorDefinition);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushNatural8Value(thread, red);
   Arcadia_ValueStack_pushNatural8Value(thread, green);
   Arcadia_ValueStack_pushNatural8Value(thread, blue);
   Arcadia_ValueStack_pushNatural8Value(thread, 5);
-  ARCADIA_CREATEOBJECT(Arcadia_ADL_ColorDefinition);
+  _Arcadia_EndCreate(Arcadia_ADL_ColorDefinition);
 }

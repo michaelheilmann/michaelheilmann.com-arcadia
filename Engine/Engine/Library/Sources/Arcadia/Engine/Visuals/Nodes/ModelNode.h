@@ -44,7 +44,7 @@ struct Arcadia_Engine_Visuals_ModelNode {
   /// The backend context.
   Arcadia_Engine_Visuals_BackendContext* backendContext;
   /// The model resource.
-  Arcadia_Engine_Visuals_Implementation_ModelResource* modelResource;
+  Arcadia_Engine_Visuals_ModelResource* modelResource;
 };
 
 Arcadia_Engine_Visuals_ModelNode*

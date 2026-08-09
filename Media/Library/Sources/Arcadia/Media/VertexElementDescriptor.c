@@ -36,12 +36,6 @@ Arcadia_Media_VertexElementDescriptor_isEqualTo
     Arcadia_Thread* thread
   );
 
-static void
-Arcadia_Media_VertexElementDescriptor_isNotEqualTo
-  (
-    Arcadia_Thread* thread
-  );
-
 static const Arcadia_ObjectType_Operations _Arcadia_Media_VertexElementDescriptor_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Media_VertexElementDescriptor_construct,
@@ -90,7 +84,6 @@ Arcadia_Media_VertexElementDescriptor_initializeDispatchImpl
   )
 {
   ((Arcadia_ObjectDispatch*)self)->isEqualTo = &Arcadia_Media_VertexElementDescriptor_isEqualTo;
-  ((Arcadia_ObjectDispatch*)self)->isNotEqualTo = &Arcadia_Media_VertexElementDescriptor_isNotEqualTo;
 }
 
 static void
@@ -123,35 +116,6 @@ Arcadia_Media_VertexElementDescriptor_isEqualTo
   }
 }
 
-static void
-Arcadia_Media_VertexElementDescriptor_isNotEqualTo
-  (
-    Arcadia_Thread* thread
-  )
-{
-  if (Arcadia_ValueStack_getSize(thread) < 3) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  if (2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 2);
-  Arcadia_Media_VertexElementDescriptor* xx = (Arcadia_Media_VertexElementDescriptor*)Arcadia_Value_getObjectReferenceValueChecked(thread, x, _Arcadia_Media_VertexElementDescriptor_getType(thread));
-
-  Arcadia_Value y = Arcadia_ValueStack_getValue(thread, 1);
-  Arcadia_ValueStack_popValues(thread, 3);
-  if (!Arcadia_Value_isInstanceOf(thread, &y, _Arcadia_Media_VertexElementDescriptor_getType(thread))) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
-  } else {
-    Arcadia_Media_VertexElementDescriptor* yy = (Arcadia_Media_VertexElementDescriptor*)Arcadia_Value_getObjectReferenceValue(&y);
-    Arcadia_ValueStack_pushBooleanValue(thread, xx->offset != yy->offset ||
-                                                xx->semantics != yy->semantics ||
-                                                xx->syntactics != yy->syntactics);
-  }
-}
-
 Arcadia_Media_VertexElementDescriptor*
 Arcadia_Media_VertexElementDescriptor_create
   (
@@ -161,12 +125,12 @@ Arcadia_Media_VertexElementDescriptor_create
     Arcadia_Media_VertexElementSyntactics syntactics
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Media_VertexElementDescriptor);
   Arcadia_ValueStack_pushNatural32Value(thread, offset);
   Arcadia_ValueStack_pushInteger32Value(thread, semantics);
   Arcadia_ValueStack_pushInteger32Value(thread, syntactics);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Media_VertexElementDescriptor);
+  _Arcadia_EndCreate(Arcadia_Media_VertexElementDescriptor);
 }
 
 Arcadia_Natural8Value

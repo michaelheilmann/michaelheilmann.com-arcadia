@@ -19,6 +19,7 @@
 #include "Arcadia/Engine/Include.h"
 #include "Arcadia/Engine/Demo/Scene.h"
 #include "Arcadia/ADL/Include.h"
+#include "Arcadia/Starship/Viewer3D.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Demo.MainMenuScene", Arcadia_Engine_Demo_MainMenuScene,
                           u8"Arcadia.Engine.Demo.Scene");
@@ -43,44 +44,26 @@ struct Arcadia_Engine_Demo_MainMenuScene {
   // The models, thee of them.
   Arcadia_Engine_Visuals_ModelNode* modelNode;
 
-  // The 'W', 'A', 'S', and 'D' latches.
-  Arcadia_BooleanValue latches[4];
+  // The 'W' (index 0), 'A' (index 1), 'S' (index 2), and 'D' (index 3) latches.
+  // The 'Q' (index 4) and 'E' (index 5) latches.
+  Arcadia_BooleanValue latches[6];
   struct {
-    Arcadia_Real32Value oldx;
-    Arcadia_Real32Value oldy;
-  } mousePosition;
-  Arcadia_BooleanValue mouseInWindow;
+    struct {
+      Arcadia_Real32Value x;
+      Arcadia_Real32Value y;
+    } oldPosition;
+    struct {
+      Arcadia_Real32Value x;
+      Arcadia_Real32Value y;
+    } delta;
+    Arcadia_BooleanValue inWindow;
+  } mouse;
 
   // The sound source for some background sound effects.
   Arcadia_Engine_Audials_SoundSourceNode* soundSourceNode;
 
-  struct {
 
-    /// The forward vector of the viewer.
-    Arcadia_Math_Vector3Real32* forward;
-
-    /// The up vector of the viewer.
-    Arcadia_Math_Vector3Real32* up;
-
-    /// The right vector of the viewer.
-    Arcadia_Math_Vector3Real32* right;
-
-    /// The position of the viewer.
-    Arcadia_Math_Vector3Real32* position;
-
-    /// "pitch" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local x-axis
-    /// The initial value is @a 0.
-    Arcadia_Real32Value pitch;
-
-    /// "yaw" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local y-axis.
-    /// The initial value is @a 0.
-    Arcadia_Real32Value yaw;
-
-    /// "roll" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local z-axis
-    /// The initial value is @a 0.
-    Arcadia_Real32Value roll;
-
-  } viewer;
+  Arcadia_Starship_Viewer3D* viewer3D;
 };
 
 Arcadia_Engine_Demo_MainMenuScene*

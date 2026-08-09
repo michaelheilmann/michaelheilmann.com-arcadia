@@ -19,39 +19,39 @@
 #include "Arcadia/Engine/Visuals/BackendContext.h"
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_constructImpl
+Arcadia_Engine_Visuals_Resource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_initializeDispatchImpl
+Arcadia_Engine_Visuals_Resource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ResourceDispatch* self
+    Arcadia_Engine_Visuals_ResourceDispatch* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_destructImpl
+Arcadia_Engine_Visuals_Resource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   );
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_visitImpl
+Arcadia_Engine_Visuals_Resource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_Resource_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_Resource_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_Resource_visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_Resource_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Resource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Resource_destructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Resource_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Resource_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -59,18 +59,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.Resource", Arcadia_Engine_Visuals_Implementation_Resource,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Resource", Arcadia_Engine_Visuals_Resource,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_constructImpl
+Arcadia_Engine_Visuals_Resource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_Resource);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Resource);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -81,70 +81,70 @@ Arcadia_Engine_Visuals_Implementation_Resource_constructImpl
   }
   self->context = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Visuals_BackendContext_getType(thread));
   self->referenceCount = 0;
-  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_Resource);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Resource);
 }
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_initializeDispatchImpl
+Arcadia_Engine_Visuals_Resource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_ResourceDispatch* self
+    Arcadia_Engine_Visuals_Resource* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_destructImpl
+Arcadia_Engine_Visuals_Resource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_ResourceDispatch* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Engine_Visuals_Implementation_Resource_visitImpl
+Arcadia_Engine_Visuals_Resource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   )
 {/*Intentionally empty.*/}
 
 void
-Arcadia_Engine_Visuals_Implementation_Resource_load
+Arcadia_Engine_Visuals_Resource_load
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   )
-{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Implementation_Resource, load, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Resource, load, self); }
 
 void
-Arcadia_Engine_Visuals_Implementation_Resource_unload
+Arcadia_Engine_Visuals_Resource_unload
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   )
-{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Implementation_Resource, unload, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Resource, unload, self); }
 
 void
-Arcadia_Engine_Visuals_Implementation_Resource_unlink
+Arcadia_Engine_Visuals_Resource_unlink
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   )
-{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Implementation_Resource, unlink, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Resource, unlink, self); }
 
 void
-Arcadia_Engine_Visuals_Implementation_Resource_render
+Arcadia_Engine_Visuals_Resource_render
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self,
-    Arcadia_Engine_Visuals_Implementation_EnterPassResource* renderingContextResource
+    Arcadia_Engine_Visuals_Resource* self,
+    Arcadia_Engine_Visuals_EnterPassResource* renderingContextResource
   )
-{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Implementation_Resource, render, self, renderingContextResource); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_Resource, render, self, renderingContextResource); }
 
 void
-Arcadia_Engine_Visuals_Implementation_Resource_ref
+Arcadia_Engine_Visuals_Resource_ref
   (
-    Arcadia_Thread* thread, Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Thread* thread, Arcadia_Engine_Visuals_Resource* self
   )
 {
   if (self->referenceCount == Arcadia_Integer32Value_Maximum) {
@@ -155,10 +155,10 @@ Arcadia_Engine_Visuals_Implementation_Resource_ref
 }
 
 void
-Arcadia_Engine_Visuals_Implementation_Resource_unref
+Arcadia_Engine_Visuals_Resource_unref
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_Implementation_Resource* self
+    Arcadia_Engine_Visuals_Resource* self
   )
 {
   if (self->referenceCount == Arcadia_Integer32Value_Literal(0)) {

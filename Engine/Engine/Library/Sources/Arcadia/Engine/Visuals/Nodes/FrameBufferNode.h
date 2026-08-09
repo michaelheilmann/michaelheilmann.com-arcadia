@@ -49,7 +49,7 @@ struct Arcadia_Engine_Visuals_FrameBufferNode {
   Arcadia_Engine_Visuals_BackendContext* backendContext;
 
   /// The frame buffer resource.
-  Arcadia_Engine_Visuals_Implementation_FrameBufferResource* frameBufferResource;
+  Arcadia_Engine_Visuals_FrameBufferResource* frameBufferResource;
 };
 
 /// @brief Create an frame buffer mode.

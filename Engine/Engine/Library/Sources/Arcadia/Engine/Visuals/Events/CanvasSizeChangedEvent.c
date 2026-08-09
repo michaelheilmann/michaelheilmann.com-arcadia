@@ -17,23 +17,23 @@
 #include "Arcadia/Engine/Visuals/Events/CanvasSizeChangedEvent.h"
 
 static void
-Arcadia_Visuals_CanvasSizeChangedEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasSizeChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasSizeChangedEvent* self
+    Arcadia_Engine_Visuals_CanvasSizeChangedEvent* self
   );
 
 static void
-Arcadia_Visuals_CanvasSizeChangedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasSizeChangedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasSizeChangedEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasSizeChangedEventDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Visuals_CanvasSizeChangedEvent_constructImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_CanvasSizeChangedEvent_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Engine_Visuals_CanvasSizeChangedEvent_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_CanvasSizeChangedEvent_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -41,18 +41,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasSizeChangedEvent", Arcadia_Visuals_CanvasSizeChangedEvent,
-                         u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.CanvasSizeChangedEvent", Arcadia_Engine_Visuals_CanvasSizeChangedEvent,
+                         u8"Arcadia.Engine.Visuals.CanvasEvent", Arcadia_Engine_Visuals_CanvasEvent,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_CanvasSizeChangedEvent_constructImpl
+Arcadia_Engine_Visuals_CanvasSizeChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasSizeChangedEvent* self
+    Arcadia_Engine_Visuals_CanvasSizeChangedEvent* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_CanvasSizeChangedEvent);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_CanvasSizeChangedEvent);
   if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -66,19 +66,19 @@ Arcadia_Visuals_CanvasSizeChangedEvent_constructImpl
   self->horizontalSize = Arcadia_ValueStack_getInteger32Value(thread, 2);
   self->verticalSize = Arcadia_ValueStack_getInteger32Value(thread, 1);
   //
-  Arcadia_LeaveConstructor(Arcadia_Visuals_CanvasSizeChangedEvent);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_CanvasSizeChangedEvent);
 }
 
 static void
-Arcadia_Visuals_CanvasSizeChangedEvent_initializeDispatchImpl
+Arcadia_Engine_Visuals_CanvasSizeChangedEvent_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_CanvasSizeChangedEventDispatch* self
+    Arcadia_Engine_Visuals_CanvasSizeChangedEventDispatch* self
   )
 {/*Intentionally empty.*/}
 
-Arcadia_Visuals_CanvasSizeChangedEvent*
-Arcadia_Visuals_CanvasSizeChangedEvent_create
+Arcadia_Engine_Visuals_CanvasSizeChangedEvent*
+Arcadia_Engine_Visuals_CanvasSizeChangedEvent_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value timestamp,
@@ -86,10 +86,10 @@ Arcadia_Visuals_CanvasSizeChangedEvent_create
     Arcadia_Integer32Value verticalSize
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Visuals_CanvasSizeChangedEvent);
   Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
   Arcadia_ValueStack_pushInteger32Value(thread, horizontalSize);
   Arcadia_ValueStack_pushInteger32Value(thread, verticalSize);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_CanvasSizeChangedEvent);
+  _Arcadia_EndCreate(Arcadia_Engine_Visuals_CanvasSizeChangedEvent);
 }

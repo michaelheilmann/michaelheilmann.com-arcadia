@@ -264,9 +264,9 @@ Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext);
+  _Arcadia_EndCreate(Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext);
 }
 
 Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext*

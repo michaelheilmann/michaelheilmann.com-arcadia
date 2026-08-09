@@ -516,10 +516,10 @@ Arcadia_VPL_Symbols_Program_create
     Arcadia_Natural8Value flags
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_VPL_Symbols_Program);
   Arcadia_ValueStack_pushNatural8Value(thread, flags);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_Program);
+  _Arcadia_EndCreate(Arcadia_VPL_Symbols_Program);
 }
 
 Arcadia_List*

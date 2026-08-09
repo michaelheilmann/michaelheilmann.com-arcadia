@@ -21,14 +21,14 @@
 typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.VertexBufferResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource,
-                          u8"Arcadia.Visuals.Implementation.VertexBufferResource");
+                          u8"Arcadia.Visuals.VertexBufferResource");
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResourceDispatch {
-  Arcadia_Engine_Visuals_Implementation_VertexBufferResourceDispatch _parent;
+  Arcadia_Engine_Visuals_VertexBufferResourceDispatch _parent;
 };
 
 struct Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource {
-  Arcadia_Engine_Visuals_Implementation_VertexBufferResource _parent;
+  Arcadia_Engine_Visuals_VertexBufferResource _parent;
 
   GLuint vertexArrayID;
   GLuint vertexBufferID;

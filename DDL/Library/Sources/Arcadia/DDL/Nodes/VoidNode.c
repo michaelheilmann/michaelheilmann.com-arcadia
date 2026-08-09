@@ -119,10 +119,10 @@ Arcadia_DDL_VoidNode_createVoid
     Arcadia_VoidValue voidValue
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDL_VoidNode);
   Arcadia_ValueStack_pushVoidValue(thread, voidValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_VoidNode);
+  _Arcadia_EndCreate(Arcadia_DDL_VoidNode);
 }
 
 Arcadia_DDL_VoidNode*
@@ -132,8 +132,8 @@ Arcadia_DDL_VoidNode_createString
     Arcadia_String* stringValue
   )
 {
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  _Arcadia_BeginCreate(Arcadia_DDL_VoidNode);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, stringValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_DDL_VoidNode);
+  _Arcadia_EndCreate(Arcadia_DDL_VoidNode);
 }
