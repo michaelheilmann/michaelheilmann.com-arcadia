@@ -13,20 +13,19 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_ENGINE_INPUT_MOUSEBUTTONACTION_H_INCLUDED)
+#ifndef ARCADIA_ENGINE_INPUT_MOUSEBUTTONACTION_H_INCLUDED
 #define ARCADIA_ENGINE_INPUT_MOUSEBUTTONACTION_H_INCLUDED
 
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Ring1/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Input_MouseButtonAction
-Arcadia_declareEnumerationType(u8"Arcadia.Engine.Input.MouseButtonAction",
+Arcadia_declareEnumerationType("Arcadia.Engine.Input.MouseButtonAction",
                                Arcadia_Engine_Input_MouseButtonAction);
 
 enum Arcadia_Engine_Input_MouseButtonAction {
 
   Arcadia_Engine_Input_MouseButtonAction_Pressed = 1,
 
-  Arcadia_Engine_Input_MouseButtonAction_Released,
+  Arcadia_Engine_Input_MouseButtonAction_Released = 2,
 
 };
 

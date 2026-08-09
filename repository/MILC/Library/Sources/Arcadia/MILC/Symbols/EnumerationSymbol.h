@@ -38,6 +38,9 @@ struct Arcadia_MILC_EnumerationSymbol {
   Arcadia_MILC_Symbol _parent;
   /// The abstract syntax tree defining this enumeration symbol if any. A null pointer otherwise.
   Arcadia_MILC_AST_EnumerationDefinitionNode* ast;
+  /// The symbols of the enumeration members of this enumeration in order of appearance.
+  Arcadia_List* members;
+  /// The scope of this enumeration.
   Arcadia_Languages_Scope* scope;
 };
 

@@ -18,9 +18,10 @@
 
 #include "Arcadia/Ring1/Implementation/Status.h"
 #include "Arcadia/Ring1/Implementation/Thread.h"
-#include <assert.h>
 
 #include "Arcadia/Ring1/Implementation/Unicode/UTF8/mapASCIIToASCII.h"
+
+#include <assert.h>
 
 static inline void
 f

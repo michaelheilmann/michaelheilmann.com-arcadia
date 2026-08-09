@@ -600,14 +600,14 @@ onConstructorDefinition
     Arcadia_Thread_jump(thread);
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->constructorParameters); i < n; ++i) {
-    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->constructorParameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->parameters); i < n; ++i) {
+    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->parameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
                                                               variable->name,
                                                               (Arcadia_MILC_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
-    if (definitionAst->constructorBody) {
+    if (definitionAst->body) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
@@ -620,11 +620,11 @@ onConstructorDefinition
     R_Interpreter_Constructor* construcor = R_Interpreter_Constructor_createForeign(thread, Arcadia_Value_getForeignProcedureValue(&v));
     R_Interpreter_Class_addConstructor(process, enclosing, construcor);
   } else {
-    if (!definitionAst->constructorBody) {
+    if (!definitionAst->body) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    R_Interpreter_Constructor* constructor = R_Interpreter_Constructor_create(thread, onConstructorBody(thread, interpreterProcessState, context, definitionAst->constructorBody));
+    R_Interpreter_Constructor* constructor = R_Interpreter_Constructor_create(thread, onConstructorBody(thread, interpreterProcessState, context, definitionAst->body));
     R_Interpreter_Class_addConstructor(process, enclosing, constructor);
   }
 }

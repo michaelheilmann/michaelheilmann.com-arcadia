@@ -113,6 +113,9 @@ Arcadia_MILC_AST_ProcedureDefinitionNode_visitImpl
   if (self->parameters) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->parameters);
   }
+  if (self->returnType) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->returnType);
+  }
   if (self->body) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->body);
   }
@@ -126,6 +129,7 @@ Arcadia_MILC_AST_ProcedureDefinitionNode_create
     Arcadia_String* nativeName,
     Arcadia_MILC_AST_IdentifierNode* name,
     Arcadia_List* parameters,
+    Arcadia_MILC_AST_IdentifierNode* returnType,
     Arcadia_List* body
   )
 {
@@ -143,6 +147,11 @@ Arcadia_MILC_AST_ProcedureDefinitionNode_create
   }
   if (parameters) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, parameters);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  if (returnType) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, returnType);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }

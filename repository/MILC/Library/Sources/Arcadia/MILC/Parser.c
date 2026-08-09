@@ -78,6 +78,13 @@ next
     Arcadia_MILC_Parser* self
   );
 
+static Arcadia_MILC_Parser*
+Arcadia_MILC_Parser_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
+  );
+
 static Arcadia_Languages_Diagnostics*
 Arcadia_MILC_Parser_getDiagnosticsImpl
   (
@@ -148,7 +155,7 @@ Arcadia_MILC_Parser_constructImpl
     Arcadia_Thread_jump(thread);
   }
   self->context = (Arcadia_MILC_Context*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_MILC_Context_getType(thread));
-  self->scanner = self->context->scanner;
+  self->scanner = Arcadia_MILC_Scanner_getInstance(thread, self->context);
   self->stringTable = self->context->stringTable;
   self->diagnostics = self->context->diagnostics;
   Arcadia_LeaveConstructor(Arcadia_MILC_Parser);
@@ -235,7 +242,7 @@ next
   }
 }
 
-Arcadia_MILC_Parser*
+static Arcadia_MILC_Parser*
 Arcadia_MILC_Parser_create
   (
     Arcadia_Thread* thread,
@@ -246,6 +253,22 @@ Arcadia_MILC_Parser_create
   if (context) Arcadia_ValueStack_pushObjectReferenceValue(thread, context); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
   _Arcadia_EndCreate(Arcadia_MILC_Parser);
+}
+
+Arcadia_MILC_Parser*
+Arcadia_MILC_Parser_getInstance
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
+  )
+{ 
+  Arcadia_Value k = Arcadia_Value_makeTypeValue(_Arcadia_MILC_Parser_getType(thread));
+  Arcadia_Value v = Arcadia_Map_get(thread, context->instances, k);
+  if (Arcadia_Value_isVoidValue(&v)) {
+    v = Arcadia_Value_makeObjectReferenceValue(Arcadia_MILC_Parser_create(thread, context));
+    Arcadia_Map_set(thread, context->instances, k, v, NULL, NULL);
+  }
+  return (Arcadia_MILC_Parser*)Arcadia_Value_getObjectReferenceValue(&v);
 }
 
 static Arcadia_MILC_AST_OperandNode*
@@ -1129,9 +1152,10 @@ onConstructorDefinition
   return constructorDefinitionNode;
 }
 
-// methodDefinition : 'method' ('native' string)? methodName methodParameters? methodBody?
+// methodDefinition : 'method' ('native' string)? methodName methodParameters? ':' returnType methodBody?
 // methodParameters : parameters
 // methodBody : '{' statements '}'
+// returnType : identifier
 static Arcadia_MILC_AST_MethodDefinitionNode*
 onMethodDefinition
   (
@@ -1161,10 +1185,16 @@ onMethodDefinition
   Arcadia_String* methodName = getText(thread, self);
   next(thread, self);
   Arcadia_List* methodParameters = onParameters(thread, self);
-  Arcadia_List* methodBody = NULL;
+  if (!is(thread, self, Arcadia_MILC_WordType_Colon)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  next(thread, self);
+  Arcadia_MILC_AST_IdentifierNode* returnType = onIdentifier(thread, self);
   while (is(thread, self, Arcadia_MILC_WordType_LineTerminator)) {
     next(thread, self);
   }
+  Arcadia_List* methodBody = NULL;
   if (is(thread, self, Arcadia_MILC_WordType_LeftCurlyBracket)) {
     methodBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
     next(thread, self);
@@ -1184,7 +1214,7 @@ onMethodDefinition
   while (is(thread, self, Arcadia_MILC_WordType_LineTerminator)) {
     next(thread, self);
   }
-  Arcadia_MILC_AST_MethodDefinitionNode* methodDefinitionNode = Arcadia_MILC_AST_MethodDefinitionNode_create(thread, nativeName, methodName, methodParameters, methodBody);
+  Arcadia_MILC_AST_MethodDefinitionNode* methodDefinitionNode = Arcadia_MILC_AST_MethodDefinitionNode_create(thread, nativeName, methodName, methodParameters, returnType, methodBody);
   return methodDefinitionNode;
 }
 
@@ -1240,6 +1270,19 @@ onClassMemberDefinition
       return (Arcadia_MILC_AST_Node*)onFieldDefinition(thread, self);
     } break;
     default: {
+      Arcadia_Languages_Diagnostics_add
+        (
+          thread,
+          self->diagnostics,
+          (Arcadia_Languages_Diagnostic*)
+          Arcadia_MILC_Diagnostics_Syntactical_UnexpectedWordDiagnostic_create
+            (
+              thread,
+              Arcadia_Languages_DiagnosticType_Error,
+              Arcadia_MILC_Scanner_getFile(thread, (Arcadia_MILC_Scanner*)self->scanner),
+              getType(thread, self)
+            )
+        );
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
       Arcadia_Thread_jump(thread);
     } break;
@@ -1307,7 +1350,7 @@ onEnumerationMemberDefinition
     Arcadia_Languages_Diagnostics_add(thread,
                                       self->diagnostics,
                                       (Arcadia_Languages_Diagnostic*)
-                                      Arcadia_MILC_Diagnostics_UnexpectedWordDiagnostic_create
+                                      Arcadia_MILC_Diagnostics_Syntactical_UnexpectedWordDiagnostic_create
                                         (
                                           thread,
                                           Arcadia_Languages_DiagnosticType_Error,
@@ -1327,7 +1370,7 @@ onEnumerationMemberDefinition
       Arcadia_Languages_Diagnostics_add(thread,
         self->diagnostics,
         (Arcadia_Languages_Diagnostic*)
-        Arcadia_MILC_Diagnostics_UnexpectedWordDiagnostic_create
+        Arcadia_MILC_Diagnostics_Syntactical_UnexpectedWordDiagnostic_create
           (
             thread,
             Arcadia_Languages_DiagnosticType_Error,
@@ -1362,10 +1405,10 @@ onEnumerationDefinition
     Arcadia_Languages_Diagnostics_add(thread,
                                       self->diagnostics,
                                       (Arcadia_Languages_Diagnostic*)
-                                      Arcadia_MILC_Diagnostics_UnexpectedWordDiagnostic_create(thread,
-                                                                                               Arcadia_Languages_DiagnosticType_Error,
-                                                                                               Arcadia_MILC_Scanner_getFile(thread, (Arcadia_MILC_Scanner*)self->scanner),
-                                                                                               getType(thread, self)));
+                                      Arcadia_MILC_Diagnostics_Syntactical_UnexpectedWordDiagnostic_create(thread,
+                                                                                                           Arcadia_Languages_DiagnosticType_Error,
+                                                                                                           Arcadia_MILC_Scanner_getFile(thread, (Arcadia_MILC_Scanner*)self->scanner),
+                                                                                                           getType(thread, self)));
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -1441,9 +1484,10 @@ onModuleDefinition
   return moduleDefinitionNode;
 }
 
-// procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters? procedureBody?
+// procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters? ':' returnType procedureBody?
 // procedureParameters : parameters
 // procedureBody : '{' statements '}'
+// returnType : identifier
 static Arcadia_MILC_AST_ProcedureDefinitionNode*
 onProcedureDefinition
   (
@@ -1473,10 +1517,19 @@ onProcedureDefinition
   }
   Arcadia_MILC_AST_IdentifierNode* procedureName = onIdentifier(thread, self);
   Arcadia_List* procedureParameters = onParameters(thread, self);
-  Arcadia_List* procedureBody = NULL;
   while (is(thread, self, Arcadia_MILC_WordType_LineTerminator)) {
     next(thread, self);
   }
+  if (!is(thread, self, Arcadia_MILC_WordType_Colon)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  next(thread, self);
+  Arcadia_MILC_AST_IdentifierNode* returnType = onIdentifier(thread, self);
+  while (is(thread, self, Arcadia_MILC_WordType_LineTerminator)) {
+    next(thread, self);
+  }
+  Arcadia_List* procedureBody = NULL;
   if (is(thread, self, Arcadia_MILC_WordType_LeftCurlyBracket)) {
     procedureBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
     next(thread, self);
@@ -1496,7 +1549,7 @@ onProcedureDefinition
   while (is(thread, self, Arcadia_MILC_WordType_LineTerminator)) {
     next(thread, self);
   }
-  Arcadia_MILC_AST_ProcedureDefinitionNode* procedureDefinitionNode = Arcadia_MILC_AST_ProcedureDefinitionNode_create(thread, entry, nativeName, procedureName, procedureParameters, procedureBody);
+  Arcadia_MILC_AST_ProcedureDefinitionNode* procedureDefinitionNode = Arcadia_MILC_AST_ProcedureDefinitionNode_create(thread, entry, nativeName, procedureName, procedureParameters, returnType, procedureBody);
   return procedureDefinitionNode;
 }
 
@@ -1548,10 +1601,10 @@ onCompilationUnit
         Arcadia_Languages_Diagnostics_add(thread,
                                           self->diagnostics,
                                           (Arcadia_Languages_Diagnostic*)
-                                          Arcadia_MILC_Diagnostics_UnexpectedWordDiagnostic_create(thread,
-                                                                                                   Arcadia_Languages_DiagnosticType_Error,
-                                                                                                   Arcadia_MILC_Scanner_getFile(thread, (Arcadia_MILC_Scanner*)self->scanner),
-                                                                                                   getType(thread, self)));
+                                          Arcadia_MILC_Diagnostics_Syntactical_UnexpectedWordDiagnostic_create(thread,
+                                                                                                               Arcadia_Languages_DiagnosticType_Error,
+                                                                                                               Arcadia_MILC_Scanner_getFile(thread, (Arcadia_MILC_Scanner*)self->scanner),
+                                                                                                               getType(thread, self)));
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
         Arcadia_Thread_jump(thread);
       } break;

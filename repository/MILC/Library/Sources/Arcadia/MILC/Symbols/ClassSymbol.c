@@ -83,7 +83,9 @@ Arcadia_MILC_ClassSymbol_constructImpl
   }
   //
   self->ast = NULL;
+  self->members = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   self->scope = NULL;
+  self->parentClassSymbol = NULL;
   //
   Arcadia_LeaveConstructor(Arcadia_MILC_ClassSymbol);
 }
@@ -114,8 +116,14 @@ Arcadia_MILC_ClassSymbol_visitImpl
   if (self->ast) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->ast);
   }
+  if (self->members) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->members);
+  }
   if (self->scope) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
+  }
+  if (self->parentClassSymbol) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->parentClassSymbol);
   }
 }
 

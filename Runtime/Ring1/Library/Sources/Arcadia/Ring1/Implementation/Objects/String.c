@@ -16,8 +16,8 @@
 #define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Objects/String.h"
 
-#include <assert.h>
 #include "Arcadia/Ring1/Include.h"
+#include <assert.h>
 
 static void
 Arcadia_String_constructImpl

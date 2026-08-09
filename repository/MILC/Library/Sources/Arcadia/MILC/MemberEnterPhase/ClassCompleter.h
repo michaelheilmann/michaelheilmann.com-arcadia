@@ -18,6 +18,8 @@
 
 #include "Arcadia/MILC/Completer.h"
 
+// create Arcadia.MILC.MethodSymbol
+// create Arcadia.MILC.VariableSymbol
 Arcadia_declareObjectType(u8"Arcadia.MILC.MemberEnterPhase.ClassCompleter", Arcadia_MILC_MemberEnterPhase_ClassCompleter,
                           Arcadia_MILC_Completer);
 

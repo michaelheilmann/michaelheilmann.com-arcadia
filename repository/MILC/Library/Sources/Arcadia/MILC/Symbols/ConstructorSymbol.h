@@ -16,7 +16,9 @@
 #if !defined(ARCADIA_MILC_SYMBOLS_CONSTRUCTORSYMBOL_H_INCLUDED)
 #define ARCADIA_MILC_SYMBOLS_CONSTRUCTORSYMBOL_H_INCLUDED
 
+#include "Arcadia/Languages/Include.h"
 #include "Arcadia/MILC/Symbols/Symbol.h"
+#include "Arcadia/MILC/AST/Include.h"
 
 /// @code
 /// class Arcadia.MILC.ConstructorSymbol extends Arcadia.MILC.Symbol {
@@ -34,6 +36,14 @@ struct Arcadia_MILC_ConstructorSymbolDispatch {
 
 struct Arcadia_MILC_ConstructorSymbol {
   Arcadia_MILC_Symbol _parent;
+  /// The abstract syntax tree defining this constructor symbol if any. A null pointer otherwise.
+  Arcadia_MILC_AST_ConstructorDefinitionNode* ast;
+
+  /// The symbols of the parameters of this constructor in order of appearance.
+  Arcadia_List* parameters;
+
+  /// The scope for the parameters.
+  Arcadia_Languages_Scope* scope;
 };
 
 Arcadia_MILC_ConstructorSymbol*

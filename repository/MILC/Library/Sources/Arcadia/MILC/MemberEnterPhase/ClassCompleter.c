@@ -19,6 +19,7 @@
 #include "Arcadia/MILC/Context.h"
 #include "Arcadia/MILC/Diagnostics/Include.h"
 #include "Arcadia/MILC/Symbols/Include.h"
+#include "Arcadia/MILC/TypeResolutionPhase.h"
 #include <assert.h>
 
 static void
@@ -159,7 +160,56 @@ onCompleteConstructor
     Arcadia_MILC_ClassSymbol* classSymbol,
     Arcadia_MILC_AST_ConstructorDefinitionNode* node
   )
-{ }
+{ 
+  Arcadia_String* name = Arcadia_String_createFromCxxString(thread, u8"<constructor>");
+  // Enter the constructor symbol into the class symbol.
+  Arcadia_MILC_ConstructorSymbol* constructorSymbol = Arcadia_MILC_ConstructorSymbol_create(thread, name);
+  constructorSymbol->ast = node;
+  Arcadia_List_insertBack(thread, ((Arcadia_MILC_ClassSymbol*)classSymbol)->members, Arcadia_Value_makeObjectReferenceValue((Arcadia_Object*)constructorSymbol));
+  if (Arcadia_Languages_Scope_contains(thread, classSymbol->scope, ((Arcadia_MILC_Symbol*)constructorSymbol)->name, Arcadia_BooleanValue_False)) {
+    Arcadia_Languages_Diagnostics_add
+      (
+        thread, context->diagnostics,
+        (Arcadia_Languages_Diagnostic*)
+        Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+          (
+            thread,
+            Arcadia_Languages_DiagnosticType_Error,
+            name
+          )
+      );
+  } else {
+    Arcadia_Languages_Scope_enter(thread, classSymbol->scope, ((Arcadia_MILC_Symbol*)constructorSymbol)->name, (Arcadia_Object*)constructorSymbol);
+  }
+  // Enter the parameter symbols into the constructor symbol.
+  if (!constructorSymbol->scope) {
+    constructorSymbol->scope = Arcadia_Languages_Scope_create(thread, NULL);
+  }
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->parameters); i < n; ++i) {
+    Arcadia_MILC_AST_FieldDefinitionNode* fieldDefinitionNode = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, node->parameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
+    Arcadia_MILC_VariableSymbol* fieldSymbol = Arcadia_MILC_VariableSymbol_create(thread, fieldDefinitionNode->name);
+    ((Arcadia_MILC_Symbol*)fieldSymbol)->enclosing = (Arcadia_MILC_Symbol*)constructorSymbol;
+    fieldSymbol->ast = fieldDefinitionNode;
+    Arcadia_List_insertBack(thread, ((Arcadia_MILC_ConstructorSymbol*)constructorSymbol)->parameters, Arcadia_Value_makeObjectReferenceValue((Arcadia_Object*)fieldSymbol));
+    if (Arcadia_Languages_Scope_contains(thread, constructorSymbol->scope, ((Arcadia_MILC_Symbol*)fieldSymbol)->name, Arcadia_BooleanValue_False)) {
+      Arcadia_Languages_Diagnostics_add
+        (
+          thread, context->diagnostics,
+          (Arcadia_Languages_Diagnostic*)
+          Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+            (
+              thread,
+              Arcadia_Languages_DiagnosticType_Error,
+              fieldDefinitionNode->name
+            )
+        );
+    } else {
+      Arcadia_Languages_Scope_enter(thread, constructorSymbol->scope, ((Arcadia_MILC_Symbol*)fieldSymbol)->name, (Arcadia_Object*)fieldSymbol);
+    }
+  }
+  // This is why we use completers (among other reasons). We cannot resolve a constructor's types here.
+  ((Arcadia_MILC_Symbol*)constructorSymbol)->completer = Arcadia_MILC_TypeResolutionPhase_getInstance(thread, context)->constructorCompleter;
+}
 
 static void
 onCompleteField
@@ -171,13 +221,17 @@ onCompleteField
     Arcadia_MILC_AST_FieldDefinitionNode* node
   )
 { 
-  Arcadia_MILC_FieldSymbol* fieldSymbol = Arcadia_MILC_FieldSymbol_create(thread, node->name);
+  // Enter the field symbol into the class symbol.
+  Arcadia_MILC_VariableSymbol* fieldSymbol = Arcadia_MILC_VariableSymbol_create(thread, node->name);
+  ((Arcadia_MILC_Symbol*)fieldSymbol)->enclosing = (Arcadia_MILC_Symbol*)classSymbol;
   fieldSymbol->ast = node;
+  Arcadia_List_insertBack(thread, ((Arcadia_MILC_ClassSymbol*)classSymbol)->members, Arcadia_Value_makeObjectReferenceValue((Arcadia_Object*)fieldSymbol));
   if (Arcadia_Languages_Scope_contains(thread, classSymbol->scope, ((Arcadia_MILC_Symbol*)fieldSymbol)->name, Arcadia_BooleanValue_False)) {
     Arcadia_Languages_Diagnostics_add
       (
         thread, context->diagnostics,
-        (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+        (Arcadia_Languages_Diagnostic*)
+        Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
           (
             thread,
             Arcadia_Languages_DiagnosticType_Error,
@@ -199,13 +253,16 @@ onCompleteMethod
     Arcadia_MILC_AST_MethodDefinitionNode* node
   )
 { 
+  // Enter the method symbol into the class symbol.
   Arcadia_MILC_MethodSymbol* methodSymbol = Arcadia_MILC_MethodSymbol_create(thread, node->name);
   methodSymbol->ast = node;
+  Arcadia_List_insertBack(thread, ((Arcadia_MILC_ClassSymbol*)classSymbol)->members, Arcadia_Value_makeObjectReferenceValue((Arcadia_Object*)methodSymbol));
   if (Arcadia_Languages_Scope_contains(thread, classSymbol->scope, ((Arcadia_MILC_Symbol*)methodSymbol)->name, Arcadia_BooleanValue_False)) {
     Arcadia_Languages_Diagnostics_add
       (
         thread, context->diagnostics,
-        (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+        (Arcadia_Languages_Diagnostic*)
+        Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
           (
             thread,
             Arcadia_Languages_DiagnosticType_Error,
@@ -215,7 +272,31 @@ onCompleteMethod
   } else {
     Arcadia_Languages_Scope_enter(thread, classSymbol->scope, ((Arcadia_MILC_Symbol*)methodSymbol)->name, (Arcadia_Object*)methodSymbol);
   }
-
+  // Enter the parameter symbols into the method symbol.
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->parameters); i < n; ++i) {
+    Arcadia_MILC_AST_FieldDefinitionNode* fieldDefinitionNode = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, node->parameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
+    Arcadia_MILC_VariableSymbol* fieldSymbol = Arcadia_MILC_VariableSymbol_create(thread, fieldDefinitionNode->name);
+    ((Arcadia_MILC_Symbol*)fieldSymbol)->enclosing = (Arcadia_MILC_Symbol*)methodSymbol;
+    fieldSymbol->ast = fieldDefinitionNode;
+    Arcadia_List_insertBack(thread, ((Arcadia_MILC_ConstructorSymbol*)methodSymbol)->parameters, Arcadia_Value_makeObjectReferenceValue((Arcadia_Object*)fieldSymbol));
+    if (Arcadia_Languages_Scope_contains(thread, methodSymbol->scope, ((Arcadia_MILC_Symbol*)fieldSymbol)->name, Arcadia_BooleanValue_False)) {
+      Arcadia_Languages_Diagnostics_add
+        (
+          thread, context->diagnostics,
+          (Arcadia_Languages_Diagnostic*)
+          Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+            (
+              thread,
+              Arcadia_Languages_DiagnosticType_Error,
+              fieldDefinitionNode->name
+            )
+        );
+    } else {
+      Arcadia_Languages_Scope_enter(thread, methodSymbol->scope, ((Arcadia_MILC_Symbol*)fieldSymbol)->name, (Arcadia_Object*)fieldSymbol);
+    }
+  }
+  // This is why we use completers (among other reasons). We cannot resolve a methods types here.
+  ((Arcadia_MILC_Symbol*)methodSymbol)->completer = Arcadia_MILC_TypeResolutionPhase_getInstance(thread, context)->methodCompleter;
 }
 
 static void
@@ -246,6 +327,8 @@ completeImpl
       Arcadia_Thread_jump(thread);
     }
   }
+  // This is for resolving the field types.
+  symbol->completer = Arcadia_MILC_TypeResolutionPhase_getInstance(thread, context)->classCompleter;
 }
 
 Arcadia_MILC_MemberEnterPhase_ClassCompleter*

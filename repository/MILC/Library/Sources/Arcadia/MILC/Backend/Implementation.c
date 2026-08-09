@@ -17,7 +17,9 @@
 
 #include "Arcadia/MILC/Backend/SymbolInfo.h"
 #include "Arcadia/MILC/Completer.h"
+#include "Arcadia/MILC/Backend/ClassSymbolWriter.h"
 #include "Arcadia/MILC/Backend/EnumerationConstantSymbolInfo.h"
+#include "Arcadia/MILC/Backend/EnumerationSymbolWriter.h"
 
 static void
 constructImpl
@@ -48,15 +50,6 @@ visitImpl
   );
 
 static void
-onWriteEnumerationConstant
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MILC_Backend_Implementation* self,
-    Arcadia_MILC_Backend_EnumerationConstantSymbolInfo* symbolInfo,
-    Arcadia_MILC_Context* context
-  );
-
-static void
 onWriteSymbolInfo
   (
     Arcadia_Thread* thread,
@@ -64,7 +57,7 @@ onWriteSymbolInfo
     Arcadia_MILC_Backend_SymbolInfo* symbolInfo,
     Arcadia_MILC_Context* context 
   );
-  
+
 static void
 onVisitSymbol
   (
@@ -112,10 +105,15 @@ constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (0 != _numberOfArguments) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  self->context = (Arcadia_MILC_Context*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_MILC_Context_getType(thread));
+  self->classSymbolWriter = (Arcadia_MILC_Backend_SymbolWriter*)Arcadia_MILC_Backend_ClassSymbolWriter_create(thread);
+  self->enumerationSymbolWriter = (Arcadia_MILC_Backend_SymbolWriter*)Arcadia_MILC_Backend_EnumerationSymbolWriter_create(thread);
+  self->symbolInfos = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+
   Arcadia_LeaveConstructor(Arcadia_MILC_Backend_Implementation);
 }
 
@@ -141,7 +139,20 @@ visitImpl
     Arcadia_Thread* thread,
     Arcadia_MILC_Backend_Implementation* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->context) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->context);
+  }
+  if (self->classSymbolWriter) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->classSymbolWriter);
+  }
+  if (self->enumerationSymbolWriter) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->enumerationSymbolWriter);
+  }
+  if (self->symbolInfos) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->symbolInfos);
+  }
+}
 
 static void
 onVisitSymbol
@@ -157,13 +168,19 @@ onVisitSymbol
     case Arcadia_MILC_SymbolKind_Module: {
       onVisitScope(thread, self, context, ((Arcadia_MILC_ModuleSymbol*)symbol)->scope);
     } break;
-    default: {
+    case Arcadia_MILC_SymbolKind_PrimitiveType: {
       Arcadia_MILC_Backend_SymbolInfo* symbolInfo = Arcadia_MILC_Backend_SymbolInfo_create(thread, context, symbol);
       Arcadia_StringBuilder* stringBuilder = Arcadia_StringBuilder_create(thread);
       Arcadia_MILC_Backend_SymbolInfo_dump(thread, symbolInfo, 2, stringBuilder);
       Arcadia_Log_information(thread, context->log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuilder)));
-
-      Arcadia_Map_set(thread, context->backendSymbolInfos, Arcadia_Value_makeObjectReferenceValue(symbol), Arcadia_Value_makeObjectReferenceValue(symbolInfo), NULL, NULL);
+      Arcadia_Map_set(thread, self->symbolInfos, Arcadia_Value_makeObjectReferenceValue(symbol), Arcadia_Value_makeObjectReferenceValue(symbolInfo), NULL, NULL);
+    } break;
+    default: {
+      Arcadia_MILC_Backend_SymbolInfo* symbolInfo = Arcadia_MILC_Backend_SymbolInfo_create(thread, context, symbol);
+      Arcadia_StringBuilder* stringBuilder = Arcadia_StringBuilder_create(thread);
+      //Arcadia_MILC_Backend_SymbolInfo_dump(thread, symbolInfo, 2, stringBuilder);
+      Arcadia_Log_information(thread, context->log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuilder)));
+      Arcadia_Map_set(thread, self->symbolInfos, Arcadia_Value_makeObjectReferenceValue(symbol), Arcadia_Value_makeObjectReferenceValue(symbolInfo), NULL, NULL);
     } break;
   }
 }
@@ -184,27 +201,6 @@ onVisitScope
   }
 }
 
-Arcadia_MILC_Backend_Implementation*
-Arcadia_MILC_Backend_Implementation_create
-  (
-    Arcadia_Thread* thread
-  )
-{
-  _Arcadia_BeginCreate(Arcadia_MILC_Backend_Implementation);
-  Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  _Arcadia_EndCreate(Arcadia_MILC_Backend_Implementation);
-}
-
-static void
-onWriteEnumerationConstant
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MILC_Backend_Implementation* self,
-    Arcadia_MILC_Backend_EnumerationConstantSymbolInfo* symbolInfo,
-    Arcadia_MILC_Context* context
-  )
-{ }
-
 static void
 onWriteSymbolInfo
   (
@@ -214,122 +210,96 @@ onWriteSymbolInfo
     Arcadia_MILC_Context* context
   )
 { 
-  if (symbolInfo->symbol->completer) {
-    Arcadia_MILC_Completer_complete(thread, symbolInfo->symbol->completer, context, symbolInfo->symbol);
-  }
-  static const char* COPYRIGHT = 
-    "// The author of this software is Michael Heilmann (contact@michaelheilmann.com).\n"
-    "//\n"
-    "// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).\n"
-    "//\n"
-    "// Permission to use, copy, modify, and distribute this software for any\n"
-    "// purpose without fee is hereby granted, provided that this entire notice\n"
-    "// is included in all copies of any software which is or includes a copy\n"
-    "// or modification of this software and in all copies of the supporting\n"
-    "// documentation for such software.\n"
-    "//\n"
-    "// THIS SOFTWARE IS BEING PROVIDED \"AS IS\", WITHOUT ANY EXPRESS OR IMPLIED\n"
-    "// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY\n"
-    "// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY\n"
-    "// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.\n"
-    ;
-
-  Arcadia_StringBuilder* stringBuilder = Arcadia_StringBuilder_create(thread);
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_ByteArrayBuilder* byteArrayBuilder = Arcadia_ByteArrayBuilder_create(thread);
-
-  Arcadia_StringBuilder_clear(thread, stringBuilder);
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, COPYRIGHT);
-  Arcadia_ByteArrayBuilder_clear(thread, byteArrayBuilder);
-  Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteArrayBuilder, Arcadia_StringBuilder_getBytes(thread, stringBuilder), Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuilder));
-  Arcadia_FileSystem_setFileContents(thread, fileSystem, symbolInfo->cxxSourceFilePath, byteArrayBuilder);
-
-  Arcadia_StringBuilder_clear(thread, stringBuilder);
-  // #ifndef 
-  // #define
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, COPYRIGHT);
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "#ifndef ");
-  Arcadia_StringBuilder_insertBackString(thread, stringBuilder, symbolInfo->cxxNameUpperCase);
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "_H_INCLUDED");
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "#define ");
-  Arcadia_StringBuilder_insertBackString(thread, stringBuilder, symbolInfo->cxxNameUpperCase);
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "_H_INCLUDED");
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
-
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
-  if (symbolInfo->symbol->kind == Arcadia_MILC_SymbolKind_Enumeration) {
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "Arcadia_declareEnumerationType");
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "(");
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\"");
-    Arcadia_StringBuilder_insertBackString(thread, stringBuilder, symbolInfo->symbol->name);
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\"");
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ",\n");
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "                               ");
-    Arcadia_StringBuilder_insertBackString(thread, stringBuilder, symbolInfo->cxxName);
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ")");
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ";\n");
-
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "enum ");
-    Arcadia_StringBuilder_insertBackString(thread, stringBuilder, symbolInfo->cxxName);
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, " {\n");
-
-#if 1
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
-    Arcadia_List* constantSymbols = Arcadia_Map_getValues(thread, ((Arcadia_MILC_EnumerationSymbol*)symbolInfo->symbol)->scope->entries);
-    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)constantSymbols); i < n; ++i) {
-      Arcadia_MILC_EnumerationConstantSymbol* constantSymbol = (Arcadia_MILC_EnumerationConstantSymbol*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, constantSymbols, i, _Arcadia_MILC_EnumerationConstantSymbol_getType(thread));
-      Arcadia_Value temporary = Arcadia_Map_get(thread, context->backendSymbolInfos, Arcadia_Value_makeObjectReferenceValue(constantSymbol));
-      Arcadia_MILC_Backend_EnumerationConstantSymbolInfo* constantSymbolInfo;
-      if (Arcadia_Value_isVoidValue(&temporary)) {
-        constantSymbolInfo = Arcadia_MILC_Backend_EnumerationConstantSymbolInfo_create(thread, context, (Arcadia_MILC_Symbol*)constantSymbol);
-        Arcadia_Map_set(thread, context->backendSymbolInfos, Arcadia_Value_makeObjectReferenceValue(constantSymbol), Arcadia_Value_makeObjectReferenceValue(constantSymbolInfo), NULL, NULL);
-      } else {
-        constantSymbolInfo = (Arcadia_MILC_Backend_EnumerationConstantSymbolInfo*)Arcadia_Value_getObjectReferenceValueChecked(thread, temporary, _Arcadia_MILC_Backend_EnumerationConstantSymbolInfo_getType(thread));
-      }
-      Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "  ");
-      Arcadia_StringBuilder_insertBackString(thread, stringBuilder, constantSymbolInfo->cxxName);
-      Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ",\n");
-      Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
+  if (symbolInfo->symbol->kind == Arcadia_MILC_SymbolKind_Class) {
+    if (symbolInfo->symbol->completer) {
+      Arcadia_MILC_Completer_complete(thread, symbolInfo->symbol->completer, context, symbolInfo->symbol);
     }
-#endif
 
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "};");
-    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
+    Arcadia_StringBuilder* stringBuilder = Arcadia_StringBuilder_create(thread);
+    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+    Arcadia_ByteArrayBuilder* byteArrayBuilder = Arcadia_ByteArrayBuilder_create(thread);
+
+    Arcadia_StringBuilder_clear(thread, stringBuilder);
+    Arcadia_MILC_Backend_SymbolWriter_write(thread, self->classSymbolWriter, context, Arcadia_MILC_Backend_CXXFileType_C, symbolInfo, stringBuilder);
+    Arcadia_ByteArrayBuilder_clear(thread, byteArrayBuilder);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteArrayBuilder, Arcadia_StringBuilder_getBytes(thread, stringBuilder), Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuilder));
+    Arcadia_FileSystem_setFileContents(thread, fileSystem, symbolInfo->cxxSourceFilePath, byteArrayBuilder);
+
+    Arcadia_StringBuilder_clear(thread, stringBuilder);
+    Arcadia_MILC_Backend_SymbolWriter_write(thread, self->classSymbolWriter, context, Arcadia_MILC_Backend_CXXFileType_H, symbolInfo, stringBuilder);
+    Arcadia_ByteArrayBuilder_clear(thread, byteArrayBuilder);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteArrayBuilder, Arcadia_StringBuilder_getBytes(thread, stringBuilder), Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuilder));
+    Arcadia_FileSystem_setFileContents(thread, fileSystem, symbolInfo->cxxHeaderFilePath, byteArrayBuilder);
   }
+  if (symbolInfo->symbol->kind == Arcadia_MILC_SymbolKind_Enumeration) {
+    if (symbolInfo->symbol->completer) {
+      Arcadia_MILC_Completer_complete(thread, symbolInfo->symbol->completer, context, symbolInfo->symbol);
+    }
 
-  // #endif
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "#endif // ");
-  Arcadia_StringBuilder_insertBackString(thread, stringBuilder, symbolInfo->cxxNameUpperCase);
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "_H_INCLUDED");
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, "\n");
+    Arcadia_StringBuilder* stringBuilder = Arcadia_StringBuilder_create(thread);
+    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+    Arcadia_ByteArrayBuilder* byteArrayBuilder = Arcadia_ByteArrayBuilder_create(thread);
 
-  Arcadia_ByteArrayBuilder_clear(thread, byteArrayBuilder);
-  Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteArrayBuilder, Arcadia_StringBuilder_getBytes(thread, stringBuilder), Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuilder));
-  Arcadia_FileSystem_setFileContents(thread, fileSystem, symbolInfo->cxxHeaderFilePath, byteArrayBuilder);
+    Arcadia_StringBuilder_clear(thread, stringBuilder);
+    Arcadia_MILC_Backend_SymbolWriter_write(thread, self->enumerationSymbolWriter, context, Arcadia_MILC_Backend_CXXFileType_C, symbolInfo, stringBuilder);
+    Arcadia_ByteArrayBuilder_clear(thread, byteArrayBuilder);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteArrayBuilder, Arcadia_StringBuilder_getBytes(thread, stringBuilder), Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuilder));
+    Arcadia_FileSystem_setFileContents(thread, fileSystem, symbolInfo->cxxSourceFilePath, byteArrayBuilder);
+
+    Arcadia_StringBuilder_clear(thread, stringBuilder);
+    Arcadia_MILC_Backend_SymbolWriter_write(thread, self->enumerationSymbolWriter, context, Arcadia_MILC_Backend_CXXFileType_H, symbolInfo, stringBuilder);
+    Arcadia_ByteArrayBuilder_clear(thread, byteArrayBuilder);
+    Arcadia_ByteArrayBuilder_insertBackBytes(thread, byteArrayBuilder, Arcadia_StringBuilder_getBytes(thread, stringBuilder), Arcadia_StringBuilder_getNumberOfBytes(thread, stringBuilder));
+    Arcadia_FileSystem_setFileContents(thread, fileSystem, symbolInfo->cxxHeaderFilePath, byteArrayBuilder);
+  }
+}
+
+Arcadia_MILC_Backend_Implementation*
+Arcadia_MILC_Backend_Implementation_create
+  ( 
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
+  )
+{
+  _Arcadia_BeginCreate(Arcadia_MILC_Backend_Implementation);
+  if (context) Arcadia_ValueStack_pushObjectReferenceValue(thread, context); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  _Arcadia_EndCreate(Arcadia_MILC_Backend_Implementation);
+}
+
+Arcadia_MILC_Backend_Implementation*
+Arcadia_MILC_Backend_Implementation_getInstance
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
+  )
+{ 
+  Arcadia_Value k = Arcadia_Value_makeTypeValue(_Arcadia_MILC_Backend_Implementation_getType(thread));
+  Arcadia_Value v = Arcadia_Map_get(thread, context->instances, k);
+  if (Arcadia_Value_isVoidValue(&v)) {
+    v = Arcadia_Value_makeObjectReferenceValue(Arcadia_MILC_Backend_Implementation_create(thread, context));
+    Arcadia_Map_set(thread, context->instances, k, v, NULL, NULL);
+  }
+  return (Arcadia_MILC_Backend_Implementation*)Arcadia_Value_getObjectReferenceValue(&v);
 }
 
 void
 Arcadia_MILC_Backend_Implementation_run
   (
     Arcadia_Thread* thread,
-    Arcadia_MILC_Backend_Implementation* self,
-    Arcadia_MILC_Context* context
+    Arcadia_MILC_Backend_Implementation* self
   )
 {
   // (1) Clear the collection of backend symbol infos.
-  Arcadia_Collection_clear(thread, (Arcadia_Collection*)context->backendSymbolInfos);
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->symbolInfos);
   // (2) Enter the backend symbol infos.
-  onVisitScope(thread, self, context, context->scope);
-
-  Arcadia_List* symbolInfos = Arcadia_Map_getValues(thread, context->backendSymbolInfos);
+  onVisitScope(thread, self, self->context, self->context->scope);
+  Arcadia_MILC_Symbol* objectSymbol = Arcadia_MILC_Symbols_getInstance(thread, self->context)->object;
+  Arcadia_List* symbolInfos = Arcadia_Map_getValues(thread, self->symbolInfos);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)symbolInfos); i < n; ++i) {
     Arcadia_MILC_Backend_SymbolInfo* symbolInfo = (Arcadia_MILC_Backend_SymbolInfo*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, symbolInfos, i, _Arcadia_MILC_Backend_SymbolInfo_getType(thread));
-    if (symbolInfo->symbol->kind == Arcadia_MILC_SymbolKind_Class || symbolInfo->symbol->kind == Arcadia_MILC_SymbolKind_Enumeration) {
-      onWriteSymbolInfo(thread, self, symbolInfo, context);
+    if (objectSymbol != symbolInfo->symbol && (symbolInfo->symbol->kind == Arcadia_MILC_SymbolKind_Class || symbolInfo->symbol->kind == Arcadia_MILC_SymbolKind_Enumeration)) {
+      onWriteSymbolInfo(thread, self, symbolInfo, self->context);
     }
   }
 }

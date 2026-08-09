@@ -17,11 +17,11 @@
 #include "Arcadia/Ring1/Implementation/StringToReal/toReal64.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include <assert.h>
 #include "Arcadia/Ring1/Implementation/StringToReal/Result.h"
 #include "Arcadia/Ring1/Implementation/StringToReal/Clinger.h"
 #include "Arcadia/Ring1/Implementation/StringToReal/Gay.h"
 #include "Arcadia/Ring1/Implementation/StringToReal/Lemire.h"
+#include <assert.h>
 
 static Arcadia_Integer64Value
 decimalDigitsToInteger64Value

@@ -150,7 +150,7 @@ Arcadia_Engine_Visuals_CameraNode_constructImpl
   // Move the camera along the positive z axis by multiplying the camera position by `translate(0, 0, 1)`.
   // However, as we actually do not transform the camera position but the position of the objects in world space,
   // we actually have to use the inverse `inverse(translate(0, 0, 1))`.
-  Arcadia_Math_Matrix4x4Real32Value_setTranslation(thread, self->worldToViewMatrix, 0.f, 0.f, -1.f);
+  Arcadia_Math_Matrix4x4Real32_setTranslation(thread, self->worldToViewMatrix, 0.f, 0.f, -1.f);
 
   Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_CameraNode);
 }

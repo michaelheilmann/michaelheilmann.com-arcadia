@@ -19,6 +19,7 @@
 #include "Arcadia/MILC/Context.h"
 #include "Arcadia/MILC/Diagnostics/Include.h"
 #include "Arcadia/MILC/Symbols/Include.h"
+#include "Arcadia/MILC/TypeResolutionPhase.h"
 #include <assert.h>
 
 static void
@@ -135,7 +136,7 @@ completeImpl
     symbol->completer = NULL;
     return;
   }
-  symbol->completer = NULL;
+  symbol->completer = Arcadia_MILC_TypeResolutionPhase_getInstance(thread, context)->procedureCompleter;
 }
 
 Arcadia_MILC_MemberEnterPhase_ProcedureCompleter*

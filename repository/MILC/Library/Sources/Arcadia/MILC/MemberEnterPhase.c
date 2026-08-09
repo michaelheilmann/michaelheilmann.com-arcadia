@@ -216,6 +216,9 @@ onVisitSymbol
         onVisitSymbol(thread, self, symbol);
       }
     } break;
+    case Arcadia_MILC_SymbolKind_PrimitiveType: {
+      /* Intentionally empty. */
+    } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);

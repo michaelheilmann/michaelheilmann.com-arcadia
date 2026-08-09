@@ -33,8 +33,8 @@ struct Arcadia_MILC_AST_ConstructorDefinitionNodeDispatch {
 struct Arcadia_MILC_AST_ConstructorDefinitionNode {
   Arcadia_MILC_AST_DefinitionNode _parent;
   Arcadia_String* nativeName;
-  Arcadia_List* constructorParameters;
-  Arcadia_List* constructorBody;
+  Arcadia_List* parameters;
+  Arcadia_List* body;
 };
 
 Arcadia_MILC_AST_ConstructorDefinitionNode*
@@ -42,8 +42,8 @@ Arcadia_MILC_AST_ConstructorDefinitionNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* nativeName,
-    Arcadia_List* constructorParameters,
-    Arcadia_List* constructorBody
+    Arcadia_List* parameters,
+    Arcadia_List* body
   );
 
 #endif // ARCADIA_MILC_AST_DEFINITIONS_CONSTRUCTORDEFINITIONNODE_H_INCLUDED

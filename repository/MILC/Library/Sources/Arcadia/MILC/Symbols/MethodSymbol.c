@@ -83,6 +83,10 @@ Arcadia_MILC_MethodSymbol_constructImpl
   }
   //
   self->ast = NULL;
+  self->scope = NULL;
+  self->parameters = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  self->overrideOf = NULL;
+  self->returnValueType = NULL;
   //
   Arcadia_LeaveConstructor(Arcadia_MILC_MethodSymbol);
 }
@@ -112,6 +116,18 @@ Arcadia_MILC_MethodSymbol_visitImpl
 {
   if (self->ast) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->ast);
+  }
+  if (self->scope) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
+  }
+  if (self->parameters) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->parameters);
+  }
+  if (self->returnValueType) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->returnValueType);
+  }
+  if (self->overrideOf) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->overrideOf);
   }
 }
 

@@ -18,6 +18,8 @@
 #include "Arcadia/MILC/Include.h"
 #include "Arcadia/MILC/MemberEnterPhase/ClassCompleter.h"
 #include "Arcadia/MILC/MemberEnterPhase/EnumerationCompleter.h"
+#include "Arcadia/MILC/Symbols/Symbols.h"
+#include "Arcadia/MILC/Environment.h"
 #include <assert.h>
 
 static void
@@ -250,7 +252,9 @@ onClassDefinitionNode
   Arcadia_MILC_ClassSymbol* symbol = Arcadia_MILC_ClassSymbol_create(thread, symbolName);
   ((Arcadia_MILC_Symbol*)symbol)->enclosing = (Arcadia_MILC_Symbol*)moduleSymbol;
   symbol->ast = classDefinitionNode;
-
+  Arcadia_MILC_Environment* environment = Arcadia_MILC_Environment_create(thread, (Arcadia_MILC_Symbol*)symbol, compilationUnitNode);
+  Arcadia_Map_set(thread, self->context->environments, Arcadia_Value_makeObjectReferenceValue(symbol),
+                                                       Arcadia_Value_makeObjectReferenceValue(environment), NULL, NULL);
   if (!moduleSymbol->scope) {
     moduleSymbol->scope = Arcadia_Languages_Scope_create(thread, self->context->scope);
   }
@@ -290,6 +294,13 @@ onModuleDefinitionNode
   assert(NULL != moduleNode);
   // Create the module symbol.
   Arcadia_MILC_ModuleSymbol* moduleSymbol = Arcadia_MILC_ModuleSymbol_create(thread, moduleSymbolName);
+  // Associate the module symbolw ith this module node.
+  moduleNode->moduleSymbol = moduleSymbol;
+  // Associate te module definition node with the module symbol.
+  moduleSymbol->moduleDefinitionNode = moduleDefinitionNode;
+  Arcadia_MILC_Environment* environment = Arcadia_MILC_Environment_create(thread, (Arcadia_MILC_Symbol*)moduleSymbol, compilationUnitNode);
+  Arcadia_Map_set(thread, self->context->environments, Arcadia_Value_makeObjectReferenceValue(moduleSymbol),
+                                                       Arcadia_Value_makeObjectReferenceValue(environment), NULL, NULL);
   // LANGUAGE DEFINITION: Assert no two definitions of the same name exist in the root scope.
   if (Arcadia_Languages_Scope_contains(thread, self->context->scope, moduleSymbolName, Arcadia_BooleanValue_False)) {
     Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create(thread, Arcadia_Languages_DiagnosticType_Error, moduleSymbolName);
@@ -302,7 +313,8 @@ onModuleDefinitionNode
       (
         thread,
         self->context->diagnostics,
-        (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_MultipleModuleDefinitionsDiagnostic_create
+        (Arcadia_Languages_Diagnostic*)
+        Arcadia_MILC_Diagnostics_MultipleModuleDefinitionsDiagnostic_create
           (
             thread,
             Arcadia_Languages_DiagnosticType_Error,
@@ -311,10 +323,6 @@ onModuleDefinitionNode
       );
   }
   self->lastSymbol = moduleSymbol;
-  // Associate the module symbolw ith this module node.
-  moduleNode->moduleSymbol = moduleSymbol;
-  // Associate te module definition node with the module symbol.
-  moduleSymbol->moduleDefinitionNode = moduleDefinitionNode;
 }
 
 static void
@@ -336,6 +344,9 @@ onEnumerationDefinitionNode
   Arcadia_MILC_EnumerationSymbol* symbol = Arcadia_MILC_EnumerationSymbol_create(thread, symbolName);
   ((Arcadia_MILC_Symbol*)symbol)->enclosing = (Arcadia_MILC_Symbol*)moduleSymbol;
   symbol->ast = enumerationDefinitionNode;
+  Arcadia_MILC_Environment* environment = Arcadia_MILC_Environment_create(thread, (Arcadia_MILC_Symbol*)symbol, compilationUnitNode);
+  Arcadia_Map_set(thread, self->context->environments, Arcadia_Value_makeObjectReferenceValue(symbol),
+                                                       Arcadia_Value_makeObjectReferenceValue(environment), NULL, NULL);
 
   if (!moduleSymbol->scope) {
     moduleSymbol->scope = Arcadia_Languages_Scope_create(thread, self->context->scope);
@@ -347,7 +358,8 @@ onEnumerationDefinitionNode
     Arcadia_Languages_Diagnostics_add
       (
         thread, self->context->diagnostics,
-        (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+        (Arcadia_Languages_Diagnostic*)
+        Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
           (
             thread,
             Arcadia_Languages_DiagnosticType_Error,
@@ -377,6 +389,9 @@ onProcedureDefinitionNode
   Arcadia_MILC_ProcedureSymbol* symbol = Arcadia_MILC_ProcedureSymbol_create(thread, symbolName);
   ((Arcadia_MILC_Symbol*)symbol)->enclosing = (Arcadia_MILC_Symbol*)moduleSymbol;
   symbol->ast = procedureDefinitionNode;
+  Arcadia_MILC_Environment* environment = Arcadia_MILC_Environment_create(thread, (Arcadia_MILC_Symbol*)symbol, compilationUnitNode);
+  Arcadia_Map_set(thread, self->context->environments, Arcadia_Value_makeObjectReferenceValue(symbol),
+                                                       Arcadia_Value_makeObjectReferenceValue(environment), NULL, NULL);
 
   if (!moduleSymbol->scope) {
     moduleSymbol->scope = Arcadia_Languages_Scope_create(thread, self->context->scope);
@@ -385,7 +400,8 @@ onProcedureDefinitionNode
     Arcadia_Languages_Diagnostics_add
       (
         thread, self->context->diagnostics,
-        (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+        (Arcadia_Languages_Diagnostic*)
+        Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
           (
             thread,
             Arcadia_Languages_DiagnosticType_Error,
@@ -450,6 +466,22 @@ Arcadia_MILC_EnterPhase_run
   Arcadia_MILC_Context* context = self->context;
   if (!context->scope) {
     context->scope = Arcadia_Languages_Scope_create(thread, NULL);
+    Arcadia_MILC_Symbols* symbols = Arcadia_MILC_Symbols_getInstance(thread, context);
+
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->integer16->name, (Arcadia_Object*)symbols->integer16);
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->integer32->name, (Arcadia_Object*)symbols->integer32);
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->integer64->name, (Arcadia_Object*)symbols->integer64);
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->integer8->name,  (Arcadia_Object*)symbols->integer8);
+
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->natural16->name, (Arcadia_Object*)symbols->natural16);
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->natural32->name, (Arcadia_Object*)symbols->natural32);
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->natural64->name, (Arcadia_Object*)symbols->natural64);
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->natural8->name,  (Arcadia_Object*)symbols->natural8);
+
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->boolean->name, (Arcadia_Object*)symbols->boolean);
+
+    Arcadia_Languages_Scope_enter(thread, context->scope, symbols->object->name, (Arcadia_Object*)symbols->object);
+
   } else {
     Arcadia_Languages_Scope_clear(thread, context->scope);
   }
@@ -464,7 +496,8 @@ Arcadia_MILC_EnterPhase_run
         (
           thread,
           context->diagnostics,
-          (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_MissingModuleDefinitionDiagnostic_create
+          (Arcadia_Languages_Diagnostic*)
+          Arcadia_MILC_Diagnostics_MissingModuleDefinitionDiagnostic_create
             (
               thread,
               Arcadia_Languages_DiagnosticType_Error,

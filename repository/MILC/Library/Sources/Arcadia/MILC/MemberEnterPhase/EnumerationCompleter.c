@@ -19,6 +19,7 @@
 #include "Arcadia/MILC/Context.h"
 #include "Arcadia/MILC/Diagnostics/Include.h"
 #include "Arcadia/MILC/Symbols/Include.h"
+#include "Arcadia/MILC/TypeResolutionPhase.h"
 #include <assert.h>
 
 static void
@@ -135,7 +136,6 @@ makeFullQualifiedName
   Arcadia_StringBuilder_insertBackCxxString(thread, temporary, u8".");
   Arcadia_StringBuilder_insertBackString(thread, temporary, suffix);
   return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(temporary));
-
 }
 
 static void
@@ -153,6 +153,7 @@ completeImpl
     symbol->completer = NULL;
     return;
   }
+  /* Enter the enumeration members. */
   Arcadia_StringBuilder* temporary = Arcadia_StringBuilder_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->enumerationBody); i < n; ++i) {
     Arcadia_MILC_AST_EnumerationConstantDefinitionNode* childNode = (Arcadia_MILC_AST_EnumerationConstantDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, node->enumerationBody, i, _Arcadia_MILC_AST_EnumerationConstantDefinitionNode_getType(thread));
@@ -160,11 +161,13 @@ completeImpl
     ((Arcadia_MILC_Symbol*)childSymbol)->enclosing = (Arcadia_MILC_Symbol*)symbol;
     assert(((Arcadia_MILC_EnumerationSymbol*)symbol)->scope);
     childSymbol->ast = childNode;
+    Arcadia_List_insertBack(thread, ((Arcadia_MILC_EnumerationSymbol*)symbol)->members, Arcadia_Value_makeObjectReferenceValue((Arcadia_Object*)childSymbol));
     if (Arcadia_Languages_Scope_contains(thread, ((Arcadia_MILC_EnumerationSymbol*)symbol)->scope, ((Arcadia_MILC_Symbol*)childSymbol)->name, Arcadia_BooleanValue_True)) {
       Arcadia_Languages_Diagnostics_add
         (
           thread, context->diagnostics,
-          (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
+          (Arcadia_Languages_Diagnostic*)
+          Arcadia_MILC_Diagnostics_SymbolAlreadyDefinedDiagnostic_create
             (
               thread,
               Arcadia_Languages_DiagnosticType_Error,
@@ -179,7 +182,8 @@ completeImpl
       Arcadia_Languages_Diagnostics_add
         (
           thread, context->diagnostics,
-          (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_MissingInitializerDiagnostic_create
+          (Arcadia_Languages_Diagnostic*)
+          Arcadia_MILC_Diagnostics_MissingInitializerDiagnostic_create
             (
               thread,
               Arcadia_Languages_DiagnosticType_Error,
@@ -188,7 +192,7 @@ completeImpl
         );
     }
   }
-  symbol->completer = NULL;
+  symbol->completer = Arcadia_MILC_TypeResolutionPhase_getInstance(thread, context)->enumerationCompleter;
 }
 
 Arcadia_MILC_MemberEnterPhase_EnumerationCompleter*

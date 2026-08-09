@@ -38,6 +38,7 @@
 
 #include "Arcadia/MILC/EnterPhase.h"
 #include "Arcadia/MILC/MemberEnterPhase.h"
+#include "Arcadia/MILC/TypeResolutionPhase.h"
 
 #include "Arcadia/MILC/Symbols/Symbol.h"
 #include "Arcadia/MILC/Symbols/SymbolKind.h"

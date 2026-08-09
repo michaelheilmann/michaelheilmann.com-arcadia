@@ -56,15 +56,15 @@
 
 #include "Arcadia/Engine/Visuals/Diagnostics.h"
 
-#include "Arcadia/Engine/Visuals/Events/ApplicationQuitRequestedEvent.h"
+#include "Arcadia/Engine/Visuals/ApplicationQuitRequestedEvent.h"
 
-#include "Arcadia/Engine/Visuals/Events/CanvasActivationStateChangedEvent.h"
-#include "Arcadia/Engine/Visuals/Events/CanvasDPIChangedEvent.h"
-#include "Arcadia/Engine/Visuals/Events/CanvasEvent.h"
-#include "Arcadia/Engine/Visuals/Events/CanvasSizeChangedEvent.h"
-#include "Arcadia/Engine/Visuals/Events/WindowClosedEvent.h"
-#include "Arcadia/Engine/Visuals/Events/WindowPositionChangedEvent.h"
-#include "Arcadia/Engine/Visuals/Events/WindowSizeChangedEvent.h"
+#include "Arcadia/Engine/Visuals/CanvasActivationStateChangedEvent.h"
+#include "Arcadia/Engine/Visuals/CanvasDPIChangedEvent.h"
+#include "Arcadia/Engine/Visuals/CanvasEvent.h"
+#include "Arcadia/Engine/Visuals/CanvasSizeChangedEvent.h"
+#include "Arcadia/Engine/Visuals/WindowClosedEvent.h"
+#include "Arcadia/Engine/Visuals/WindowPositionChangedEvent.h"
+#include "Arcadia/Engine/Visuals/WindowSizeChangedEvent.h"
 
 #include "Arcadia/Engine/Input/KeyboardKeyEvent.h"
 #include "Arcadia/Engine/Input/MouseButtonEvent.h"

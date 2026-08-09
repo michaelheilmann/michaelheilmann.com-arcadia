@@ -83,6 +83,9 @@ Arcadia_MILC_ProcedureSymbol_constructImpl
   }
   //
   self->ast = NULL;
+  self->scope = NULL;
+  self->parameters= (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  self->returnValueType = NULL;
   //
   Arcadia_LeaveConstructor(Arcadia_MILC_ProcedureSymbol);
 }
@@ -112,6 +115,15 @@ Arcadia_MILC_ProcedureSymbol_visitImpl
 {
   if (self->ast) { 
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->ast);
+  }
+  if (self->scope) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
+  }
+  if (self->parameters) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->parameters);
+  }
+  if (self->returnValueType) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->returnValueType);
   }
 }
 

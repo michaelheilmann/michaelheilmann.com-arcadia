@@ -13,26 +13,23 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_ENGINE_VISUALS_TEXTUREADDRESSMODE_H_INCLUDED)
+#ifndef ARCADIA_ENGINE_VISUALS_TEXTUREADDRESSMODE_H_INCLUDED
 #define ARCADIA_ENGINE_VISUALS_TEXTUREADDRESSMODE_H_INCLUDED
 
-#if !defined(ARCADIA_ENGINE_PRIVATE) || 1 != ARCADIA_ENGINE_PRIVATE
-  #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
-#endif
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Ring1/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_TextureAddressMode
-Arcadia_declareEnumerationType(u8"Arcadia.Engine.Visuals.TextureAddressMode", Arcadia_Engine_Visuals_TextureAddressMode);
+Arcadia_declareEnumerationType("Arcadia.Engine.Visuals.TextureAddressMode",
+                               Arcadia_Engine_Visuals_TextureAddressMode);
 
 enum Arcadia_Engine_Visuals_TextureAddressMode {
 
-  Arcadia_Engine_Visuals_TextureAddressMode_ClampToBorder,
+  Arcadia_Engine_Visuals_TextureAddressMode_ClampToBorder = 0,
 
-  Arcadia_Engine_Visuals_TextureAddressMode_ClampToEdge,
+  Arcadia_Engine_Visuals_TextureAddressMode_ClampToEdge = 1,
 
-  Arcadia_Engine_Visuals_TextureAddressMode_MirroredRepeat,
+  Arcadia_Engine_Visuals_TextureAddressMode_MirroredRepeat = 2,
 
-  Arcadia_Engine_Visuals_TextureAddressMode_Repeat,
+  Arcadia_Engine_Visuals_TextureAddressMode_Repeat = 3,
 
 };
 

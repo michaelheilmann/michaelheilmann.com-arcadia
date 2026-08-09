@@ -37,6 +37,7 @@ struct Arcadia_MILC_AST_ProcedureDefinitionNode {
   Arcadia_String* nativeName;
   Arcadia_MILC_AST_IdentifierNode* name;
   Arcadia_List* parameters;
+  Arcadia_MILC_AST_IdentifierNode* returnType;
   Arcadia_List* body;
 };
 
@@ -50,6 +51,7 @@ Arcadia_MILC_AST_ProcedureDefinitionNode_create
     Arcadia_String* nativeName,
     Arcadia_MILC_AST_IdentifierNode* name,
     Arcadia_List* parameters,
+    Arcadia_MILC_AST_IdentifierNode* returnType,
     Arcadia_List* body
   );
 

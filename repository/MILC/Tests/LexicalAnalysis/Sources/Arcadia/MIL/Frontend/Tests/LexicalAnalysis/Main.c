@@ -51,7 +51,7 @@ testScanner4
     u8"$_\n"
     ;
   Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
-  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_getInstance(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, input, strlen(input))))));
 
   expectAndNext(thread, scanner, Arcadia_MILC_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
@@ -132,7 +132,7 @@ testScanner3
     u8"\n"
     ;
   Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
-  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_getInstance(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, input, strlen(input))))));
 
   //
@@ -219,7 +219,7 @@ testScanner2
     u8"\n"
     ;
   Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
-  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_getInstance(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, input, strlen(input))))));
 
   expectAndNext(thread, scanner, Arcadia_MILC_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
@@ -254,7 +254,7 @@ testScanner1
     u8""
     ;
   Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
-  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_getInstance(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, input, strlen(input))))));
 
   expectAndNext(thread, scanner, Arcadia_MILC_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);

@@ -38,7 +38,12 @@ struct Arcadia_MILC_ClassSymbol {
   Arcadia_MILC_Symbol _parent;
   /// The abstract syntax tree defining this class symbol if any. A null pointer otherwise.
   Arcadia_MILC_AST_ClassDefinitionNode* ast;
+  /// The symbols of the class members of this class in order of appearance.
+  Arcadia_List* members;
+  /// The scope of this class.
   Arcadia_Languages_Scope* scope;
+  /// The resolved parent class symbol if any. A null pointer otherwise.
+  Arcadia_MILC_ClassSymbol* parentClassSymbol;
 };
 
 Arcadia_MILC_ClassSymbol*

@@ -16,6 +16,7 @@
 #if !defined(ARCADIA_MILC_SYMBOLS_METHODSYMBOL_H_INCLUDED)
 #define ARCADIA_MILC_SYMBOLS_METHODSYMBOL_H_INCLUDED
 
+#include "Arcadia/Languages/Include.h"
 #include "Arcadia/MILC/Symbols/Symbol.h"
 #include "Arcadia/MILC/AST/Include.h"
 
@@ -35,8 +36,19 @@ struct Arcadia_MILC_MethodSymbolDispatch {
 
 struct Arcadia_MILC_MethodSymbol {
   Arcadia_MILC_Symbol _parent;
-  /// The abstract syntax tree defining this enumeration constant symbol if any. A null pointer otherwise.
+  /// The abstract syntax tree defining this method symbol if any. A null pointer otherwise.
   Arcadia_MILC_AST_MethodDefinitionNode* ast;
+
+  /// The symbols of the parameters of this method in order of appearance.
+  Arcadia_List* parameters;
+  /// The type of the return value.4
+  Arcadia_MILC_Symbol* returnValueType;
+
+  /// The method this method is an override of if any. null otherwise.
+  Arcadia_MILC_MethodSymbol* overrideOf;
+
+  /// The scope for the parameters.
+  Arcadia_Languages_Scope* scope;
 };
 
 Arcadia_MILC_MethodSymbol*

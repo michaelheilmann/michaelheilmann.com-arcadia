@@ -16,8 +16,6 @@
 #define ARCADIA_ENGINE_PRIVATE (1)
 #include "Arcadia/Engine/Visuals/TextureFilter.h"
 
-#include "Arcadia/Ring2/Include.h"
-
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
 };

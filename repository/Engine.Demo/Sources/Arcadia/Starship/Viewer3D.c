@@ -329,7 +329,7 @@ Arcadia_Starship_Viewer3D_getLoclaToWorldTransform
   Arcadia_Math_QuaternionReal32_toRotationMatrix(thread, self->rotation, r2);
 
   Arcadia_Math_Matrix4Real32* t2 = Arcadia_Math_Matrix4Real32_create(thread);
-  Arcadia_Math_Matrix4x4Real32Value_setTranslation(thread, t2, -self->position->elements[0], -self->position->elements[1], -self->position->elements[2]);
+  Arcadia_Math_Matrix4x4Real32_setTranslation(thread, t2, -self->position->elements[0], -self->position->elements[1], -self->position->elements[2]);
 
   Arcadia_Math_Matrix4Real32* tmp2 = Arcadia_Math_Matrix4Real32_multiply(thread, t2, r2);
 
@@ -350,7 +350,7 @@ Arcadia_Starship_Viewer3D_getWorldToViewMatrix
   Arcadia_Math_QuaternionReal32_toRotationMatrix(thread, inverseRotation, r2);
 
   Arcadia_Math_Matrix4Real32* t2 = Arcadia_Math_Matrix4Real32_create(thread);
-  Arcadia_Math_Matrix4x4Real32Value_setTranslation(thread, t2, -self->position->elements[0], -self->position->elements[1], -self->position->elements[2]);
+  Arcadia_Math_Matrix4x4Real32_setTranslation(thread, t2, -self->position->elements[0], -self->position->elements[1], -self->position->elements[2]);
   
   Arcadia_Math_Matrix4Real32* tmp2 = Arcadia_Math_Matrix4Real32_multiply(thread, r2, t2);
 

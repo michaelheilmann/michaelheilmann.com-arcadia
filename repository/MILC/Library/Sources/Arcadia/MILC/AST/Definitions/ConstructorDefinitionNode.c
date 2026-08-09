@@ -18,7 +18,7 @@
 #include "Arcadia/MILC/AST/Include.h"
 
 /// @code
-/// constructor(constructorParameters:Arcadia.List, constructorBody:Arcadia.List)
+/// constructor(parameters : Arcadia.List, body : Arcadia.List)
 /// @endcode
 static void
 Arcadia_MILC_AST_ConstructorDefinitionNode_constructImpl
@@ -80,12 +80,12 @@ Arcadia_MILC_AST_ConstructorDefinitionNode_constructImpl
     self->nativeName = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_String_getType(thread));
   }
 
-  self->constructorParameters = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_List_getType(thread));
+  self->parameters = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_List_getType(thread));
 
   if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
-    self->constructorBody = NULL;
+    self->body = NULL;
   } else {
-    self->constructorBody = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
+    self->body = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
   }
   //
   Arcadia_LeaveConstructor(Arcadia_MILC_AST_ConstructorDefinitionNode);
@@ -106,9 +106,15 @@ Arcadia_MILC_AST_ConstructorDefinitionNode_visitImpl
     Arcadia_MILC_AST_ConstructorDefinitionNode* self
   )
 {
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->nativeName);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->constructorParameters);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->constructorBody);
+  if (self->nativeName) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->nativeName);
+  }
+  if (self->parameters) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->parameters);
+  }
+  if (self->body) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->body);
+  }
 }
 
 Arcadia_MILC_AST_ConstructorDefinitionNode*
@@ -116,8 +122,8 @@ Arcadia_MILC_AST_ConstructorDefinitionNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* nativeName,
-    Arcadia_List* constructorParameters,
-    Arcadia_List* constructorBody
+    Arcadia_List* parameters,
+    Arcadia_List* body
   )
 {
   _Arcadia_BeginCreate(Arcadia_MILC_AST_ConstructorDefinitionNode);
@@ -126,13 +132,13 @@ Arcadia_MILC_AST_ConstructorDefinitionNode_create
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
-  if (constructorParameters) {
-    Arcadia_ValueStack_pushObjectReferenceValue(thread, constructorParameters);
+  if (parameters) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, parameters);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
-  if (constructorBody) {
-    Arcadia_ValueStack_pushObjectReferenceValue(thread, constructorBody);
+  if (body) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, body);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }

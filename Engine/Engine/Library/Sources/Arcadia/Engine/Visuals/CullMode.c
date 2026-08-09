@@ -18,7 +18,6 @@
 
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
-  .objectTypeOperations = NULL,
 };
 
 Arcadia_defineEnumerationType(u8"Arcadia.Engine.Visuals.CullMode", Arcadia_Engine_Visuals_CullMode,

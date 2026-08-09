@@ -43,17 +43,20 @@ Arcadia_MILC_SymbolKind_toString
     case Arcadia_MILC_SymbolKind_EnumerationConstant: {
       return Arcadia_String_createFromCxxString(thread, u8"enumeration constant");
     } break;
-    case Arcadia_MILC_SymbolKind_Field: {
-      return Arcadia_String_createFromCxxString(thread, u8"field");
-    } break;
     case Arcadia_MILC_SymbolKind_Method: {
       return Arcadia_String_createFromCxxString(thread, u8"method");
     } break;
     case Arcadia_MILC_SymbolKind_Module: {
       return Arcadia_String_createFromCxxString(thread, u8"module");
     } break;
+    case Arcadia_MILC_SymbolKind_PrimitiveType: {
+      return Arcadia_String_createFromCxxString(thread, u8"primitive type");
+    } break;
     case Arcadia_MILC_SymbolKind_Procedure: {
       return Arcadia_String_createFromCxxString(thread, u8"procedure");
+    } break;
+    case Arcadia_MILC_SymbolKind_Variable: {
+      return Arcadia_String_createFromCxxString(thread, u8"field");
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);

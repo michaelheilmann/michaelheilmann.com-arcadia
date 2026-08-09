@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_BACKEND_IMPLEMENTATION_H_INCLUDED
 
 #include "Arcadia/MILC/Context.h"
+#include "Arcadia/MILC/Backend/SymbolWriter.h"
 
 /// @brief The Cxx backend.
 /// @warning The context object passed to the compilation task object is modified by each invocation of Arcadia.MILC.Backend.Implemetation.execute.
@@ -30,21 +31,33 @@ struct Arcadia_MILC_Backend_ImplementationDispatch {
 
 struct Arcadia_MILC_Backend_Implementation {
   Arcadia_Object _parent;
+  Arcadia_MILC_Context* context;
+  Arcadia_MILC_Backend_SymbolWriter* classSymbolWriter;
+  Arcadia_MILC_Backend_SymbolWriter* enumerationSymbolWriter;
+
+  /// @brief Map from addresses of symbols to Arcadia.MILC.Backend.SymbolInfo or derived type instances.
+  Arcadia_Map* symbolInfos;
 };
 
 Arcadia_MILC_Backend_Implementation*
 Arcadia_MILC_Backend_Implementation_create
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
+  );
+
+Arcadia_MILC_Backend_Implementation*
+Arcadia_MILC_Backend_Implementation_getInstance
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
   );
 
 void
 Arcadia_MILC_Backend_Implementation_run
   (
     Arcadia_Thread* thread,
-    Arcadia_MILC_Backend_Implementation* self,
-    Arcadia_MILC_Context* context
-
+    Arcadia_MILC_Backend_Implementation* self
   );
 
 #endif // ARCADIA_MILC_BACKEND_IMPLEMENTATION_H_INCLUDED

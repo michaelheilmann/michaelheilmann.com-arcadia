@@ -13,22 +13,19 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_ENGINE_VISUALS_TEXTUREFILTER_H_INCLUDED)
+#ifndef ARCADIA_ENGINE_VISUALS_TEXTUREFILTER_H_INCLUDED
 #define ARCADIA_ENGINE_VISUALS_TEXTUREFILTER_H_INCLUDED
 
-#if !defined(ARCADIA_ENGINE_PRIVATE) || 1 != ARCADIA_ENGINE_PRIVATE
-  #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
-#endif
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Ring1/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_TextureFilter
-Arcadia_declareEnumerationType(u8"Arcadia.Engine.Visuals.TextureFilter", Arcadia_Engine_Visuals_TextureFilter);
+Arcadia_declareEnumerationType("Arcadia.Engine.Visuals.TextureFilter",
+                               Arcadia_Engine_Visuals_TextureFilter);
 
 enum Arcadia_Engine_Visuals_TextureFilter {
 
-  Arcadia_Engine_Visuals_TextureFilter_Linear,
+  Arcadia_Engine_Visuals_TextureFilter_Linear = 0,
 
-  Arcadia_Engine_Visuals_TextureFilter_Nearest,
+  Arcadia_Engine_Visuals_TextureFilter_Nearest = 1,
 
 };
 

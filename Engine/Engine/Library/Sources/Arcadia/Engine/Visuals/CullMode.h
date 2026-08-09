@@ -13,28 +13,25 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_ENGINE_VISUALS_CULLMODE_H_INCLUDED)
+#ifndef ARCADIA_ENGINE_VISUALS_CULLMODE_H_INCLUDED
 #define ARCADIA_ENGINE_VISUALS_CULLMODE_H_INCLUDED
 
-#if !defined(ARCADIA_ENGINE_PRIVATE) || 1 != ARCADIA_ENGINE_PRIVATE
-  #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
-#endif
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Ring1/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_CullMode
-Arcadia_declareEnumerationType(u8"Arcadia.Engine.Visuals.CullMode", Arcadia_Engine_Visuals_CullMode);
+Arcadia_declareEnumerationType("Arcadia.Engine.Visuals.CullMode",
+                               Arcadia_Engine_Visuals_CullMode);
 
 enum Arcadia_Engine_Visuals_CullMode {
 
-  Arcadia_Engine_Visuals_CullMode_None,
+  Arcadia_Engine_Visuals_CullMode_None = 0,
 
-  Arcadia_Engine_Visuals_CullMode_Front,
+  Arcadia_Engine_Visuals_CullMode_Front = 1,
 
-  Arcadia_Engine_Visuals_CullMode_Back,
+  Arcadia_Engine_Visuals_CullMode_Back = 2,
 
-  Arcadia_Engine_Visuals_CullMode_FrontAndBack,
+  Arcadia_Engine_Visuals_CullMode_FrontAndBack = 3,
 
-  Arcadia_Engine_Visuals_CullMode_BackAndFront,
+  Arcadia_Engine_Visuals_CullMode_BackAndFront = 4,
 
 };
 

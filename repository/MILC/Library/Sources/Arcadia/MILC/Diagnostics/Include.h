@@ -17,13 +17,18 @@
 #define ARCADIA_MILC_DIAGNOSTICS_INCLUDE_H_INCLUDED
 
 #include "Arcadia/MILC/Diagnostics/ConfigurationFileInvalidDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/CyclicInheritanceDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/FileNotFoundDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/IntegerLiteralOutOfRangeDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/InvalidPathDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/MissingInitializerDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/MissingModuleDefinitionDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/MultipleModuleDefinitionsDiagnostic.h"
 #include "Arcadia/MILC/Diagnostics/SymbolAlreadyDefinedDiagnostic.h"
-#include "Arcadia/MILC/Diagnostics/UnexpectedSymbolDiagnostic.h"
-#include "Arcadia/MILC/Diagnostics/UnexpectedWordDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/SymbolNotDefinedDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/SymbolIsNoClassDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/SymbolIsNoMethodDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/Lexical/UnexpectedSymbolDiagnostic.h"
+#include "Arcadia/MILC/Diagnostics/Syntactical/UnexpectedWordDiagnostic.h"
 
 #endif // ARCADIA_MILC_DIAGNOSTICS_INCLUDE_H_INCLUDED

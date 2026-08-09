@@ -48,8 +48,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MILC_ConstructorSymbol_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_MILC_ConstructorSymbol_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MILC_ConstructorSymbol_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MILC_ConstructorSymbol_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MILC_ConstructorSymbol_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -82,6 +82,10 @@ Arcadia_MILC_ConstructorSymbol_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
+  self->ast = NULL;
+  self->scope = NULL;
+  self->parameters = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  //
   Arcadia_LeaveConstructor(Arcadia_MILC_ConstructorSymbol);
 }
 
@@ -107,7 +111,17 @@ Arcadia_MILC_ConstructorSymbol_visitImpl
     Arcadia_Thread* thread,
     Arcadia_MILC_ConstructorSymbol* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->ast) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->ast);
+  }
+  if (self->scope) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
+  }
+  if (self->parameters) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->parameters);
+  }
+}
 
 Arcadia_MILC_ConstructorSymbol*
 Arcadia_MILC_ConstructorSymbol_create

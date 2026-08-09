@@ -17,8 +17,8 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
-#include <assert.h>
 #include "Arcadia/VPL/Include.h"
+#include <assert.h>
 
 #define VertexShaderDirty (1)
 #define FragmentShaderDirty (2)

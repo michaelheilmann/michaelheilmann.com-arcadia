@@ -17,6 +17,7 @@
 
 #include "Arcadia/MILC/Include.h"
 #include "Arcadia/MILC/AST/Include.h"
+#include <assert.h>
 
 static Arcadia_String*
 nameToPathString
@@ -168,7 +169,13 @@ makeCxxSourceFilePath
   Arcadia_String* fileName = Arcadia_List_getObjectReferenceValueAt(thread, cxxFilePath->fileNames, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)cxxFilePath->fileNames) - 1);
   Arcadia_List_removeBack(thread, cxxFilePath->fileNames, 1);
   Arcadia_StringBuilder_insertBackString(thread, stringBuilder, fileName);
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ".c.g");
+  if (symbol->kind != Arcadia_MILC_SymbolKind_Enumeration) {
+    // Currently a hack as we are merely able to produce proper ".c" files for enumerations.
+    // All other types emit "c.g" in order to avoid overwriting the ".c" files with broken contents.
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ".c.g");
+  } else {
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ".c");
+  }
   Arcadia_List_insertBackObjectReferenceValue(thread, cxxFilePath->fileNames, (Arcadia_Object*)Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuilder)));
   return cxxFilePath;
 }
@@ -187,7 +194,13 @@ makeCxxHeaderFilePath
   Arcadia_String* fileName = Arcadia_List_getObjectReferenceValueAt(thread, cxxFilePath->fileNames, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)cxxFilePath->fileNames) - 1);
   Arcadia_List_removeBack(thread, cxxFilePath->fileNames, 1);
   Arcadia_StringBuilder_insertBackString(thread, stringBuilder, fileName);
-  Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ".h.g");
+  if (symbol->kind != Arcadia_MILC_SymbolKind_Enumeration) {
+    // Currently a hack as we are merely able to produce proper ".h" files for enumerations.
+    // All other types emit "h.g" in order to avoid overwriting the ".h" files with broken contents.
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ".h.g");
+  } else {
+    Arcadia_StringBuilder_insertBackCxxString(thread, stringBuilder, ".h");
+  }
   Arcadia_List_insertBackObjectReferenceValue(thread, cxxFilePath->fileNames, (Arcadia_Object*)Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuilder)));
   return cxxFilePath;
 }
@@ -318,28 +331,28 @@ Arcadia_MILC_Backend_SymbolInfo_dump
     Arcadia_StringBuilder_insertBackCodePoint(thread, target, ' ');
   }
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8"[ modulePath = ");
-  Arcadia_StringBuilder_insertBackString(thread, target, Arcadia_FilePath_toGeneric(thread, self->moduleDirectoryPath));
+  Arcadia_StringBuilder_insertBackString(thread, target, self->moduleDirectoryPath ? Arcadia_FilePath_toGeneric(thread, self->moduleDirectoryPath) : Arcadia_String_createFromCxxString(thread, u8"null"));
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8" ]\n");
   //
   for (Arcadia_SizeValue i = 0, n = indent + 2; i < n; ++i) {
     Arcadia_StringBuilder_insertBackCodePoint(thread, target, ' ');
   }
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8"[ cxxFilesPath = ");
-  Arcadia_StringBuilder_insertBackString(thread, target, Arcadia_FilePath_toGeneric(thread, self->cxxFilesPath));
+  Arcadia_StringBuilder_insertBackString(thread, target, self->cxxFilesPath ? Arcadia_FilePath_toGeneric(thread, self->cxxFilesPath) : Arcadia_String_createFromCxxString(thread, u8"null"));
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8" ]\n");
   //
   for (Arcadia_SizeValue i = 0, n = indent + 2; i < n; ++i) {
     Arcadia_StringBuilder_insertBackCodePoint(thread, target, ' ');
   }
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8"[ cxxSourceFilePath = ");
-  Arcadia_StringBuilder_insertBackString(thread, target, Arcadia_FilePath_toGeneric(thread, self->cxxSourceFilePath));
+  Arcadia_StringBuilder_insertBackString(thread, target, self->cxxSourceFilePath ? Arcadia_FilePath_toGeneric(thread, self->cxxSourceFilePath) : Arcadia_String_createFromCxxString(thread, u8"null"));
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8" ]\n");
   //
   for (Arcadia_SizeValue i = 0, n = indent + 2; i < n; ++i) {
     Arcadia_StringBuilder_insertBackCodePoint(thread, target, ' ');
   }
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8"[ cxxHeaderFilePath = ");
-  Arcadia_StringBuilder_insertBackString(thread, target, Arcadia_FilePath_toGeneric(thread, self->cxxHeaderFilePath));
+  Arcadia_StringBuilder_insertBackString(thread, target, self->cxxHeaderFilePath ? Arcadia_FilePath_toGeneric(thread, self->cxxHeaderFilePath) : Arcadia_String_createFromCxxString(thread, u8"null"));
   Arcadia_StringBuilder_insertBackCxxString(thread, target, u8" ]\n");
   //
   for (Arcadia_SizeValue i = 0, n = indent + 2; i < n; ++i) {

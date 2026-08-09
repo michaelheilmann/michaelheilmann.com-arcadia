@@ -23,9 +23,11 @@
 #include "Arcadia/MILC/Symbols/ConstructorSymbol.h"
 #include "Arcadia/MILC/Symbols/EnumerationSymbol.h"
 #include "Arcadia/MILC/Symbols/EnumerationConstantSymbol.h"
-#include "Arcadia/MILC/Symbols/FieldSymbol.h"
 #include "Arcadia/MILC/Symbols/MethodSymbol.h"
 #include "Arcadia/MILC/Symbols/ModuleSymbol.h"
+#include "Arcadia/MILC/Symbols/PrimitiveTypeSymbol.h"
 #include "Arcadia/MILC/Symbols/ProcedureSymbol.h"
+#include "Arcadia/MILC/Symbols/Symbols.h"
+#include "Arcadia/MILC/Symbols/VariableSymbol.h"
 
 #endif // ARCADIA_MILC_SYMBOLS_INCLUDE_H_INCLUDED

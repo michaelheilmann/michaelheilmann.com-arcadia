@@ -16,9 +16,9 @@
 #define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Object.h"
 
-#include <assert.h>
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
+#include <assert.h>
 
 static void*
 Arcadia_allocateObject

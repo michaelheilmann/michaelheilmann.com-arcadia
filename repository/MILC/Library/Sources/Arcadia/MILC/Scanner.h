@@ -29,12 +29,13 @@ typedef struct Arcadia_MILC_Context Arcadia_MILC_Context;
 Arcadia_declareObjectType(u8"Arcadia.MILC.Scanner", Arcadia_MILC_Scanner,
                           u8"Arcadia.Languages.Scanner");
 
-/// @brief Create a MIL scanner.
+
+/// @brief Get or create the MIL scanner in this context.
 /// @param thread A pointer to this thread.
-/// @param context The context.
-/// @return A pointer to this MIL scanner.
+/// @param context A pointer to this context.
+/// @return A pointer to the MIL scanner in this context.
 Arcadia_MILC_Scanner*
-Arcadia_MILC_Scanner_create
+Arcadia_MILC_Scanner_getInstance
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_Context* context

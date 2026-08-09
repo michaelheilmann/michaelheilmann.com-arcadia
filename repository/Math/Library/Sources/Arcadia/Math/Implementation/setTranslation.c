@@ -16,7 +16,7 @@
 #include "Arcadia/Math/Implementation/setTranslation.h"
 
 void
-Arcadia_Math_Matrix4x4Real32Value_setTranslation
+Arcadia_Math_Matrix4x4Real32_setTranslation
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real32* self,
@@ -47,7 +47,7 @@ Arcadia_Math_Matrix4x4Real32Value_setTranslation
 }
 
 void
-Arcadia_Math_Matrix4x4Real64Value_setTranslation
+Arcadia_Math_Matrix4x4Real64_setTranslation
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real64* self,

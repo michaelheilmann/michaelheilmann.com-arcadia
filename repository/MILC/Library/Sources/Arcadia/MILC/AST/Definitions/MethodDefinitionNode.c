@@ -69,17 +69,18 @@ Arcadia_MILC_AST_MethodDefinitionNode_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (4 !=_numberOfArguments) {
+  if (5 !=_numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_ValueStack_isVoidValue(thread, 4)) {
+  if (Arcadia_ValueStack_isVoidValue(thread, 5)) {
     self->nativeName = NULL;
   } else {
-    self->nativeName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 4, _Arcadia_String_getType(thread));
+    self->nativeName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 5, _Arcadia_String_getType(thread));
   }
-  self->name = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_String_getType(thread));
-  self->parameters = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_List_getType(thread));
+  self->name = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 4, _Arcadia_String_getType(thread));
+  self->parameters = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_List_getType(thread));
+  self->returnType = (Arcadia_MILC_AST_IdentifierNode*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_MILC_AST_IdentifierNode_getType(thread));
   if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
     self->body = NULL;
   } else {
@@ -112,6 +113,9 @@ Arcadia_MILC_AST_MethodDefinitionNode_visitImpl
   if (self->parameters) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->parameters);
   }
+  if (self->returnType) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->returnType);
+  }
   if (self->body) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->body);
   }
@@ -124,6 +128,7 @@ Arcadia_MILC_AST_MethodDefinitionNode_create
     Arcadia_String* nativeName,
     Arcadia_String* name,
     Arcadia_List* parameters,
+    Arcadia_MILC_AST_IdentifierNode* returnType,
     Arcadia_List* body
   )
 {
@@ -143,11 +148,16 @@ Arcadia_MILC_AST_MethodDefinitionNode_create
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
+  if (returnType) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, returnType);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
   if (body) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, body);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
-  Arcadia_ValueStack_pushNatural8Value(thread, 4);
+  Arcadia_ValueStack_pushNatural8Value(thread, 5);
   _Arcadia_EndCreate(Arcadia_MILC_AST_MethodDefinitionNode);
 }

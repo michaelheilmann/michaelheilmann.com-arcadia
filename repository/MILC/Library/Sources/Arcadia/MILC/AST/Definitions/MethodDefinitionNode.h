@@ -18,6 +18,7 @@
 
 #include "Arcadia/MILC/AST/DefinitionNode.h"
 #include "Arcadia/Collections/Include.h"
+typedef struct Arcadia_MILC_AST_IdentifierNode Arcadia_MILC_AST_IdentifierNode;
 
 /// @code
 /// class Arcadia.MILC.AST.MethodDefinitionNode extends Arcadia.MILC.AST.DefinitionNode
@@ -35,6 +36,7 @@ struct Arcadia_MILC_AST_MethodDefinitionNode {
   Arcadia_String* nativeName;
   Arcadia_String* name;
   Arcadia_List* parameters;
+  Arcadia_MILC_AST_IdentifierNode* returnType;
   Arcadia_List* body;
 };
 
@@ -45,6 +47,7 @@ Arcadia_MILC_AST_MethodDefinitionNode_create
     Arcadia_String* nativeName,
     Arcadia_String* name,
     Arcadia_List* parameters,
+    Arcadia_MILC_AST_IdentifierNode* returnType,
     Arcadia_List* body
   );
 

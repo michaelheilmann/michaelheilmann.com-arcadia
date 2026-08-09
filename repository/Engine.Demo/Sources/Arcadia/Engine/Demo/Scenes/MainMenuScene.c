@@ -195,6 +195,7 @@ Arcadia_Engine_Demo_MainMenuScene_constructImpl
   //
   self->soundSourceNode = NULL;
   //
+  self->uiCanvasNode = NULL;
   //
   self->latches[0] = Arcadia_BooleanValue_False;
   self->latches[1] = Arcadia_BooleanValue_False;
@@ -259,6 +260,10 @@ Arcadia_Engine_Demo_MainMenuScene_visit
   if (self->soundSourceNode) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->soundSourceNode);
   }
+
+  if (self->uiCanvasNode) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->uiCanvasNode);
+  }
 }
 
 static void
@@ -305,6 +310,23 @@ load
           (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext,
           SAMPLEBUFFERS[0]
         );
+  }
+
+  if (!self->uiCanvasNode) {
+    self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+    Arcadia_ADL_ModelDefinition* modelDefinition =
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/MainMenuScene/NewGameButton/NewGameButtonModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "MainMenuScene.NewGameButtonModel"));
+    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
+    Arcadia_Engine_UI_PanelNode* panelNode =
+      (Arcadia_Engine_UI_PanelNode*)
+      Arcadia_Engine_UI_PanelNode_create
+        (
+          thread,
+          (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext,
+          modelDefinition
+        );
+    Arcadia_List_insertBackObjectReferenceValue(thread, self->uiCanvasNode->rectangles, (Arcadia_Object*)panelNode);
   }
 
   if (!self->enterPassNode) {
@@ -471,6 +493,13 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
   Arcadia_Engine_Visuals_EnterPassNode_setCameraNode(thread, self->enterPassNode, self->cameraNode);
   // Render the models.
   Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext);
+
+  // Tell the UI canvas the size of the visuals canvas.
+  Arcadia_Engine_UI_CanvasNode_setVisualsCanvasSize(thread, self->uiCanvasNode, width, height);
+  // The position and the size of the UI canvas.
+  Arcadia_Engine_UI_WidgetNode_setPosition(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, 0, 0);
+  Arcadia_Engine_UI_WidgetNode_setSize(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, width, height);
+  Arcadia_Engine_UI_CanvasNode_updateVisuals(thread, self->uiCanvasNode, self->enterPassNode);
 }
 
 static void

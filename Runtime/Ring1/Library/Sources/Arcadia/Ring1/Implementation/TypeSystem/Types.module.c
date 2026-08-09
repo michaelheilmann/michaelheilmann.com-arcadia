@@ -20,15 +20,15 @@
 #include "Arcadia/Ring1/Implementation/TypeSystem/Names.module.h"
 #include "Arcadia/Ring1/Implementation/Atoms.module.h"
 
-#include <assert.h>
-#include <string.h>
-#include <limits.h>
-
 #include "Arcadia/Ring1/Implementation/TypeSystem/EnumerationTypeNode.module.h"
 #include "Arcadia/Ring1/Implementation/TypeSystem/InterfaceTypeNode.module.h"
 #include "Arcadia/Ring1/Implementation/TypeSystem/InternalTypeNode.module.h"
 #include "Arcadia/Ring1/Implementation/TypeSystem/ObjectTypeNode.module.h"
 #include "Arcadia/Ring1/Implementation/TypeSystem/ScalarTypeNode.module.h"
+
+#include <assert.h>
+#include <string.h>
+#include <limits.h>
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

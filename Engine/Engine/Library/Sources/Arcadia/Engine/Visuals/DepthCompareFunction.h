@@ -13,34 +13,31 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_ENGINE_VISUALS_DEPTHCOMPAREFUNCTION_H_INCLUDED)
+#ifndef ARCADIA_ENGINE_VISUALS_DEPTHCOMPAREFUNCTION_H_INCLUDED
 #define ARCADIA_ENGINE_VISUALS_DEPTHCOMPAREFUNCTION_H_INCLUDED
 
-#if !defined(ARCADIA_ENGINE_PRIVATE) || 1 != ARCADIA_ENGINE_PRIVATE
-  #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
-#endif
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Ring1/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_DepthCompareFunction
-Arcadia_declareEnumerationType(u8"Arcadia.Engine.Visuals.DepthCompareFunction", Arcadia_Engine_Visuals_DepthCompareFunction);
+Arcadia_declareEnumerationType("Arcadia.Engine.Visuals.DepthCompareFunction",
+                               Arcadia_Engine_Visuals_DepthCompareFunction);
 
 enum Arcadia_Engine_Visuals_DepthCompareFunction {
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_Always,
+  Arcadia_Engine_Visuals_DepthCompareFunction_Always = 0,
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_Never,
+  Arcadia_Engine_Visuals_DepthCompareFunction_Never = 1,
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_Equal,
+  Arcadia_Engine_Visuals_DepthCompareFunction_Equal = 2,
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_NotEqual,
+  Arcadia_Engine_Visuals_DepthCompareFunction_NotEqual = 3,
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_LessThan,
+  Arcadia_Engine_Visuals_DepthCompareFunction_LessThan = 4,
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_LessThanOrEqualTo,
+  Arcadia_Engine_Visuals_DepthCompareFunction_LessThanOrEqualTo = 5,
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_GreaterThan,
+  Arcadia_Engine_Visuals_DepthCompareFunction_GreaterThan = 6,
 
-  Arcadia_Engine_Visuals_DepthCompareFunction_GreaterThanOrEqualTo,
+  Arcadia_Engine_Visuals_DepthCompareFunction_GreaterThanOrEqualTo = 7,
 
 };
 

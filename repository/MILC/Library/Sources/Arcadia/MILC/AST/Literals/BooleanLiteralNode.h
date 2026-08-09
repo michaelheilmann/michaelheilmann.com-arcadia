@@ -17,7 +17,7 @@
 #define ARCADIA_MILC_AST_BOOLEANLITERALNODE_H_INCLUDED
 
 #include "Arcadia/MILC/AST/Node.h"
-typedef struct Arcadia_MILC_Type Arcadia_MILC_Type;
+typedef struct Arcadia_MILC_Symbol Arcadia_MILC_Symbol;
 
 /// @code
 /// class Arcadia.MILC.AST.BooleanLiteralNode extends Arcadia.MILC.AST.Node
@@ -37,7 +37,7 @@ struct Arcadia_MILC_AST_BooleanLiteralNode {
   Arcadia_MILC_AST_Node parent;
   Arcadia_String* value;
   /// @brief The type of this node. Initially null. Computed in a later phase.
-  Arcadia_MILC_Type* type;
+  Arcadia_MILC_Symbol* type;
 };
 
 Arcadia_MILC_AST_BooleanLiteralNode*

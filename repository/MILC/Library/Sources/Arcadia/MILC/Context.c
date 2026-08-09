@@ -17,6 +17,7 @@
 #include "Arcadia/MILC/Context.h"
 
 #include "Arcadia/Logging/Include.h"
+#include "Arcadia/MILC/Environment.h"
 #include "Arcadia/MILC/MemberEnterPhase/ClassCompleter.h"
 #include "Arcadia/MILC/MemberEnterPhase/EnumerationCompleter.h"
 #include "Arcadia/MILC/Backend/Implementation.h"
@@ -90,16 +91,11 @@ Arcadia_MILC_Context_constructImpl
   self->log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   self->diagnostics = Arcadia_Languages_Diagnostics_create(thread, self->log);
 
-  self->scanner = NULL;
-  self->parser = NULL;
-
   self->workingDirectoryPath = NULL;
 
   self->moduleNodes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   self->scope = NULL;
-
-  self->backend = Arcadia_MILC_Backend_Implementation_create(thread);
-  self->backendSymbolInfos = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->environments = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 
   Arcadia_LeaveConstructor(Arcadia_MILC_Context);
 }
@@ -133,13 +129,6 @@ Arcadia_MILC_Context_visit
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->diagnostics);
   }
 
-  if (self->scanner) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scanner);
-  }
-  if (self->parser) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->parser);
-  }
-
   if (self->workingDirectoryPath) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->workingDirectoryPath);
   }
@@ -151,13 +140,8 @@ Arcadia_MILC_Context_visit
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
   }
 
-
-
-  if (self->backend) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backend);
-  }
-  if (self->backendSymbolInfos) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendSymbolInfos);
+  if (self->environments) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->environments);
   }
 }
 

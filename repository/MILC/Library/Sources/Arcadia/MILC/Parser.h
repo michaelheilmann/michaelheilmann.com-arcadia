@@ -28,12 +28,12 @@ typedef struct Arcadia_MILC_Context Arcadia_MILC_Context;
 Arcadia_declareObjectType(u8"Arcadia.MIL.Parser", Arcadia_MILC_Parser,
                           u8"Arcadia.Languages.Parser");
 
-/// @brief Create a MIL parser.
+/// @brief Get or create the MIL parser in this context.
 /// @param thread A pointer to this thread.
-/// @param context The context.
-/// @return A pointer to this MIL parser.
+/// @param context A pointer to this context.
+/// @return A pointer to the MIL parser.
 Arcadia_MILC_Parser*
-Arcadia_MILC_Parser_create
+Arcadia_MILC_Parser_getInstance
   (
     Arcadia_Thread* thread,
     Arcadia_MILC_Context* context

@@ -23,6 +23,7 @@ typedef struct Arcadia_MILC_Parser Arcadia_MILC_Parser;
 typedef struct Arcadia_MILC_EnterPhase Arcadia_MILC_EnterPhase;
 typedef struct Arcadia_MILC_MemberEnterPhase Arcadia_MILC_MemberEnterPhase;
 typedef struct Arcadia_MILC_Completer Arcadia_MILC_Completer;
+typedef struct Arcadia_MILC_Environment Arcadia_MILC_Environment;
 typedef struct  Arcadia_MILC_Backend_Implementation Arcadia_MILC_Backend_Implementation;
 
 Arcadia_declareObjectType(u8"Arcadia.MILC.Context", Arcadia_MILC_Context,
@@ -37,19 +38,14 @@ struct Arcadia_MILC_Context {
   Arcadia_Languages_StringTable* stringTable;
   Arcadia_Log* log;
   Arcadia_Languages_Diagnostics* diagnostics;
-  Arcadia_MILC_Scanner* scanner;
-  Arcadia_MILC_Parser* parser;
   /// @brief The working directory.
   Arcadia_FilePath* workingDirectoryPath;
   /// @brief The list of module nodes (objects of Arcadia.MILC.AST.ModuleNode or derived type).
   Arcadia_List* moduleNodes;
   /// @brief The root scope.
   Arcadia_Languages_Scope* scope;
-
-  Arcadia_MILC_Backend_Implementation* backend;
-  /// @brief Map from addresses of symbols to Arcadia.MILC.Backend.SymbolInfo instances.
-  Arcadia_Map* backendSymbolInfos;
-
+  /// @brief A map from symbols to their environments.
+  Arcadia_Map* environments;
   Arcadia_Map* instances;
 };
 

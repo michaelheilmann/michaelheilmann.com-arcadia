@@ -15,8 +15,6 @@
 
 #include "Arcadia/DDLS/Symbols/SymbolReader.h"
 
-#include <assert.h>
-
 #include "Arcadia/DDLS/Symbols/Scope.h"
 #include "Arcadia/DDLS/Extensions.h"
 
@@ -28,6 +26,8 @@
 #include "Arcadia/DDLS/Symbols/ScalarSymbol.h"
 #include "Arcadia/DDLS/Symbols/SchemaReferenceSymbol.h"
 #include "Arcadia/DDLS/Symbols/SchemaSymbol.h"
+
+#include <assert.h>
 
 static Arcadia_String*
 readString

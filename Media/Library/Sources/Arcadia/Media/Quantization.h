@@ -19,9 +19,9 @@
 #if !defined(ARCADIA_MEDIA_MODULE) || 1 != ARCADIA_MEDIA_MODULE
   #error("do not include directly, include `Arcadia/Media/Include.h` instead")
 #endif
+#include "Arcadia/Media/SampleBuffer.h"
 #include <assert.h>
 #include <math.h>
-#include "Arcadia/Media/SampleBuffer.h"
 
 /// @brief Quantize a Arcadia.Real32 value value to Arcadia.Integer16.
 /// @param x The Arcadia.Real32 value.

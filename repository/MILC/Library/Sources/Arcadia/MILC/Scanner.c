@@ -220,12 +220,19 @@ isDigit
     Arcadia_MILC_Scanner* self
   );
 
+static Arcadia_MILC_Scanner*
+Arcadia_MILC_Scanner_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MILC_Scanner_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_MILC_Scanner_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MILC_Scanner_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MILC_Scanner_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MILC_Scanner_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -482,7 +489,7 @@ isDigit
   return ('0' <= self->symbol && self->symbol <= '9');
 }
 
-Arcadia_MILC_Scanner*
+static Arcadia_MILC_Scanner*
 Arcadia_MILC_Scanner_create
   (
     Arcadia_Thread* thread,
@@ -493,6 +500,22 @@ Arcadia_MILC_Scanner_create
   if (context) Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)context); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
   _Arcadia_EndCreate(Arcadia_MILC_Scanner);
+}
+
+Arcadia_MILC_Scanner*
+Arcadia_MILC_Scanner_getInstance
+  (   
+    Arcadia_Thread* thread,
+    Arcadia_MILC_Context* context
+  )
+{
+  Arcadia_Value k = Arcadia_Value_makeTypeValue(_Arcadia_MILC_Scanner_getType(thread));
+  Arcadia_Value v = Arcadia_Map_get(thread, context->instances, k);
+  if (Arcadia_Value_isVoidValue(&v)) {
+    v = Arcadia_Value_makeObjectReferenceValue(Arcadia_MILC_Scanner_create(thread, context));
+    Arcadia_Map_set(thread, context->instances, k, v, NULL, NULL);
+  }
+  return (Arcadia_MILC_Scanner*)Arcadia_Value_getObjectReferenceValue(&v);
 }
 
 static Arcadia_UnicodeCodePointReader*

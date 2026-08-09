@@ -34,10 +34,9 @@ onTest
   Arcadia_ByteArray* byteArray  = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, byteArrayBuilder), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, byteArrayBuilder)));
   Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, byteArray));
   Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
-  context->scanner = context->scanner ? context->scanner : Arcadia_MILC_Scanner_create(thread, context);
-  context->parser = context->parser ? context->parser : Arcadia_MILC_Parser_create(thread, context);
-  Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)context->parser, reader);
-  Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser);
+  Arcadia_MILC_Parser* parser = Arcadia_MILC_Parser_getInstance(thread, context);
+  Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)parser, reader);
+  Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser);
 }
 
 void

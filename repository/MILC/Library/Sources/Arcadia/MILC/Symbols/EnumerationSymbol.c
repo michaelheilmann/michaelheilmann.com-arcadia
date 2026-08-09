@@ -84,6 +84,7 @@ Arcadia_MILC_EnumerationSymbol_constructImpl
   //
   self->ast = NULL;
   self->scope = NULL;
+  self->members = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   //
   Arcadia_LeaveConstructor(Arcadia_MILC_EnumerationSymbol);
 }
@@ -116,6 +117,9 @@ Arcadia_MILC_EnumerationSymbol_visitImpl
   }
   if (self->scope) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
+  }
+  if (self->members) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->members);
   }
 }
 

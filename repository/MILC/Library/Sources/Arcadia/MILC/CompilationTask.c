@@ -172,6 +172,7 @@ step2
     Arcadia_MILC_CompilationTask* self
   )
 {
+  Arcadia_MILC_Parser* parser = Arcadia_MILC_Parser_getInstance(thread, self->context);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->context->moduleNodes); i < n; ++i) {
     Arcadia_MILC_AST_ModuleNode* moduleNode= (Arcadia_MILC_AST_ModuleNode*)Arcadia_List_getObjectReferenceValueAt(thread, self->context->moduleNodes, i);
     Arcadia_FilePath* moduleDirectoryPath = moduleNode->moduleDirectoryPath;
@@ -189,9 +190,9 @@ step2
       Arcadia_ByteArrayBuilder* fileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, moduleFilePath);
       Arcadia_ByteArray* byteArray = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, fileContents), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, fileContents)));
       Arcadia_UnicodeCodePointReader* reader = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, byteArray));
-      Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)self->context->parser, reader);
-      Arcadia_MILC_Parser_setFile(thread, self->context->parser, moduleFilePath);
-      Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
+      Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)parser, reader);
+      Arcadia_MILC_Parser_setFile(thread, parser, moduleFilePath);
+      Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
       compilationUnitNode->filePath = moduleFilePath;
       Arcadia_MILC_AST_ModuleNode_appendCompilationUnit(thread, moduleNode, compilationUnitNode);
       compilationUnitNode->moduleNode = moduleNode;
@@ -265,6 +266,7 @@ step3
     Arcadia_MILC_CompilationTask* self
   )
 {
+  Arcadia_MILC_Parser* parser = Arcadia_MILC_Parser_getInstance(thread, self->context);
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_Value milExtension = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_createFromCxxString(thread, u8".mil"));
   Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
@@ -289,9 +291,9 @@ step3
         Arcadia_ByteArrayBuilder* x = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
         Arcadia_ByteArray* y = Arcadia_ByteArray_createByteArray(thread, Arcadia_RuntimeByteArray_create(thread, Arcadia_ByteArrayBuilder_getBytes(thread, x), Arcadia_ByteArrayBuilder_getNumberOfBytes(thread, x)));
         Arcadia_UnicodeCodePointReader* z = (Arcadia_UnicodeCodePointReader*)Arcadia_ByteReader_UnicodeCodePointReader_create(thread, (Arcadia_ByteReader*)Arcadia_ByteArray_ByteReader_create(thread, y));
-        Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)self->context->parser, z);
-        Arcadia_MILC_Parser_setFile(thread, self->context->parser, filePath);
-        Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->context->parser), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
+        Arcadia_Languages_Parser_setInput(thread, (Arcadia_Languages_Parser*)parser, z);
+        Arcadia_MILC_Parser_setFile(thread, parser, filePath);
+        Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = (Arcadia_MILC_AST_CompilationUnitNode*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser), _Arcadia_MILC_AST_CompilationUnitNode_getType(thread));
         compilationUnitNode->filePath = filePath;
         compilationUnitNode->moduleNode = moduleNode;
 #if 0
@@ -399,9 +401,6 @@ symbolKindToString
     case Arcadia_MILC_SymbolKind_Enumeration: {
       return Arcadia_String_createFromCxxString(thread, u8"enumeration");
     } break;
-    case Arcadia_MILC_SymbolKind_Field: {
-      return Arcadia_String_createFromCxxString(thread, u8"field");
-    } break;
     case Arcadia_MILC_SymbolKind_Method: {
       return Arcadia_String_createFromCxxString(thread, u8"method");
     } break;
@@ -410,6 +409,9 @@ symbolKindToString
     } break;
     case Arcadia_MILC_SymbolKind_Procedure: {
       return Arcadia_String_createFromCxxString(thread, u8"procedure");
+    } break;
+    case Arcadia_MILC_SymbolKind_Variable: {
+      return Arcadia_String_createFromCxxString(thread, u8"variable");
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -602,9 +604,6 @@ Arcadia_MILC_CompilationTask_run
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     self->context->workingDirectoryPath = workingDirectoryPath;
     Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->context->moduleNodes);
-    self->context->scanner = self->context->scanner ? self->context->scanner : Arcadia_MILC_Scanner_create(thread, self->context);
-    self->context->parser = self->context->parser ? self->context->parser : Arcadia_MILC_Parser_create(thread, self->context);
-
 
     for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)moduleDirectoryPaths); i < n; ++i) {
       // Get the module directory path from the list.
@@ -626,6 +625,8 @@ Arcadia_MILC_CompilationTask_run
     // (5) Enter the member-level symbols (constructors, methods, fields, enumeration elements).
     // This must be deferred because types are resolved.
     Arcadia_MILC_MemberEnterPhase_run(thread, Arcadia_MILC_MemberEnterPhase_getInstance(thread, self->context));
+    // (6) Resolve the types (e.g. of the initializers of enumeration constants).
+    Arcadia_MILC_TypeResolutionPhase_run(thread, Arcadia_MILC_TypeResolutionPhase_getInstance(thread, self->context));
     // Dump top-level symbols.
   #if defined(Arcadia_MILC_Configuration_ListTopLevelSymbols) && 1 == Arcadia_MILC_Configuration_ListTopLevelSymbols
     Arcadia_StringBuilder* stringBuffer = Arcadia_StringBuilder_create(thread);
@@ -636,8 +637,11 @@ Arcadia_MILC_CompilationTask_run
     }
     Arcadia_Log_information(thread, self->context->log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer)));
   #endif
-    // (6) Invoke backend.
-    Arcadia_MILC_Backend_Implementation_run(thread,self->context->backend, self->context);
+    // Invoke the backend only if no error was recorded so far.
+    if (!Arcadia_Languages_Diagnostics_hasErrors(thread, self->context->diagnostics)) {
+      // (7) Invoke backend.
+      Arcadia_MILC_Backend_Implementation_run(thread, Arcadia_MILC_Backend_Implementation_getInstance(thread, self->context));
+    }
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);

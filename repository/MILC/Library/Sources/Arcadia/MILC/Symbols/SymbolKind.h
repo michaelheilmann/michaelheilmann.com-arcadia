@@ -25,11 +25,12 @@ enum Arcadia_MILC_SymbolKind {
   Arcadia_MILC_SymbolKind_Constructor,
   Arcadia_MILC_SymbolKind_Enumeration,
   Arcadia_MILC_SymbolKind_EnumerationConstant,
-  Arcadia_MILC_SymbolKind_Field,
   Arcadia_MILC_SymbolKind_Namespace,
   Arcadia_MILC_SymbolKind_Method,
   Arcadia_MILC_SymbolKind_Module,
+  Arcadia_MILC_SymbolKind_PrimitiveType,
   Arcadia_MILC_SymbolKind_Procedure,
+  Arcadia_MILC_SymbolKind_Variable,
 };
 
 Arcadia_String*

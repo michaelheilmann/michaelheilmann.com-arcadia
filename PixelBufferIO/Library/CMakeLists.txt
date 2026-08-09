@@ -107,7 +107,6 @@ if (NOT TARGET ${this})
   endif()
 
   OnModuleDependency(${this} ${MyProjectName}.Media)
-  OnModuleDependency(${this} ${MyProjectName}.ADL)
 
   EndProduct(${this})
 
